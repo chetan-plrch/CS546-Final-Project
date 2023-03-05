@@ -4,3 +4,4 @@ CS546 final project repository
 ## Collaborators
 * Chetan Jain
 * Sachin Devangan
+* Chandra Vamsi Reddy
