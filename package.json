@@ -1,0 +1,59 @@
+{
+  "name": "cs546-final-project",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "CS546 Final Project",
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "express": "^4.18.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "export PORT=3000 && react-scripts --openssl-legacy-provider start",
+    "server": "node server/app.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chetan-plrch/CS546-Final-Project.git"
+  },
+  "author": "Section A - Group 33",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chetan-plrch/CS546-Final-Project/issues"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "proxy": "http://localhost:3001"
+}
