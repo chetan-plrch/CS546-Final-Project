@@ -1,4 +1,4 @@
-import user from './user/index.js';
+import user from './user.js';
 
 const routeConstructor = (app) => {
     app.use('/user', user)

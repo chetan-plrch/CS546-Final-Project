@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
-import { users } from '../../data/mongoCollections.js';
+import {users} from "../config/mongoCollections.js"
 
 export const authenticate = async (req, res, next) => {
     const userCtn = await users();
