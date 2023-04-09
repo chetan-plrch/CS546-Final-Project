@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import mongoConfig from '../settings.js';
+import mongoConfig from './settings.js';
 
 let _connection = undefined;
 let _db = undefined;
