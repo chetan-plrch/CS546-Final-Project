@@ -1,0 +1,13 @@
+
+.flex-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.dialog {
+    background-color: white;
+    padding: 30px 20px;
+    width: 300px;
+    border-radius: 3px;
+    height: 300px;
+}

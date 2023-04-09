@@ -1,5 +1,10 @@
 .App {
-  text-align: center;
+  display: flex;
+  background-image: url('./theme.png');
+  min-height: 100vh;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .App-logo {
