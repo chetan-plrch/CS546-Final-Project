@@ -19,8 +19,8 @@ const create = async (
 ) => {
   const userCollection = await users();
   const userNameExits = await userCollection.findOne({userName: userName})
-  if(!userNameExits){
-    throw "Error: username already used"
+  if(userNameExits){
+    throw [404,"Error: username already used"]
   }
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -58,12 +58,12 @@ const checkLogged = async(
   const userCollection = await users();
   const user = await userCollection.findOne({userName: userName})
   if(!user){
-    throw "Error: username not found"
+    throw [400,"Error: username not found"]
   }
 
   const isPasswordMatch = await bcrypt.compare(password,user.password);
   if(!isPasswordMatch){
-    throw "Error: Invalid Password"
+    throw [400,"Error: Invalid Password"]
   }
 
   const token = jwt.sign(

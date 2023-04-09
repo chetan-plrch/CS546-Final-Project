@@ -1,6 +1,4 @@
 import { Router } from "express";
-import jwt from "jsonwebtoken";
-import { users } from "../config/mongoCollections.js";
 import { errorType, roleType } from "../util.js";
 import { authenticate, authorize } from "../middleware/index.js";
 import { userData } from "../data/index.js";
@@ -60,7 +58,9 @@ router.post("/signup", async (req, res) => {
   } catch (e) {
     let status = e[0] ? e[0] : 500;
     let message = e[1] ? e[1] : "Internal Server Error";
-    res.status(status).send({ error: message });
+    //console.log(message);
+    res.status(status).json({ error: message });
+    //console.log(e);
   }
 });
 
