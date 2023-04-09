@@ -2,6 +2,7 @@ import { Router } from "express";
 import { errorType, roleType } from "../util.js";
 import { authenticate, authorize } from "../middleware/index.js";
 import { userData } from "../data/index.js";
+import validation from "../validations.js";
 
 const router = Router();
 
@@ -9,9 +10,6 @@ router.get("/user", authenticate, async (req, res) => {
   return res.send(req.user);
 });
 
-const validateUser = (user) => {
-  return true;
-};
 
 router.post("/signup", async (req, res) => {
   let userInfo = req.body;
@@ -20,25 +18,65 @@ router.post("/signup", async (req, res) => {
       .status(400)
       .json({ error: "There are no fields in the request body" });
   }
-  // try {
-  //     console.log('request recieved')
-  //     const user = req.body;
-  //     const userCtn = await users();
-  //     validateUser(user)
-  //     const { insertedId } = await userCtn.insertOne(user);
-  //     if (insertedId) {
-  //         return res.status(200).send({ message: 'Successfully created user' });
-  //     } else {
-  //         return res.status(500).send({ message: 'Unable to create user record' });
-  //     }
-  // } catch(e) {
-  //     console.log(e)
-  //     if(e.ERROR_TYPE === errorType.BAD_INPUT) {
-  //         return res.status(400).send({ message: e.message });
-  //     } else {
-  //         return res.status(500).send({ message: 'Internal server error' });
-  //     }
-  // }
+  //validating the request body
+  let Allerrors = []
+  try{
+  userInfo.firstName = validation.checkString(userInfo.firstName,"First name");
+  }catch(e){
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.lastName = validation.checkString(userInfo.lastName,"Last Name");
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.userName = validation.checkString(userInfo.userName,"User name");
+  } catch (e) {
+    Allerrors.push(e)
+  }
+  try {
+    userInfo.userName = validation.checkUsername(userInfo.userName);
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.email = validation.checkMailID(userInfo.email);
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.password = validation.checkPassword(userInfo.password);
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.age = validation.checkAge(userInfo.age);
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.city = validation.checkString(userInfo.city,"city");
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  try {
+    userInfo.state = validation.checkString(userInfo.state,"state");
+  } catch (e) {
+    Allerrors.push(e)
+  }
+
+  if(Allerrors.length > 0){
+    return res.send({Allerrors})
+  }
+
   try {
     const newUser = await userData.create(
       userInfo.firstName,
@@ -65,15 +103,40 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  try{
   const userObj = req.body;
-  const token = await userData.checkLogged(userObj.userName, userObj.password)
+
+  if (!userObj || Object.keys(userObj).length === 0) {
+    return res
+      .status(400)
+      .json({ error: "There are no fields in the request body" });
+  }
+  //validation for the req body
+  let Allerrors = []
+  
+  if(userObj.userName.trim() === "" || !userObj.userName){
+    Allerrors.push("enter username")
+  }
+  if(userObj.password.trim() === "" || !userObj.password){
+    Allerrors.push("enter password")
+  }
+
+  if(Allerrors.length > 0){
+    return res.send({Allerrors})
+  }
+
+  try{
+  const token = await userData.checkLogged(userObj.userName.trim(), userObj.password.trim())
+
   res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
   return res.status(200).send({ message: "User successfully loggedin" });
   }catch(e){
-    res.send(e)
+    let status = e[0] ? e[0] : 500;
+    let message = e[1] ? e[1] : "Internal Server Error";
+    //console.log(message);
+    res.status(status).json({ error: message });
+    //console.log(e);
   }
-});
+},authenticate);
 
 router.get("/check", authenticate, authorize(roleType.ADMIN), (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
