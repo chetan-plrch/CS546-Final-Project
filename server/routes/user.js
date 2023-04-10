@@ -89,7 +89,8 @@ router.post("/signup", async (req, res) => {
       userInfo.city,
       userInfo.state,
       userInfo.isAnonymous,
-      userInfo.role
+      userInfo.role,
+      userInfo.profilePic
     );
     //res.json(newUser)
     res.status(200).send({message: 'Successfully created user' })

@@ -15,7 +15,8 @@ const create = async (
   city,
   state,
   isAnonymous,
-  role
+  role,
+  profilePic = null
 ) => {
   //validating the request body
   let Allerrors = [];
@@ -84,6 +85,13 @@ const create = async (
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // Convert the image to binary data
+  let profilePicData = null;
+  if (profilePic) {
+    const fileContent = fs.readFileSync(profilepic.path);
+    profilePicData = new Binary(fileContent);
+  }
+
   // Create a new user object with the hashed password
   const newUser = {
     firstName,
@@ -97,6 +105,9 @@ const create = async (
     state,
     isAnonymous,
     role,
+    profilePic : profilePicData,
+    connections : {blocked : [],active:[]},
+    isActive : true
   };
 
   const insertInfo = await userCollection.insertOne(newUser);

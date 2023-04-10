@@ -9,6 +9,10 @@ const Login = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (!username || !password) {
+      setError("Please enter a username and password.");
+      return;
+    }
     const data = { userName: username, password: password };
     let response = await fetch("/user/login", {
       method: "POST",
