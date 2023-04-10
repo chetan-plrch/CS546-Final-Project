@@ -28,6 +28,10 @@ const validAge = (age) => {
     return true;
 }
 
+const validCity = (city) => {
+    return /^[a-zA-Z ]+$/.test(city)
+}
+
 const isUsernameValid = (username) => {
     if(!username) return true;
     return validUsername(username)
@@ -56,6 +60,12 @@ const isValidPassword = (password) => {
 const isValidAge = (age) => {
     if(!age) return true;
     return validAge(age)
+}
+
+const isValidCity = (city) => {
+    if(!city) return true;
+    if(city.length > 50) return false;
+    return validCity(city)
 }
 
 const capitalizeFirst = (str) => {
@@ -92,6 +102,14 @@ const validator = (user) => {
 
     if(!isValidAge(user.age)) {
         errorObj.age.helperText = 'Age is invalid'
+    }
+
+    if(!isValidCity(user.city)) {
+        errorObj.city.helperText = 'City is invalid'
+    }
+
+    if(!isValidCity(user.state)) {
+        errorObj.state.helperText = 'State is invalid'
     }
 
     return errorObj

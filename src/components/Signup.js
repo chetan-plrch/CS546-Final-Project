@@ -9,7 +9,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CustomSelect from "./CustomSelect";
-
+import CustomCheckbox from './CustomCheckbox';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const defaultUser = {
   username: "",
@@ -28,6 +30,7 @@ const SignUp = (props) => {
   const [user, setUser] = React.useState(defaultUser);
   const [errors, setErrors] = React.useState(defaultUser);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [saving, setSaving] = React.useState(null)
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -35,8 +38,12 @@ const SignUp = (props) => {
 
   const onChangeOfValue = (key, value) => setUser({ ...user, [key]: value });
 
-  const onBlur = () => setErrors(h.validator(user))
+  const createUser = () => {
+      setSaving(true)
+  }
 
+  const onBlur = () => setErrors(h.validator(user))
+    console.log('user', user)
   return (
     <div className="dialog">
         <div className="dialog-header">
@@ -152,6 +159,19 @@ const SignUp = (props) => {
         value={user.state}
         onChange={onChangeOfValue}
       />
+      <CustomCheckbox 
+        className="anonymous-input"
+        name="isAnonymous"
+        checked={user.isAnonymous}
+        onChange={onChangeOfValue}
+        text={'Stay anonymous'}
+      />
+      <Button
+        onClick={createUser} 
+        variant={saving ? "outlined" : "contained" }
+        color="success">
+        {saving ? <CircularProgress size={25} color="success" /> : 'Create account'}
+      </Button>
     </div>
   );
 };
