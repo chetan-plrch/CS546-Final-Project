@@ -121,13 +121,20 @@ const SignUp = (props) => {
         value={user.age} 
         onChange={onChangeOfValue}
     />
-      <CustomTextField
+      <CustomSelect 
         onBlur={onBlur}
         error={errors.role.helperText}
         helperText={errors.role.helperText}
         name="role"
         value={user.role}
         onChange={onChangeOfValue}
+        options={[{
+            label: 'LISTENER',
+            value: 'LISTENER'
+        }, {
+            label: 'SEEKER',
+            value: 'SEEKER'
+        }]}
       />
       <CustomTextField
         onBlur={onBlur}
