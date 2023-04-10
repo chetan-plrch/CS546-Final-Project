@@ -15,12 +15,13 @@ export default function CustomTextField(props) {
             id={props.name}
             name={props.name}
             onChange={onChange}
-            defaultValue={props.defaultValue || ''}
             value={props.value}
             label={h.capitalizeFirst(props.name)}
             variant="outlined"
             error={props.error}
             helperText={props.helperText}
+            type={props.type}
+            InputProps={props.inputProps}
         />
     );
 }

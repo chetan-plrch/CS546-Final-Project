@@ -4,6 +4,13 @@ import "./Signup.css";
 import CustomTextField from "./CustomTextField";
 import h from '../helper/index';
 
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CustomSelect from "./CustomSelect";
+
+
 const defaultUser = {
   username: "",
   firstname: "",
@@ -20,14 +27,15 @@ const defaultUser = {
 const SignUp = (props) => {
   const [user, setUser] = React.useState(defaultUser);
   const [errors, setErrors] = React.useState(defaultUser);
+  const [showPassword, setShowPassword] = React.useState(false);
 
-  const onChangeOfValue = (key, value) => {
-    setUser({ ...user, [key]: value });
-  };
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const onBlur = () => {
-    setErrors(h.validator(user))
-  }
+  const handleMouseDownPassword = (e) => e.preventDefault();
+
+  const onChangeOfValue = (key, value) => setUser({ ...user, [key]: value });
+
+  const onBlur = () => setErrors(h.validator(user))
 
   return (
     <div className="dialog">
@@ -71,16 +79,39 @@ const SignUp = (props) => {
         error={errors.password.helperText}
         helperText={errors.password.helperText}
         name="password"
+        type={showPassword ? "text" : "password"}
         value={user.password}
         onChange={onChangeOfValue}
+        inputProps={{
+            endAdornment: <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+        }}
       />
-      <CustomTextField
+      <CustomSelect 
         onBlur={onBlur}
         error={errors.gender.helperText}
         helperText={errors.gender.helperText}
         name="gender"
         value={user.gender}
         onChange={onChangeOfValue}
+        options={[{
+            label: 'MALE',
+            value: 'MALE'
+        }, {
+            label: 'FEMALE',
+            value: 'FEMALE'
+        }, {
+            label: 'OTHER',
+            value: 'OTHER'
+        }]}
       />
       <CustomTextField 
         onBlur={onBlur}
