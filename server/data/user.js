@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import validation from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fs from "fs"
 
 const create = async (
   firstName,
@@ -16,7 +17,7 @@ const create = async (
   state,
   isAnonymous,
   role,
-  profilePic = null
+  profilePic //convert the image into base 64 form
 ) => {
   //validating the request body
   let Allerrors = [];
@@ -85,13 +86,11 @@ const create = async (
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Convert the image to binary data
-  let profilePicData = null;
-  if (profilePic) {
-    const fileContent = fs.readFileSync(profilepic.path);
-    profilePicData = new Binary(fileContent);
+  if(!profilePic){
+    profilePic = null
   }
 
+  
   // Create a new user object with the hashed password
   const newUser = {
     firstName,
@@ -105,7 +104,7 @@ const create = async (
     state,
     isAnonymous,
     role,
-    profilePic : profilePicData,
+    profilePic,
     connections : {blocked : [],active:[]},
     isActive : true
   };
