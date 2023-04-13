@@ -1,15 +1,15 @@
 import * as React from "react";
 import { createUserAccount } from "../api/index";
 import "./Signup.css";
-import CustomTextField from "./CustomTextField";
+import CustomTextField from "../common/custom-textfield";
 import h from "../helper/index";
 
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import CustomSelect from "./CustomSelect";
-import CustomCheckbox from "./CustomCheckbox";
+import CustomSelect from "../common/custom-select";
+import CustomCheckbox from "../common/custom-checkbox";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, BrowserRouter } from "react-router-dom"
 import HomePage from './layouts/HomePage'
 import Login from './components/login';
-import Profile from './components/profile/index.js'
+import Profile from './components/profile'
 import './App.css';
 
 const App = () => {
