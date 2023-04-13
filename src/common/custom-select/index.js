@@ -1,7 +1,7 @@
 import React from 'react'
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import h from '../helper/index'
+import h from '../../helper'
 import { InputLabel } from '@mui/material';
 
 export default function CustomSelect(props) {
