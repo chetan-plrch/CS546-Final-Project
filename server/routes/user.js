@@ -1,10 +1,120 @@
+import { ObjectId } from "mongodb";
 import { Router } from "express";
+import { userData } from "../data/index.js";
+
 import { errorType, roleType } from "../util.js";
 import { authenticate, authorize } from "../middleware/index.js";
-import { userData } from "../data/index.js";
-import validation from "../validations.js";
+import * as  validation from "../validations.js";
 
-const router = Router();
+const router = Router()
+
+router.route('/').get(async (req, res) => {
+  try {
+    const users = await userData.getAll();
+
+    const result = users.map((user) => ({
+      _id: user._id.toString(),
+      username: user.username,
+    }));
+
+    if (!result) {
+      return res.status(404).json({ error: 'Users not found' });
+    }
+
+    return res.status(200).json(result);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+})
+
+
+.post(async (req, res) =>{
+  try {
+    const { username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive } = req.body;
+
+    validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
+
+    const newUser = await userData.create(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
+
+    res.status(200).json(newUser);
+  } catch(error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+
+router.route('/:id').get(async (req,res) =>{
+  try {
+    const id = req.params.id;
+    if (!ObjectId.isValid(id)) {
+      throw new Error('Invalid id');
+    }
+    const user = await userData.get(id);
+    if(!user){
+      throw new Error('No user with that id');
+    }
+    res.status(200).json({
+      _id:user._id.toString(),
+      username:user.username,
+    firstName:user.firstName,
+    lastName: user.lastName,
+    email:user.email,
+    password:user.password,
+    gender:user.gender,
+    city:user.city,
+    state:user.state,
+    age:user.age,
+    isAnonymous:user.isAnonymous,
+    role:user.role,
+    profileUrl:user.profileUrl,
+    connections:user.connections,
+    isActive:user.isActive,
+    });
+  } catch (error) {
+    if (error.message === 'Invalid id') {
+      res.status(400).json({ error: 'Invalid id' });
+    } else if (error.message === 'No user with that id') {
+      res.status(404).json({ error: 'No user with that id' });
+    } else {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  } 
+})
+
+.delete(async (req,res) =>{
+  const id = req.params.id;
+  
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
+  try {
+    const message = await userData.remove(id);
+    if(!message){
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.json({ userId: id, deleted: true });
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
+.put(async (req,res) =>{
+  try{
+    const id = req.params.id;
+    const {username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive} = req.body;
+    
+    validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive); // validate request body
+    
+    const updateUser = await userData.update(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
+    
+    res.status(200).json(updateUser);
+  } catch (error){
+    res.status(400).json({ error: error.message });
+  }
+})
+
 
 router.get("/user", authenticate, async (req, res) => {
   return res.send(req.user);

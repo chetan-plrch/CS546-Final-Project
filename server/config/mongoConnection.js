@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import mongoConfig from './settings.js';
+import { mongoConfig } from './settings.js';
 
 let _connection = undefined;
 let _db = undefined;
@@ -9,12 +9,9 @@ export const dbConnection = async () => {
     _connection = await MongoClient.connect(mongoConfig.serverUrl);
     _db = _connection.db(mongoConfig.database);
   }
+
   return _db;
 };
-
-export const dropDatabase = async () => {
-  return _db.dropDatabase()
-}
 
 export const closeConnection = async () => {
   await _connection.close();

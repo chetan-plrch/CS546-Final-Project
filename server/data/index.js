@@ -1,3 +1,3 @@
-import userDataFunctions from './user.js'
+import * as  UserDataFunctions from "./user.js"
 
-export const userData = userDataFunctions;
+export const userData = UserDataFunctions;
