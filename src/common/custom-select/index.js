@@ -20,6 +20,7 @@ export default function CustomSelect(props) {
             error={props.error}
             helperText={props.helperText}
             value={props.value}
+            placeholder={props.name}
             label={h.capitalizeFirst(props.name)}
             onChange={onChange}
         >
