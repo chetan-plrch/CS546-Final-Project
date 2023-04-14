@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 import './profile.css'
-// import CustomTextField from "../CustomTextField.js";
-import CustomCheckbox from "../CustomCheckbox";
+import CustomCheckbox from "../../common/custom-checkbox";
 
 const Profile = () => {
   const [profile, setProfile] = useState({
@@ -11,7 +10,7 @@ const Profile = () => {
     username: 'myBeagleDaisy',
     isAnonymous: true,
     email: 'wickjohn@continental.org',
-    gender: 'Male',
+    gender: 'M',
     age: 50,
     city: 'New York',
     state: 'New York',
@@ -71,7 +70,7 @@ const Profile = () => {
           className="input-box"
           type="text"
           placeholder="Last Name"
-          value={profile.gender}
+          value={profile.gender === 'M' ? 'Male' : 'Female'}
           onChange={(e) => console.log('do something')}
         />
       </div>
