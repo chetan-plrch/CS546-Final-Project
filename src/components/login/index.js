@@ -13,7 +13,7 @@ const Login = () => {
       setError("Please enter a username and password.");
       return;
     }
-    const data = { userName: username, password: password };
+    const data = { username, password };
     let response = await fetch("/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -33,12 +33,12 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    userInfo.userName = validation.checkString(userInfo.userName,"User name");
+    userInfo.username = validation.checkString(userInfo.username,"User name");
   } catch (e) {
     Allerrors.push(e)
   }
   try {
-    userInfo.userName = validation.checkUsername(userInfo.userName);
+    userInfo.username = validation.checkUsername(userInfo.username);
   } catch (e) {
     Allerrors.push(e)
   }
@@ -81,7 +81,7 @@ router.post("/signup", async (req, res) => {
     const newUser = await userData.create(
       userInfo.firstName,
       userInfo.lastName,
-      userInfo.userName,
+      userInfo.username,
       userInfo.email,
       userInfo.password,
       userInfo.gender,
@@ -114,7 +114,7 @@ router.post("/login", async (req, res) => {
   //validation for the req body
   let Allerrors = []
   
-  if(userObj.userName.trim() === "" || !userObj.userName){
+  if(userObj.username.trim() === "" || !userObj.username){
     Allerrors.push("enter username")
   }
   if(userObj.password.trim() === "" || !userObj.password){
@@ -126,7 +126,7 @@ router.post("/login", async (req, res) => {
   }
 
   try{
-  const token = await userData.checkLogged(userObj.userName.trim(), userObj.password.trim())
+  const token = await userData.checkLogged(userObj.username.trim(), userObj.password.trim())
 
   res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
   return res.status(200).send({ message: "User successfully loggedin" });

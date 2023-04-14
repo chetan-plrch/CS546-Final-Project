@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const create = async (
   firstName,
   lastName,
-  userName,
+  username,
   email,
   password,
   gender,
@@ -33,12 +33,12 @@ const create = async (
   }
 
   try {
-    userName = validation.checkString(userName, "User name");
+    username = validation.checkString(username, "User name");
   } catch (e) {
     Allerrors.push(e);
   }
   try {
-    userName = validation.checkUsername(userName);
+    username = validation.checkUsername(username);
   } catch (e) {
     Allerrors.push(e);
   }
@@ -78,7 +78,7 @@ const create = async (
   }
 
   const userCollection = await users();
-  const userNameExits = await userCollection.findOne({ userName: userName });
+  const userNameExits = await userCollection.findOne({ username });
   if (userNameExits) {
     throw [404, "Error: username already used"];
   }
@@ -96,7 +96,7 @@ const create = async (
   const newUser = {
     firstName,
     lastName,
-    userName,
+    username,
     email,
     password: hashedPassword,
     gender,
@@ -121,10 +121,10 @@ const create = async (
   return res;
 };
 
-const checkLogged = async (userName, password) => {
+const checkLogged = async (username, password) => {
   let Allerrors = []
 
-  if(userName.trim() === "" || !userName){
+  if(username.trim() === "" || !username){
     Allerrors.push("enter username")
   }
   if(password.trim() === "" || !password){
@@ -136,7 +136,7 @@ const checkLogged = async (userName, password) => {
   }
   const userCollection = await users();
 
-  const user = await userCollection.findOne({ userName: userName });
+  const user = await userCollection.findOne({ username });
   if (!user) {
     throw [400, "username/password one them is incorrect"];
   }

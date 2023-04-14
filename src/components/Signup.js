@@ -41,7 +41,6 @@ const SignUp = (props) => {
   const createUser = async () => {
     setSaving(true);
     const response = await createUserAccount(user);
-    console.log("----", response);
     setSaving(false);
   };
 
@@ -112,6 +111,7 @@ const SignUp = (props) => {
         name="gender"
         value={user.gender}
         onChange={onChangeOfValue}
+        placeholder={"Gender"}
         options={[
           {
             label: "MALE",
