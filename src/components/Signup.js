@@ -12,11 +12,13 @@ import CustomSelect from "../common/custom-select";
 import CustomCheckbox from "../common/custom-checkbox";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import ErrorMessage from "../common/common-error";
+import SuccessMessage from "../common/common-success";
 
 const defaultUser = {
   username: "",
-  firstname: "",
-  lastname: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
   gender: "",
@@ -29,6 +31,7 @@ const defaultUser = {
 const SignUp = (props) => {
   const [user, setUser] = React.useState(defaultUser);
   const [errors, setErrors] = React.useState(defaultUser);
+  const [apiStatus, setApiStatus] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
   const [saving, setSaving] = React.useState(null);
 
@@ -41,6 +44,20 @@ const SignUp = (props) => {
   const createUser = async () => {
     setSaving(true);
     const response = await createUserAccount(user);
+    const [error, data] = response;
+    if (error) {
+      setApiStatus({
+        error: true,
+        success: false,
+        message: data
+      })
+    } else {
+      setApiStatus({ 
+        error: false,
+        success: true,
+        message: 'Sign up successful!'
+      })
+    }
     setSaving(false);
   };
 
@@ -59,18 +76,18 @@ const SignUp = (props) => {
       />
       <CustomTextField
         onBlur={onBlur}
-        error={errors.firstname.helperText}
-        helperText={errors.firstname.helperText}
-        name="firstname"
-        value={user.firstname}
+        error={errors.firstName.helperText}
+        helperText={errors.firstName.helperText}
+        name="firstName"
+        value={user.firstName}
         onChange={onChangeOfValue}
       />
       <CustomTextField
         onBlur={onBlur}
-        error={errors.lastname.helperText}
-        helperText={errors.lastname.helperText}
-        name="lastname"
-        value={user.lastname}
+        error={errors.lastName.helperText}
+        helperText={errors.lastName.helperText}
+        name="lastName"
+        value={user.lastName}
         onChange={onChangeOfValue}
       />
       <CustomTextField
@@ -176,6 +193,8 @@ const SignUp = (props) => {
         onChange={onChangeOfValue}
         text={"Stay anonymous"}
       />
+      {apiStatus.error && <ErrorMessage>{apiStatus.message}</ErrorMessage>}
+      {apiStatus.success && <SuccessMessage>{apiStatus.message}</SuccessMessage>}
       <Button
         onClick={createUser}
         variant={saving ? "outlined" : "contained"}

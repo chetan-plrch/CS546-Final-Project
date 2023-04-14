@@ -1,17 +1,38 @@
-const createUserAccount = async ({ email, password }) => {
+const constructResponse = (response, responseJson) => {
+  if (response.status === 200) {
+    return [false, responseJson];
+  } else if (response.status === 400) {
+    return [true, formatErrorMessage(responseJson)]
+  } else if (response.status === 404) {
+    return [true, formatErrorMessage(responseJson)]
+  } else {
+    return [true, formatErrorMessage(responseJson)]
+  }
+}
+
+const formatErrorMessage = (errorResponse) => {
+  if (Array.isArray(errorResponse.Allerrors)) {
+    return errorResponse.Allerrors.join('\n')
+  } else {
+    return errorResponse.message
+  }
+}
+
+const createUserAccount = async (user) => {
   try {
-    const response = await fetch("https://lmel2.wiremockapi.cloud/json/1", {
+    const response = await fetch("/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(user),
     });
     const responseJson = await response.json();
-    return responseJson;
+    console.log('--- responseJson ---', response)
+    return constructResponse(response.status, responseJson)
   } catch (e) {
     console.log("error occurred", e);
-    return false;
+    return [true, 'Some error occurred']
   }
 };
 
