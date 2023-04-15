@@ -11,14 +11,14 @@ const ProfileImage = () => {
     const MAX_FILE_SIZE = 204.8; // 200KB
     const fileSizeKiloBytes = file.size / 1024;
 
-    if (fileSizeKiloBytes > MAX_FILE_SIZE) {
-      setErrorMessage("File size is greater than 200KB limit");
-      return;
-    }
-
     const allowedExtensions = /(\jpg|\jpeg|\png|\gif)$/i;
     if (!allowedExtensions.exec(file.type)) {
       setErrorMessage("Invalid file type! jpg, jpeg, png, gif are supported");
+      return;
+    }
+
+    if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+      setErrorMessage("File size is greater than 200KB limit");
       return;
     }
 
