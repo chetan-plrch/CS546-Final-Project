@@ -1,61 +1,65 @@
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 
-const ProfileImage = (props) => {
-  const imageBase64 = props.image;
-  const [selectedFile, setSelectedFile] = useState();
-  const [errorMsg, setErrorMsg] = useState("");
+const ProfileImage = () => {
+  const [profileImage, setImage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("")
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
 
-  const handleFileChange = (event) => {
-    console.log("files", event.target.files[0]);
-    if (event.target.files.length > 0) {
-      const isValid = validateSelectedFile(event.target.files[0]);
-      if (!isValid) {
-        setSelectedFile(event.target.files[0]);
-      }
-    }
-  };
-
-  const validateSelectedFile = (file) => {
     const MAX_FILE_SIZE = 204.8; // 200KB
-
     const fileSizeKiloBytes = file.size / 1024;
 
     if (fileSizeKiloBytes > MAX_FILE_SIZE) {
-      setErrorMsg("File size is greater than 200KB limit");
-      setIsSuccess(false);
-      return false;
+      setErrorMessage("File size is greater than 200KB limit");
+      return;
     }
 
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    const allowedExtensions = /(\jpg|\jpeg|\png|\gif)$/i;
     if (!allowedExtensions.exec(file.type)) {
-      setErrorMsg("Invalid file type! jpg, jpeg, png, gif are supported");
-      setIsSuccess(false);
-      return false;
+      setErrorMessage("Invalid file type! jpg, jpeg, png, gif are supported");
+      return;
     }
 
-    setErrorMsg("");
-    setIsSuccess(true);
-    return true;
+    setErrorMessage('')
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
-  if (imageBase64) {
-  }
   return (
-    <div className="picture-dialog">
-      <Avatar
-        sx={{
-          bgcolor: "red",
-          width: 80,
-          height: 80,
-          marginTop: 6,
-          marginRight: 2,
-        }}
-      >
-        N
-      </Avatar>
-      <input type="file" name="file" onChange={handleFileChange} />;
-      {errorMsg && <div>{errorMsg}</div>}
+    <div>
+      <label htmlFor="profile-image">
+        {profileImage ? (
+          <img className="profile-image" src={profileImage} alt="Profile" />
+        ) : (
+            <Avatar
+                sx={{
+                bgcolor: "lightgrey",
+                color: 'black',
+                width: 80,
+                height: 80,
+                marginTop: 6,
+                marginRight: 2,
+                fontSize: '10px',
+                cursor: 'pointer'
+              }}
+            >
+              No Profile Image
+            </Avatar>
+        )}
+      </label>
+
+      <input
+        type="file"
+        id="profile-image"
+        onChange={handleImageChange}
+        style={{ display: "none" }}
+      />
+      {errorMessage && <div className="profile-image-error">{errorMessage}</div>}
     </div>
   );
 };
