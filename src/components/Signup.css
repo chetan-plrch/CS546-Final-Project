@@ -5,6 +5,9 @@
 .dialog {
   display: flex;
   flex-direction: row;
+}
+
+.container-dialog {
   background-color: white;
   padding: 20px 35px;
   border-radius: 10px;
@@ -13,7 +16,7 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.dialog-header {
+.header-dialog {
   color: #2d842d;
   font-size: 20px;
   font-weight: bold;
@@ -33,7 +36,6 @@
   margin-left: 25px;
 }
 
-
 .profile-image {
   width: 80px;
   height: 80px;
@@ -50,6 +52,16 @@
   color: red;
 }
 
+.signup-button {
+  margin-left: 96px !important;
+  margin-top: 10px !important;
+}
+
 .anonymous-input {
   margin-left: -10px !important;
+}
+
+.signup-message-spacing {
+  margin-left: 96px !important;
+  height: 20px;
 }

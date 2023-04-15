@@ -12,9 +12,9 @@ import CustomSelect from "../common/custom-select";
 import CustomCheckbox from "../common/custom-checkbox";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import ErrorMessage from "../common/common-error";
 import SuccessMessage from "../common/common-success";
 import ProfileImage from "../common/common-profile";
+import CommonMessage from "../common/common-message";
 
 const defaultUser = {
   username: "",
@@ -65,11 +65,11 @@ const SignUp = (props) => {
   const onBlur = () => setErrors(h.validator(user));
 
   return (
-    <>
+    <div className="container-dialog">
       <div className="dialog">
         <ProfileImage image={undefined} />
         <div className="input-dialog">
-          <div className="dialog-header">Sign up here!</div>
+          <div className="header-dialog">Sign up here!</div>
           <CustomTextField
             onBlur={onBlur}
             error={errors.username.helperText}
@@ -200,19 +200,18 @@ const SignUp = (props) => {
             onChange={onChangeOfValue}
           />
         </div>
-        <div>
-          {apiStatus.error && 
-            <div className="profile-image-error">
-              {apiStatus.message}
-            </div>
-          }
-          {apiStatus.success && (
-            <SuccessMessage>{apiStatus.message}</SuccessMessage>
-          )}
+      </div>
+      <div>
+          <CommonMessage 
+            success={apiStatus.success}
+            error={apiStatus.error}
+            message={apiStatus.message}
+          />
           <Button
             onClick={createUser}
             variant={saving ? "outlined" : "contained"}
             color="success"
+            className="signup-button"
           >
             {saving ? (
               <CircularProgress size={25} color="success" />
@@ -221,8 +220,7 @@ const SignUp = (props) => {
             )}
           </Button>
         </div>
-      </div>
-    </>
+    </div>
   );
 };
 
