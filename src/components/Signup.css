@@ -4,11 +4,11 @@
 
 .dialog {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: white;
   padding: 20px 35px;
   border-radius: 10px;
-  width: 240px;
+  width: 300px;
   height: fit-content;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -19,6 +19,11 @@
   font-weight: bold;
   margin-bottom: 15px;
   text-align: center;
+}
+
+.input-dialog {
+  display: flex;
+  flex-direction: column;
 }
 
 .anonymous-input {
