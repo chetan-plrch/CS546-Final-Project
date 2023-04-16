@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import "./login.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
-
+  const navigate = useNavigate();
   async function handleSubmit(event) {
     event.preventDefault();
     if (!username || !password) {
@@ -29,6 +30,10 @@ const Login = () => {
       console.log(responseData);
       toast.success(responseData.message);
       setErrors([]);
+      // Delay redirect and show toast notification
+      setTimeout(() => {
+        navigate("/user/profile");
+      }, 3000);
     }
   }
 
