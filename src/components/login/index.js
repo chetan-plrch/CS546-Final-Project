@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-
+import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+import "react-toastify/dist/ReactToastify.css";
 import "./login.css";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
 
   async function handleSubmit(event) {
     event.preventDefault();
     if (!username || !password) {
-      setError("Please enter a username and password.");
+      setErrors(["Please enter a username and password."]);
       return;
     }
     const data = { userName: username, password: password };
@@ -18,21 +19,24 @@ const Login = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => {
-        console.error(error);
-        const errorMessage = error.Allerrors.join(", ");
-        setError(errorMessage);
-      });
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      setErrors(errorData.errors || ["An error occurred while logging in. Please try again."]);
+    } else {
+      const responseData = await response.json();
+      console.log(responseData);
+      toast.success(responseData.message);
+      setErrors([]);
+    }
   }
 
   return (
     <>
       <div className="login-container">
         <form className="login-form">
-          <h1>Login</h1>
+          <h2>Login</h2>
           <input
             className="login-input"
             type="text"
@@ -51,8 +55,15 @@ const Login = () => {
             Submit
           </button>
         </form>
-        {error && <div className="error-banner">{error}</div>}
+        {errors.length > 0 && (
+          <div className="error-banner">
+            {errors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
+          </div>
+        )}
       </div>
+      <ToastContainer />
     </>
   );
 };

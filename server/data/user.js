@@ -96,7 +96,7 @@ const create = async (
     throw [404, "Error: username already used"];
   }
   // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 16);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   if(!profilePic){
     profilePic = null
