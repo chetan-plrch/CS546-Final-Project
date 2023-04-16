@@ -174,9 +174,10 @@ const checkLogged = async (userName, password) => {
   }
 
   const token = jwt.sign(
-    { _id: user._id, username: user.username },
+    { _id: user._id, username: user.username,firstName: user.firstName },
     "private-key"
   );
+  //console.log(token);
 
   return token;
 };

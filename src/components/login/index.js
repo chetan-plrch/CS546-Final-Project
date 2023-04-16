@@ -3,6 +3,8 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -24,10 +26,14 @@ const Login = () => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      setErrors(errorData.errors || ["An error occurred while logging in. Please try again."]);
+      setErrors(
+        errorData.errors || [
+          "An error occurred while logging in. Please try again.",
+        ]
+      );
     } else {
       const responseData = await response.json();
-      console.log(responseData);
+      //console.log(responseData);
       toast.success(responseData.message);
       setErrors([]);
       // Delay redirect and show toast notification

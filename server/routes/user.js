@@ -3,7 +3,7 @@ import { errorType, roleType } from "../util.js";
 import { authenticate, authorize } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
-
+import jwt from 'jsonwebtoken'
 const router = Router();
 
 router.get("/user", authenticate, async (req, res) => {
@@ -159,9 +159,11 @@ router.post("/login", async (req, res) => {
 
   try{
   const token = await userData.checkLogged(userObj.userName.trim(), userObj.password.trim())
-
+  //console.log(token);
+  const fn = jwt.decode(token)
   res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-  return res.status(200).send({ message: "User successfully loggedin" });
+  const message = `${fn.firstName}, Welcome Back`
+  return res.status(200).send({message});
   }catch(e){
     let status = e[0] ? e[0] : 500;
     let message = e[1] ? e[1] : "Internal Server Error";
