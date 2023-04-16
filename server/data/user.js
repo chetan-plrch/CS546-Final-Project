@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import validation from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import fs from "fs"
+
 
 const create = async (
   firstName,
@@ -20,62 +20,74 @@ const create = async (
   profilePic //convert the image into base 64 form
 ) => {
   //validating the request body
-  let Allerrors = [];
+  let errors = [];
   try {
-    firstName = validation.checkString(firstName, "First name");
+    firstName = validation.checkString(firstName, "Firstname");
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
-    lastName = validation.checkString(lastName, "Last Name");
+    lastName = validation.checkString(lastName, "Lastname");
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
-    userName = validation.checkString(userName, "User name");
+    userName = validation.checkString(userName, "Username");
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
   try {
     userName = validation.checkUsername(userName);
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
     email = validation.checkMailID(email);
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
     password = validation.checkPassword(password);
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
     age = validation.checkAge(age);
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
     city = validation.checkString(city, "city");
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
   try {
     state = validation.checkString(state, "state");
   } catch (e) {
-    Allerrors.push(e);
+    errors.push(e);
   }
 
-  if (Allerrors.length > 0) {
-    throw [400, Allerrors];
+  try {
+    gender = validation.checkGender(gender)
+  } catch (e) {
+    errors.push(e)
+  }
+
+  try {
+    role = validation.checkRole(role)
+  } catch (e) {
+    errors.push(e)
+  }
+
+  if (errors.length > 0) {
+    throw [400, errors];
   }
 
   const userCollection = await users();
@@ -84,12 +96,11 @@ const create = async (
     throw [404, "Error: username already used"];
   }
   // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 16);
 
   if(!profilePic){
     profilePic = null
   }
-
   
   // Create a new user object with the hashed password
   const newUser = {
@@ -111,7 +122,7 @@ const create = async (
 
   const insertInfo = await userCollection.insertOne(newUser);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
-    throw [404, "Could not create new band"];
+    throw [404, "Could not create new user"];
 
   let userId = insertInfo.insertedId;
   let res = {};
@@ -121,28 +132,45 @@ const create = async (
 };
 
 const checkLogged = async (userName, password) => {
-  let Allerrors = []
+  let errors = []
 
   if(userName.trim() === "" || !userName){
-    Allerrors.push("enter username")
+    errors.push("Error: Enter username")
   }
   if(password.trim() === "" || !password){
-    Allerrors.push("enter password")
+    errors.push("Error: Enter password")
   }
 
-  if(Allerrors.length > 0){
-    throw [400,Allerrors]
+  try {
+    userName = validation.checkString(userName, "Username");
+  } catch (e) {
+    errors.push(e);
+  }
+  try {
+    userName = validation.checkUsername(userName);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  try {
+    password = validation.checkPassword(password);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  if(errors.length > 0){
+    throw [400,errors]
   }
   const userCollection = await users();
 
   const user = await userCollection.findOne({ userName: userName });
   if (!user) {
-    throw [400, "username/password one them is incorrect"];
+    throw [400, "username/password one of them is incorrect"];
   }
 
   const isPasswordMatch = await bcrypt.compare(password, user.password);
   if (!isPasswordMatch) {
-    throw [400, "username/password one them is incorrect"];
+    throw [400, "username/password one of them is incorrect"];
   }
 
   const token = jwt.sign(

@@ -19,62 +19,75 @@ router.post("/signup", async (req, res) => {
       .json({ error: "There are no fields in the request body" });
   }
   //validating the request body
-  let Allerrors = []
+  let errors = []
   try{
   userInfo.firstName = validation.checkString(userInfo.firstName,"First name");
   }catch(e){
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.lastName = validation.checkString(userInfo.lastName,"Last Name");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.userName = validation.checkString(userInfo.userName,"User name");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
   try {
     userInfo.userName = validation.checkUsername(userInfo.userName);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.email = validation.checkMailID(userInfo.email);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.password = validation.checkPassword(userInfo.password);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.age = validation.checkAge(userInfo.age);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.city = validation.checkString(userInfo.city,"city");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
   try {
     userInfo.state = validation.checkString(userInfo.state,"state");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e)
   }
 
-  if(Allerrors.length > 0){
-    return res.send({Allerrors})
+  try {
+    userInfo.gender = validation.checkGender(userInfo.gender)
+  } catch (e) {
+    errors.push(e)
+  }
+
+  try {
+    userInfo.role = validation.checkRole(userInfo.role)
+  } catch (e) {
+    errors.push(e)
+  }
+
+  if (errors.length > 0) {
+    res.status(400).send({ errors });
+    return;
   }
 
   try {
@@ -93,6 +106,7 @@ router.post("/signup", async (req, res) => {
       userInfo.profilePic
     );
     //res.json(newUser)
+    console.log(newUser);
     res.status(200).send({message: 'Successfully created user' })
   } catch (e) {
     let status = e[0] ? e[0] : 500;
@@ -112,17 +126,35 @@ router.post("/login", async (req, res) => {
       .json({ error: "There are no fields in the request body" });
   }
   //validation for the req body
-  let Allerrors = []
+  let errors = []
   
   if(userObj.userName.trim() === "" || !userObj.userName){
-    Allerrors.push("enter username")
+    errors.push("Error: Enter username")
   }
   if(userObj.password.trim() === "" || !userObj.password){
-    Allerrors.push("enter password")
+    errors.push("Error: Enter password")
   }
 
-  if(Allerrors.length > 0){
-    return res.send({Allerrors})
+  try {
+    userObj.userName = validation.checkString(userObj.userName, "Username");
+  } catch (e) {
+    errors.push(e);
+  }
+  try {
+    userObj.userName = validation.checkUsername(userObj.userName);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  try {
+    userObj.password = validation.checkPassword(userObj.password);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    res.status(400).send({ errors });
+    return;
   }
 
   try{
