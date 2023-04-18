@@ -57,6 +57,28 @@ const exportedMethods = {
       throw "Error: Enter valid role"
     }
     return role
+  },
+  checkId(id, varName) {
+    if (!id) throw `${varName} need to have valid values`;
+    if (typeof id !== "string") throw `Error:${varName}  must be a string`;
+    id = id.trim();
+    if (id.length === 0)
+      throw `Error: ${varName}  cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `Error: ${varName}  invalid object ID`;
+    return id;
+  },
+  checkRating(rate, varName){
+    if(!rate){ 
+      throw `${varName} needs to have a value`
+    }
+    if(isNaN(parseInt(rate))){
+      throw `${varName} must be a number`
+    } 
+    rate = parseInt(rate);
+    if(rate > 5){
+      throw `${varName} must be between 1 and 5`
+    }
+    return rate
   }
 };
 
