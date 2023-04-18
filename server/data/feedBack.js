@@ -75,6 +75,8 @@ const createFeedBack = async (
   let res = {};
   res = await feedBackCollection.findOne({ _id: feedBackId });
   res._id = res._id.toString();
+  res.userID = res.userID.toString();
+  res.chatId = res.chatId.toString();
   return res;
 };
 
