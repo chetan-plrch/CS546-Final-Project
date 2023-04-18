@@ -1,5 +1,4 @@
 import { users } from "../config/mongoCollections.js";
-import { ObjectId } from "mongodb";
 import validation from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

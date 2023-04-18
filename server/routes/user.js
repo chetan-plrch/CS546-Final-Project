@@ -173,6 +173,12 @@ router.post("/login", async (req, res) => {
   }
 },authenticate);
 
+router.post("/feedback",async(req,res)=>{
+  let feedBody = req.body;
+  
+})
+
+
 router.get("/check", authenticate, authorize(roleType.ADMIN), (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });

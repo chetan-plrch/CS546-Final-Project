@@ -3,8 +3,8 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
-
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -45,36 +45,42 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-container">
-        <form className="login-form">
-          <h2>Login</h2>
-          <input
-            className="login-input"
+    <div>
+      <Form className="login-form">
+      <h2 id="logIn">Log In</h2>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             type="text"
-            placeholder="Username"
+            placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <input
-            className="login-input"
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="login-button" onClick={handleSubmit}>
-            Submit
-          </button>
-        </form>
-        {errors.length > 0 && (
+        </Form.Group>
+
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Form>
+      {errors.length > 0 && (
           <div className="error-banner">
             {errors.map((error, index) => (
               <div key={index}>{error}</div>
             ))}
           </div>
         )}
-      </div>
-      <ToastContainer />
+    </div>
+    <ToastContainer />
     </>
   );
 };
