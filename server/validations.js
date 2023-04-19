@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 const exportedMethods = {
   checkString(strVal, varName) {
-    if (!strVal) throw "Error: All fields need to have valid values";
+    if (!strVal) throw `Error: ${varName} field needs to have valid values`;
     if (typeof strVal !== "string") throw `Error: ${varName} must be a string!`;
     strVal = strVal.trim();
     if (strVal.length === 0)
@@ -13,7 +13,7 @@ const exportedMethods = {
   },
   checkAge(age){
     if(!age){
-        throw "All fields need to have valid values";
+        throw `Error: age fields need to have valid values`;
     }
     if(typeof parseInt(age) !== "number"){
         throw "Error: age should be number";
@@ -35,16 +35,51 @@ const exportedMethods = {
     if(!emailRegex.test(email)){
       throw "Error: Enter valid email ID";
     }
-    return email.trim()
+    return email.trim().toLowerCase()
   },
   checkUsername(username){
     const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/; // Regex to validate username
     if(!usernameRegex.test(username)){
       throw "Error: username can only contain alphanumeric characters and underscores and a length between 3 and 20 characters "
     }
-    return username.trim()
+    return username.trim().toLowerCase()
+  },
+  checkGender(gender){
+    const allowedGenders = ["M", "F", "male", "female","m","f"];
+    if(!allowedGenders.includes(gender.toLowerCase())){
+      throw "Error: Enter valid gender"
+    }
+    return gender
+  },
+  checkRole(role){
+    const allowedRole = ["listener","seeker"];
+    if(!allowedRole.includes(role.toLowerCase())){
+      throw "Error: Enter valid role"
+    }
+    return role
+  },
+  checkId(id, varName) {
+    if (!id) throw `${varName} need to have valid values`;
+    if (typeof id !== "string") throw `Error:${varName}  must be a string`;
+    id = id.trim();
+    if (id.length === 0)
+      throw `Error: ${varName}  cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `Error: ${varName}  invalid object ID`;
+    return id.trim();
+  },
+  checkRating(rate, varName){
+    if(!rate){ 
+      throw `${varName} needs to have a value`
+    }
+    if(isNaN(parseInt(rate))){
+      throw `${varName} must be a number`
+    } 
+    rate = parseInt(rate);
+    if(rate > 5){
+      throw `${varName} must be between 1 and 5`
+    }
+    return rate
   }
-  
 };
 
 export default exportedMethods;
