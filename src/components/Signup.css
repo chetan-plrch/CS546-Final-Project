@@ -4,16 +4,19 @@
 
 .dialog {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+}
+
+.container-dialog {
   background-color: white;
   padding: 20px 35px;
   border-radius: 10px;
-  width: 240px;
+  width: 610px;
   height: fit-content;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.dialog-header {
+.header-dialog {
   color: #2d842d;
   font-size: 20px;
   font-weight: bold;
@@ -21,6 +24,58 @@
   text-align: center;
 }
 
+.input-dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-dialog-2 {
+  display: flex;
+  flex-direction: column;
+  margin-top: 38px;
+  margin-left: 25px;
+}
+
+.profile-image {
+  width: 80px;
+  height: 80px;
+  margin-top: 48px;
+  margin-right: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-image-error {
+  font-size: 13px;
+  width: 82px;
+  text-align: center;
+  color: red;
+  margin-top: 10px;
+}
+
+.signup-button {
+  margin-left: 96px !important;
+  margin-top: 10px !important;
+  width: 230px !important;
+}
+
 .anonymous-input {
   margin-left: -10px !important;
+}
+
+.signup-message-spacing {
+  margin-left: 96px !important;
+  height: 20px;
+}
+
+.MuiFormGroup-root {
+  flex-direction: row !important;
+}
+
+.MuiFormGroup-root span {
+  font-size: 12px !important;
+}
+
+.my-helper-text {
+  color: #d32f2f !important;
 }

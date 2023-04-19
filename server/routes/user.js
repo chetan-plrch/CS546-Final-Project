@@ -41,7 +41,7 @@ router.post("/signup", async (req, res) => {
     errors.push(e);
   }
   try {
-    userInfo.userName = validation.checkUsername(userInfo.userName);
+    userInfo.username = validation.checkUsername(userInfo.username);
   } catch (e) {
     errors.push(e);
   }
@@ -97,7 +97,7 @@ router.post("/signup", async (req, res) => {
     const newUser = await userData.create(
       userInfo.firstName,
       userInfo.lastName,
-      userInfo.userName,
+      userInfo.username,
       userInfo.email,
       userInfo.password,
       userInfo.gender,

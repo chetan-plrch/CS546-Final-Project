@@ -1,31 +1,38 @@
 import React from 'react'
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import h from '../../helper'
-import { InputLabel } from '@mui/material';
+import { FormHelperText } from '@mui/material';
 
 export default function CustomSelect(props) {
     const onChange = (e) => {
         props.onChange(props.name, e.target.value)
     }
 
-    return <>
-        <InputLabel id={props.name + '-label'}>{h.capitalizeFirst(props.name)}</InputLabel>
-        <Select
-            labelId={props.name + '-label'}
-            onBlur={props.onBlur}
-            size="small"
-            id={props.name}
-            name={props.name}
-            error={props.error}
-            helperText={props.helperText}
-            value={props.value}
-            label={h.capitalizeFirst(props.name)}
-            onChange={onChange}
-        >
-            {props.options.map(({ label, value }) => {
-                return <MenuItem value={value}>{label}</MenuItem>    
-            })}
-        </Select>
-    </>
+    return <FormControl>
+      <FormLabel size="small" id={`radio-buttons-${props.name}-label`}>{h.capitalizeFirst(props.name)}</FormLabel>
+      <RadioGroup
+        aria-labelledby={`radio-buttons-${props.name}-label`}
+        defaultValue=""
+        name="radio-buttons-group"
+        size="small"
+        onChange={onChange}
+      >
+        {props.options.map(({ label, value }) => {
+            return <FormControlLabel sx={{
+                '& .MuiSvgIcon-root': {
+                  fontSize: 18,
+                },
+              }} 
+              value={value} 
+              control={<Radio />} 
+              label={label} 
+            />
+        })}
+      </RadioGroup>
+      <FormHelperText className="my-helper-text">{props.helperText}</FormHelperText>
+    </FormControl>
 }

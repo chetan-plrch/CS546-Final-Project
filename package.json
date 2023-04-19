@@ -28,10 +28,12 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "4.0.3",
     "react-toastify": "^9.1.2",
+    "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
+    "start": "export PORT=3000 && react-scripts start",
     "server": "nodemon server/app.js",
     "build": "react-scripts build",
     "test": "export PORT=3000 && react-scripts start &",

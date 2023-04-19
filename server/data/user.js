@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const create = async (
   firstName,
   lastName,
-  userName,
+  username,
   email,
   password,
   gender,
@@ -38,7 +38,7 @@ const create = async (
     errors.push(e);
   }
   try {
-    userName = validation.checkUsername(userName);
+    username = validation.checkUsername(username);
   } catch (e) {
     errors.push(e);
   }
@@ -90,7 +90,7 @@ const create = async (
   }
 
   const userCollection = await users();
-  const userNameExits = await userCollection.findOne({ userName: userName });
+  const userNameExits = await userCollection.findOne({ username });
   if (userNameExits) {
     throw [404, "Error: username already used"];
   }
@@ -105,7 +105,7 @@ const create = async (
   const newUser = {
     firstName,
     lastName,
-    userName,
+    username,
     email,
     password: hashedPassword,
     gender,
@@ -162,7 +162,7 @@ const checkLogged = async (userName, password) => {
   }
   const userCollection = await users();
 
-  const user = await userCollection.findOne({ userName: userName });
+  const user = await userCollection.findOne({ username });
   if (!user) {
     throw [400, "username/password one of them is incorrect"];
   }

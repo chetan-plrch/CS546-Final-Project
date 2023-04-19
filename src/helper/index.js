@@ -73,11 +73,9 @@ const capitalizeFirst = (str) => {
     return str[0].toUpperCase() + str.slice(1, str.length)
 }
 
-const validator = (user) => {
-    const errorObj = {}
+const validator = (user, errorObj) => {
     Object.keys(user).forEach((key) => {
-        errorObj[key] = {}
-        errorObj[key].helperText = undefined
+        errorObj[key] = { ...(errorObj[key] || {}) }
     })
 
     if (!isUsernameValid(user.username)) {
