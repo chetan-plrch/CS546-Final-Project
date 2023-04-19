@@ -48,11 +48,10 @@ const ProfileImage = () => {
                 cursor: 'pointer'
               }}
             >
-              No Profile Image
+              No Image
             </Avatar>
         )}
       </label>
-
       <input
         type="file"
         id="profile-image"

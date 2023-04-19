@@ -12,9 +12,10 @@ import CustomSelect from "../common/custom-select";
 import CustomCheckbox from "../common/custom-checkbox";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import SuccessMessage from "../common/common-success";
 import ProfileImage from "../common/common-profile";
 import CommonMessage from "../common/common-message";
+import io from 'socket.io-client'
+const s = io("http://localhost:3002")
 
 const defaultUser = {
   username: "",
@@ -134,6 +135,14 @@ const SignUp = (props) => {
           />
         </div>
         <div className="input-dialog-2">
+          <CustomTextField
+            onBlur={onBlur}
+            error={errors.age.helperText}
+            helperText={errors.age.helperText}
+            name="age"
+            value={user.age}
+            onChange={onChangeOfValue}
+          />
           <CustomSelect
             onBlur={onBlur}
             error={errors.gender.helperText}
@@ -156,14 +165,6 @@ const SignUp = (props) => {
                 value: "OTHER",
               },
             ]}
-          />
-          <CustomTextField
-            onBlur={onBlur}
-            error={errors.age.helperText}
-            helperText={errors.age.helperText}
-            name="age"
-            value={user.age}
-            onChange={onChangeOfValue}
           />
           <CustomSelect
             onBlur={onBlur}
