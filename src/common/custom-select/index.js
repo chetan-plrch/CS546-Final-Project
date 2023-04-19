@@ -5,6 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import h from '../../helper'
+import { FormHelperText } from '@mui/material';
 
 export default function CustomSelect(props) {
     const onChange = (e) => {
@@ -18,6 +19,7 @@ export default function CustomSelect(props) {
         defaultValue=""
         name="radio-buttons-group"
         size="small"
+        onChange={onChange}
       >
         {props.options.map(({ label, value }) => {
             return <FormControlLabel sx={{
@@ -31,5 +33,6 @@ export default function CustomSelect(props) {
             />
         })}
       </RadioGroup>
+      <FormHelperText className="my-helper-text">{props.helperText}</FormHelperText>
     </FormControl>
 }

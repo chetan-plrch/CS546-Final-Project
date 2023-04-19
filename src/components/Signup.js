@@ -26,6 +26,7 @@ const defaultUser = {
   gender: "",
   age: "",
   role: "",
+  profileUrl: "",
   city: "",
   state: "",
 };
@@ -43,70 +44,111 @@ const SignUp = (props) => {
 
   const onChangeOfValue = (key, value) => setUser({ ...user, [key]: value });
 
-  const createUser = async () => {
-    setSaving(true);
-    const response = await createUserAccount(user);
-    const [error, data] = response;
-    if (error) {
-      setApiStatus({
-        error: true,
-        success: false,
-        message: data,
-      });
-    } else {
-      setApiStatus({
-        error: false,
-        success: true,
-        message: "Sign up successful!",
-      });
+  const submissionValidation = () => {
+    let valid = true;
+    let allFields = new Set(Object.keys(defaultUser))
+    allFields.delete('city')
+    allFields.delete('state')
+    allFields.delete('profileUrl')
+    let requiredFields = Array.from(allFields)
+    
+    let errorsObj = {}
+    requiredFields.forEach(key => {
+      if ((user[key] === '') || (user[key].trim() === '')) {
+        errorsObj[key] = { ...(errors[key] || {}) }
+        if (!errorsObj[key].helperText) {
+          errorsObj[key].helperText = '*Field required'
+        }
+      }
+    })
+    
+    if(Object.keys(errorsObj).length > 0) {
+      setErrors(errorsObj)
+      valid = false
     }
-    setSaving(false);
+    return valid
+  }
+
+  const createUser = async () => {
+    const valid = submissionValidation()
+
+    if (valid) {
+      setSaving(true);
+      const response = await createUserAccount(user);
+      const [error, data] = response;
+      if (error) {
+        setApiStatus({
+          error: true,
+          success: false,
+          message: data,
+        });
+      } else {
+        setApiStatus({
+          error: false,
+          success: true,
+          message: "Sign up successful!",
+        });
+      }
+      setSaving(false);
+    }
   };
 
-  const onBlur = () => setErrors(h.validator(user));
+  const onBlur = () => {
+    setErrors(h.validator(user, errors))
+  };
 
+  const getHelperText = (key) => {
+    if (errors[key]) {
+      return errors[key].helperText
+    }
+    return ''
+  }
+
+  console.log('user', user)
   return (
     <div className="container-dialog">
       <div className="dialog">
-        <ProfileImage image={undefined} />
+        <ProfileImage name='profileUrl' image={user.profileUrl} onChange={onChangeOfValue} />
         <div className="input-dialog">
           <div className="header-dialog">Sign up here!</div>
           <CustomTextField
             onBlur={onBlur}
-            error={errors.username.helperText}
-            helperText={errors.username.helperText}
+            error={getHelperText('username')}
+            helperText={getHelperText('username')}
             name="username"
             value={user.username}
             onChange={onChangeOfValue}
           />
           <CustomTextField
             onBlur={onBlur}
-            error={errors.firstName.helperText}
-            helperText={errors.firstName.helperText}
+            error={getHelperText('firstName')}
+            helperText={getHelperText('firstName')}
             name="firstName"
+            label="first name"
             value={user.firstName}
             onChange={onChangeOfValue}
           />
           <CustomTextField
             onBlur={onBlur}
-            error={errors.lastName.helperText}
-            helperText={errors.lastName.helperText}
+            error={getHelperText('lastName')}
+            helperText={getHelperText('lastName')}
             name="lastName"
+            label="last name"
             value={user.lastName}
             onChange={onChangeOfValue}
           />
           <CustomTextField
             onBlur={onBlur}
-            error={errors.email.helperText}
-            helperText={errors.email.helperText}
+            error={getHelperText('email')}
+            helperText={getHelperText('email')}
             name="email"
             value={user.email}
             onChange={onChangeOfValue}
           />
           <CustomTextField
             onBlur={onBlur}
-            error={errors.password.helperText}
-            helperText={errors.password.helperText}
+            error={getHelperText('password')}
+            helperText={getHelperText('password')}
             name="password"
             type={showPassword ? "text" : "password"}
             value={user.password}
@@ -137,16 +179,16 @@ const SignUp = (props) => {
         <div className="input-dialog-2">
           <CustomTextField
             onBlur={onBlur}
-            error={errors.age.helperText}
-            helperText={errors.age.helperText}
+            error={getHelperText('age')}
+            helperText={getHelperText('age')}
             name="age"
             value={user.age}
             onChange={onChangeOfValue}
           />
           <CustomSelect
             onBlur={onBlur}
-            error={errors.gender.helperText}
-            helperText={errors.gender.helperText}
+            error={getHelperText('gender')}
+            helperText={getHelperText('gender')}
             name="gender"
             value={user.gender}
             onChange={onChangeOfValue}
@@ -168,8 +210,8 @@ const SignUp = (props) => {
           />
           <CustomSelect
             onBlur={onBlur}
-            error={errors.role.helperText}
-            helperText={errors.role.helperText}
+            error={getHelperText('role')}
+            helperText={getHelperText('role')}
             name="role"
             value={user.role}
             onChange={onChangeOfValue}
@@ -186,17 +228,19 @@ const SignUp = (props) => {
           />
           <CustomTextField
             onBlur={onBlur}
-            error={errors.city.helperText}
-            helperText={errors.city.helperText}
+            error={getHelperText('city')}
+            helperText={getHelperText('city')}
             name="city"
+            label="city (optional)"
             value={user.city}
             onChange={onChangeOfValue}
           />
           <CustomTextField
             onBlur={onBlur}
-            error={errors.state.helperText}
-            helperText={errors.state.helperText}
+            error={getHelperText('state')}
+            helperText={getHelperText('state')}
             name="state"
+            label="state (optional)"
             value={user.state}
             onChange={onChangeOfValue}
           />

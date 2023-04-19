@@ -75,3 +75,7 @@
 .MuiFormGroup-root span {
   font-size: 12px !important;
 }
+
+.my-helper-text {
+  color: #d32f2f !important;
+}

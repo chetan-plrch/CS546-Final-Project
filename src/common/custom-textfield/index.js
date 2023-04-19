@@ -16,7 +16,7 @@ export default function CustomTextField(props) {
             name={props.name}
             onChange={onChange}
             value={props.value}
-            label={h.capitalizeFirst(props.name)}
+            label={h.capitalizeFirst(props.label ? props.label : props.name)}
             variant="outlined"
             error={props.error}
             helperText={props.helperText}
