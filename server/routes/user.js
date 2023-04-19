@@ -3,13 +3,13 @@ import { errorType, roleType } from "../util.js";
 import { authenticate, authorize } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
-
+import jwt from "jsonwebtoken";
+import { feedBackData } from "../data/index.js";
 const router = Router();
 
 router.get("/user", authenticate, async (req, res) => {
   return res.send(req.user);
 });
-
 
 router.post("/signup", async (req, res) => {
   let userInfo = req.body;
@@ -19,62 +19,78 @@ router.post("/signup", async (req, res) => {
       .json({ error: "There are no fields in the request body" });
   }
   //validating the request body
-  let Allerrors = []
-  try{
-  userInfo.firstName = validation.checkString(userInfo.firstName,"First name");
-  }catch(e){
-    Allerrors.push(e)
+  let errors = [];
+  try {
+    userInfo.firstName = validation.checkString(
+      userInfo.firstName,
+      "First name"
+    );
+  } catch (e) {
+    errors.push(e);
   }
 
   try {
-    userInfo.lastName = validation.checkString(userInfo.lastName,"Last Name");
+    userInfo.lastName = validation.checkString(userInfo.lastName, "Last Name");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
   try {
-    userInfo.userName = validation.checkString(userInfo.userName,"User name");
+    userInfo.userName = validation.checkString(userInfo.userName, "User name");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
   try {
     userInfo.userName = validation.checkUsername(userInfo.userName);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
   try {
     userInfo.email = validation.checkMailID(userInfo.email);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
   try {
     userInfo.password = validation.checkPassword(userInfo.password);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
   try {
     userInfo.age = validation.checkAge(userInfo.age);
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
   try {
-    userInfo.city = validation.checkString(userInfo.city,"city");
+    userInfo.city = validation.checkString(userInfo.city, "city");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
   try {
-    userInfo.state = validation.checkString(userInfo.state,"state");
+    userInfo.state = validation.checkString(userInfo.state, "state");
   } catch (e) {
-    Allerrors.push(e)
+    errors.push(e);
   }
 
-  if(Allerrors.length > 0){
-    return res.send({Allerrors})
+  try {
+    userInfo.gender = validation.checkGender(userInfo.gender);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  try {
+    userInfo.role = validation.checkRole(userInfo.role);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    res.status(400).send({ errors });
+    return;
   }
 
   try {
@@ -93,7 +109,8 @@ router.post("/signup", async (req, res) => {
       userInfo.profilePic
     );
     //res.json(newUser)
-    res.status(200).send({message: 'Successfully created user' })
+    console.log(newUser);
+    res.status(200).send({ message: "Successfully created user" });
   } catch (e) {
     let status = e[0] ? e[0] : 500;
     let message = e[1] ? e[1] : "Internal Server Error";
@@ -103,41 +120,70 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  const userObj = req.body;
+router.post("/login",async (req, res) => {
+    const userObj = req.body;
 
-  if (!userObj || Object.keys(userObj).length === 0) {
-    return res
-      .status(400)
-      .json({ error: "There are no fields in the request body" });
-  }
-  //validation for the req body
-  let Allerrors = []
-  
-  if(userObj.userName.trim() === "" || !userObj.userName){
-    Allerrors.push("enter username")
-  }
-  if(userObj.password.trim() === "" || !userObj.password){
-    Allerrors.push("enter password")
-  }
+    if (!userObj || Object.keys(userObj).length === 0) {
+      return res
+        .status(400)
+        .json({ error: "There are no fields in the request body" });
+    }
+    //validation for the req body
+    let errors = [];
 
-  if(Allerrors.length > 0){
-    return res.send({Allerrors})
-  }
+    if (userObj.userName.trim() === "" || !userObj.userName) {
+      errors.push("Error: Enter username");
+    }
+    if (userObj.password.trim() === "" || !userObj.password) {
+      errors.push("Error: Enter password");
+    }
 
-  try{
-  const token = await userData.checkLogged(userObj.userName.trim(), userObj.password.trim())
+    try {
+      userObj.userName = validation.checkString(userObj.userName, "Username");
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      userObj.userName = validation.checkUsername(userObj.userName);
+    } catch (e) {
+      errors.push(e);
+    }
 
-  res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-  return res.status(200).send({ message: "User successfully loggedin" });
-  }catch(e){
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    //console.log(message);
-    res.status(status).json({ error: message });
-    //console.log(e);
-  }
-},authenticate);
+    try {
+      userObj.password = validation.checkPassword(userObj.password);
+    } catch (e) {
+      errors.push(e);
+    }
+
+    if (errors.length > 0) {
+      res.status(400).send({ errors });
+      return;
+    }
+
+    try {
+      const token = await userData.checkLogged(
+        userObj.userName.trim(),
+        userObj.password.trim()
+      );
+      //console.log(token);
+      const fn = jwt.decode(token);
+      res.cookie("token", token, {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      const message = `${fn.firstName}, Welcome Back`;
+      return res.status(200).send({ message });
+    } catch (e) {
+      let status = e[0] ? e[0] : 500;
+      let message = e[1] ? e[1] : "Internal Server Error";
+      //console.log(message);
+      res.status(status).json({ error: message });
+      //console.log(e);
+    }
+  },
+  authenticate
+);
+
 
 router.get("/check", authenticate, authorize(roleType.ADMIN), (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
