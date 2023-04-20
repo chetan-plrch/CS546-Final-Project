@@ -12,8 +12,8 @@ import CustomSelect from "../common/custom-select";
 import CustomCheckbox from "../common/custom-checkbox";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import ProfileImage from "../common/common-profile";
-import CommonMessage from "../common/common-message";
+import ProfileImage from "../common/custom-profile-picture";
+import CommonMessage from "../common/custom-message";
 import io from 'socket.io-client'
 const s = io("http://localhost:3002")
 
