@@ -2,6 +2,7 @@ import { users } from "../config/mongoCollections.js";
 import validation from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import jwtConfig from "../config/jwtConfig.js";
 
 
 const create = async (
@@ -174,7 +175,7 @@ const checkLogged = async (userName, password) => {
 
   const token = jwt.sign(
     { _id: user._id, username: user.username,firstName: user.firstName },
-    "private-key"
+    jwtConfig.secret
   );
   //console.log(token);
 

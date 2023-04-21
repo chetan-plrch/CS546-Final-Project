@@ -4,7 +4,9 @@ export const roleType = {
 }
 
 export const errorType = {
-    BAD_INPUT: 'BAD_INPUT'
+    BAD_INPUT: 'BAD_INPUT',
+    UNAUTHORIZED: 'UNAUTHORIZED',
+    NOT_FOUND: 'NOT_FOUND'
 }
 
 export const getChatUserIds = (chats) => {
@@ -49,4 +51,10 @@ export const removeBlockedChats = (chats, blockedUserIds) => {
             return [...acc, chat]
         }
     }, []);
+}
+
+export const errorObject = (type, msg) => {
+    const e = new Error(msg)
+    e.type = type
+    return e
 }

@@ -1,17 +1,25 @@
 import { ObjectId } from 'mongodb'
 import { users, chats, sockets } from "../config/mongoCollections.js";
 import validators from '../validations.js'
-import { removeBlockedChats, formatListOfUsers, formatUser, getChatUserIds } from '../util.js'
+import { removeBlockedChats, formatListOfUsers, formatUser, getChatUserIds, errorObject, errorType } from '../util.js'
 
 const addConnection = async (userId, connectionUserId) => {
+    if (userId === connectionUserId) {
+        throw errorObject(errorType.NOT_FOUND, 'User id and connecting user id cannot be same!')
+    }
     const userCtn = await users()
-    const user = await userCtn.findOne({ _id: new ObjectId(userId) });
+    const [user, connectingUser] = await Promise.all([
+        userCtn.findOne({ _id: new ObjectId(userId) }),
+        userCtn.findOne({ _id: new ObjectId(connectionUserId) })
+    ]);
     if (!user) {
-        throw new Error('User not found in the system')
+        throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
+    } else if (!connectingUser) {
+        throw errorObject(errorType.NOT_FOUND, 'Connecting user not found in the system')
     }
     const activeConnections = new Set(user.connections.active)
     if(activeConnections.has(connectionUserId)) {
-        throw new Error('User already has an active connection')
+        return true
     } else {
         const active = [...user.connections.active, connectionUserId]
         const updatedDoc = await userCtn.findOneAndUpdate(
@@ -21,7 +29,7 @@ const addConnection = async (userId, connectionUserId) => {
         )
 
         if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
-            return updatedDoc
+            return true
         } else {
             throw new Error('Unable to update the users active connections')
         }
@@ -29,43 +37,66 @@ const addConnection = async (userId, connectionUserId) => {
 }
 
 const blockConnection = async (userId, blockUserId) => {
+    if (userId === blockUserId) {
+        throw errorObject(errorType.BAD_INPUT, 'User id and blocking user id cannot be same!')
+    }
+
     const userCtn = await users()
-    const user = await userCtn.findOne({ _id: new ObjectId(userId) });
+    const [user, blockedUser] = await Promise.all([
+        userCtn.findOne({ _id: new ObjectId(userId) }),
+        userCtn.findOne({ _id: new ObjectId(blockUserId) })
+    ]);
+    if (!user) {
+        throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
+    } else if (!blockedUser) {
+        throw errorObject(errorType.NOT_FOUND, 'Blocking user not found in the system')
+    }
+
     const activeConnections = user.connections.active
     const blockedConnections = user.connections.blocked
     const blockedConnectionsSet = new Set(user.connections.blocked)
     if(blockedConnectionsSet.has(blockUserId)) {
-        throw new Error('User is already in the block list')
+        return true;
     } else {
         const blockIdx = activeConnections.indexOf(blockUserId);
         if (blockIdx > -1) {
             activeConnections.splice(blockIdx, 1);
             blockedConnections.push(blockUserId)
         } else {
-            throw new Error('User not found in the system')
+            throw errorObject(errorType.BAD_INPUT, 'Blocking user is not in the active list of the user')
         }
-        const active = activeConnections
-        const blocked = blockedConnections
         const updatedDoc = await userCtn.findOneAndUpdate(
             { _id: new ObjectId(userId) }, 
             { $set: { 
-                'connections.blocked': blocked,
-                'connections.active': active 
+                'connections.blocked': blockedConnections,
+                'connections.active': activeConnections 
             } },
             { returnDocument: 'after', returnNewDocument: true }
         )
 
         if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
-            return updatedDoc
+            return true
         } else {
-            throw new Error('Unable to update the blocked user list')
+            throw new Error('Unable to update the blocked list of the user')
         }
     }
 }
 
 const unblockConnection = async (userId, unblockUserId) => {
+    if (userId === unblockUserId) {
+        throw errorObject(errorType.BAD_INPUT, 'User id and unblocking user id cannot be same!')
+    }
     const userCtn = await users()
-    const user = await userCtn.findOne({ _id: new ObjectId(userId) });
+    const [user, unblockedUser] = await Promise.all([
+        userCtn.findOne({ _id: new ObjectId(userId) }),
+        userCtn.findOne({ _id: new ObjectId(unblockUserId) })
+    ]);
+    if (!user) {
+        throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
+    } else if (!unblockedUser) {
+        throw errorObject(errorType.NOT_FOUND, 'Unblocking user not found in the system')
+    }
+
     const activeConnections = user.connections.active
     const blockedConnections = user.connections.blocked
     const blockedConnectionsSet = new Set(blockedConnections)
@@ -75,42 +106,42 @@ const unblockConnection = async (userId, unblockUserId) => {
             blockedConnections.splice(blockIdx, 1);
             activeConnections.push(unblockUserId)
         } else {
-            throw new Error('User not found in the system')
+            throw errorObject(errorType.BAD_INPUT, 'User is not in the block list of the user to unblock')
         }
-        const blocked = blockedConnections
-        const active = activeConnections
         const updatedDoc = await userCtn.findOneAndUpdate(
             { _id: new ObjectId(userId) }, 
             { $set: { 
-                'connections.blocked': blocked,
-                'connections.active': active,
+                'connections.blocked': blockedConnections,
+                'connections.active': activeConnections,
             } },
             { returnDocument: 'after', returnNewDocument: true }
         )
 
         if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
-            return updatedDoc
+            return true
         } else {
             throw new Error('Unable to update the active connections list ')
         }
     } else {
-        throw new Error('Blocked user not in the block list')
+        throw errorObject(errorType.BAD_INPUT, 'User not in the block list to unblock')
     }
 }
 
-const addMessagesToChat = async (senderId, receiverId, message) => {
+const addMessagesToChat = async (sId, rId, message) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
-    validators.checkId(senderId)
-    validators.checkId(receiverId)
+    const senderId = validators.checkId(sId, 'senderId')
+    const receiverId = validators.checkId(rId, 'receiverId')
 
-    if (senderId === receiverId) throw new Error('User Id of both the users cannot be same')
-    const [user1, user2] = await Promise.all([
+    if (senderId === receiverId) {
+        throw errorObject(errorType.BAD_INPUT, 'User Id of both sender and receiver cannot be same')
+    }
+    const [sender, receiver] = await Promise.all([
         usersCtx.findOne({ _id: new ObjectId(senderId) }),
         usersCtx.findOne({ _id: new ObjectId(receiverId) }),
     ])
-    if ((!user1) || (!user2)) {
-        throw new Error('User doesnt exist in the system with the given Id')
+    if ((!sender) || (!receiver)) {
+        throw errorObject(errorType.NOT_FOUND, 'User doesnt exist in the system with the given Id')
     }
 
     const chat = await chatsCtx.findOne({ users: { $all: [senderId, receiverId] }});
@@ -129,11 +160,10 @@ const addMessagesToChat = async (senderId, receiverId, message) => {
         )
 
         if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
-            return updatedDoc
+            return true
         } else {
             throw new Error('Unable to udpate the conversation of the users')
         }
-
     } else {
         const { insertedId } = await chatsCtx.insertOne({
             users: [senderId, receiverId],
@@ -145,26 +175,29 @@ const addMessagesToChat = async (senderId, receiverId, message) => {
             isArchived: false
         })
 
-        if((!insertedId) || !insertedId.toString()) 
+        if((!insertedId) || !insertedId.toString()) {
             throw new Error('Unable to insert band object into mongodb')
         }
         
         return insertedId
+    }
 }
 
-const chatHistory = async (userId, anotherUserId) => {
+const chatHistory = async (uId, anUserId) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
-    validators.checkId(userId)
-    validators.checkId(anotherUserId)
+    const userId = validators.checkId(uId, 'userId')
+    const anotherUserId = validators.checkId(anUserId, 'anotherUserId')
 
-    if (userId === anotherUserId) throw new Error('User Id of both the users cannot be same')
+    if (userId === anotherUserId) {
+        throw errorObject(errorType.BAD_INPUT, 'User Id of both the users cannot be same')
+    }
     const [user1, user2] = await Promise.all([
-        usersCtx.findOne({ _id: new Object(userId) }),
-        usersCtx.findOne({ _id: new Object(anotherUserId) }),
+        usersCtx.findOne({ _id: new ObjectId(userId) }),
+        usersCtx.findOne({ _id: new ObjectId(anotherUserId) }),
     ])
     if ((!user1) || (!user2)) {
-        throw new Error('User doesnt exist in the system with the given Id')
+        throw errorObject(errorType.NOT_FOUND, 'User doesnt exist in the system with the given Id')
     }
 
     const chat = await chatsCtx.findOne({ users: { $all: [userId, anotherUserId] }});
@@ -178,19 +211,19 @@ const chatHistory = async (userId, anotherUserId) => {
 const activeChats = async (userId) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
-    validators.checkId(userId)
 
-    const user = await usersCtx.findOne({ _id: new Object(userId) })
-    if (!user) throw new Error('User does not exist in the system')
+    const user = await usersCtx.findOne({ _id: new ObjectId(userId) })
 
-    const chatsObj = await chatsCtx.find({ users: { $in: [userId] }});
+    const chatsObj = await chatsCtx.find({ users: { $in: [userId] }}).toArray();
     if (!chatsObj) {
-        throw new Error('No chats found for the user')
+        throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
     } else {
         const filteredChats = removeBlockedChats(chatsObj, user.blocked)
+        if (filteredChats.length === 0) {
+            throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
+        }
         const chatUserIds = getChatUserIds(filteredChats)
-        const users = await getUsersByIds(chatUserIds)
-        const maskedUsers = formatListOfUsers(users)
+        const maskedUsers = await getUsersByIds(chatUserIds)
         return {
             chats: filteredChats,
             users: maskedUsers
@@ -200,9 +233,8 @@ const activeChats = async (userId) => {
 
 const getUsersByIds = async (ids) => {
     const usersCtx = await users()
-    const users = usersCtx.find({ _id: {$in: ids} });
-
-    return users.map((user) => formatUser(user));
+    const usersArr = await usersCtx.find({ _id: {$in: ids} }).toArray();
+    return usersArr.map((user) => formatUser(user));
 }
 
 const mapSocketIdToUser = async ({ socketId, userId }) => {
