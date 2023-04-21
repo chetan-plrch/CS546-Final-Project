@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb'
 
 const exportedMethods = {
   checkString(strVal, varName) {
