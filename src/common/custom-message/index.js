@@ -2,12 +2,21 @@ import React from 'react'
 
 const CommonMessage = (props) => {
     let className = 'error-message'
+    let message = props.message
     if (props.success) {
         className = 'success-message';
     }
 
+    if (Array.isArray(props.message)) {
+        message = props.message.map((msg) => {
+            return <div className={className}>
+                {msg}
+            </div>
+        })
+    }
+
     return <div className={`signup-message-spacing ${className}`}>
-        {props.message}
+        {message}
     </div>
 }
 
