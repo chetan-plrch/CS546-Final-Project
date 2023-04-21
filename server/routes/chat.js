@@ -58,6 +58,7 @@ router.get('/connections', async (req, res) => {
         const connections = await activeChats(req.user._id.toString())
         return res.status(200).send(connections)
     } catch(e) {
+        console.log('e', e)
         if (e.type === errorType.BAD_INPUT) {
             return res.status(400).send({ message: e.message })
         } else if (e.type === errorType.NOT_FOUND) {

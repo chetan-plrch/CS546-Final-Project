@@ -213,12 +213,15 @@ const activeChats = async (userId) => {
     const usersCtx = await users()
 
     const user = await usersCtx.findOne({ _id: new ObjectId(userId) })
+    if (!user) {
+        throw errorObject(errorType.NOT_FOUND, 'User not found')
+    }
 
     const chatsObj = await chatsCtx.find({ users: { $in: [userId] }}).toArray();
     if (!chatsObj) {
         throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
     } else {
-        const filteredChats = removeBlockedChats(chatsObj, user.blocked)
+        const filteredChats = removeBlockedChats(chatsObj, user.connections.blocked)
         if (filteredChats.length === 0) {
             throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
         }
