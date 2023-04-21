@@ -12,7 +12,11 @@ export default function CustomSelect(props) {
         props.onChange(props.name, e.target.value)
     }
 
-    return <FormControl>
+    const onBlur = () => {
+      props.onBlur(props.name)
+    }
+
+    return <FormControl onBlur={onBlur}>
       <FormLabel size="small" id={`radio-buttons-${props.name}-label`}>{h.capitalizeFirst(props.name)}</FormLabel>
       <RadioGroup
         aria-labelledby={`radio-buttons-${props.name}-label`}

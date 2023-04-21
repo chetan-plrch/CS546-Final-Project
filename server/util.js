@@ -1,18 +1,21 @@
+import { ObjectId } from 'mongodb'
+
 export const roleType = {
     ADMIN: 'ADMIN',
     USER: 'USER'
 }
 
 export const errorType = {
-    BAD_INPUT: 'BAD_INPUT'
+    BAD_INPUT: 'BAD_INPUT',
+    UNAUTHORIZED: 'UNAUTHORIZED',
+    NOT_FOUND: 'NOT_FOUND'
 }
 
 export const getChatUserIds = (chats) => {
     const usersSet = chats.reduce((acc, chat) => {
-        acc.add(chat.users)
+        chat.users.forEach(userId => acc.add(userId))
         return acc;
     }, new Set())
-    
     return Array.from(usersSet).map(userId => new ObjectId(userId))
 }
 
@@ -21,15 +24,17 @@ export const formatUser = (user) => {
         return {
             _id: user._id.toString(),
             firstname: 'Anonymous',
-            lastname: 'user',
-            username: user._id.toString()
+            lastname: 'User',
+            username: user._id.toString(),
+            role: user.role
         }
     } else {
         return {
             _id: user._id.toString(),
-            firstname: user.firstname,
-            lastname: user.lastname,
-            username: user.username
+            firstname: user.firstName,
+            lastName: user.lastName,
+            userName: user.username,
+            role: user.role
         }
     }
 }
@@ -49,4 +54,10 @@ export const removeBlockedChats = (chats, blockedUserIds) => {
             return [...acc, chat]
         }
     }, []);
+}
+
+export const errorObject = (type, msg) => {
+    const e = new Error(msg)
+    e.type = type
+    return e
 }
