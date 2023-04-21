@@ -30,18 +30,18 @@ const sendMessage = async (senderId, receiverId, message) => {
         }
     }
     
-    const updated = await addMessagesToChat(senderId, receiverId, message)
-    console.log('--- update the conversation', updated)
+    try {
+        await addMessagesToChat(senderId, receiverId, message)
+    } catch(e) {
+        console.log('ERROR: Failed to save message to database', senderId)
+    }
 }
-
-
 
 ioS.on("connection", async socket => {
     console.log('Socket connection is live!!')
 
     const userId = '6438d7ac8e1c21e45686e198'
-    const socketId = socket.id
-    const created = await mapSocketIdToUser({ userId, socketId })
+    const created = await mapSocketIdToUser({ userId, socketId: socket.id })
 
     if (created) {
         socket.on("message", async ({ senderId, receiverId, message }) => {
@@ -53,7 +53,5 @@ ioS.on("connection", async socket => {
     }
 
 })
-
-
 
 export default ioS

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import { users, chats, sockets } from "../config/mongoCollections.js";
 import validators from '../validations.js'
-import { removeBlockedChats, formatListOfUsers, formatUser, getChatUserIds, errorObject, errorType } from '../util.js'
+import { removeBlockedChats, formatUser, getChatUserIds, errorObject, errorType } from '../util.js'
 
 const addConnection = async (userId, connectionUserId) => {
     if (userId === connectionUserId) {
