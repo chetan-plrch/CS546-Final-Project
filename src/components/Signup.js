@@ -12,9 +12,11 @@ import CustomSelect from "../common/custom-select";
 import CustomCheckbox from "../common/custom-checkbox";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import ProfileImage from "../common/common-profile";
-import CommonMessage from "../common/common-message";
+import ProfileImage from "../common/custom-profile-picture";
+import CommonMessage from "../common/custom-message";
 import io from 'socket.io-client'
+import { redirect } from "react-router-dom";
+
 const s = io("http://localhost:3002")
 
 const defaultUser = {
@@ -42,7 +44,10 @@ const SignUp = (props) => {
 
   const handleMouseDownPassword = (e) => e.preventDefault();
 
-  const onChangeOfValue = (key, value) => setUser({ ...user, [key]: value });
+  const onChangeOfValue = (key, value) => {
+    console.log('key', key, value)
+    setUser({ ...user, [key]: value });
+  }
 
   const submissionValidation = () => {
     let valid = true;
@@ -88,6 +93,7 @@ const SignUp = (props) => {
           success: true,
           message: "Sign up successful!",
         });
+        redirect('/user/login')
       }
       setSaving(false);
     }
@@ -104,7 +110,6 @@ const SignUp = (props) => {
     return ''
   }
 
-  console.log('user', user)
   return (
     <div className="container-dialog">
       <div className="dialog">
