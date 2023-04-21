@@ -1,22 +1,27 @@
 import io from 'socket.io-client'
-const socket = io("http://localhost:3002")
 
-socket.on("connect", () => {
-    console.log('--- Socket connected! ---', socket.id);
-});
-  
-socket.on("disconnect", () => {
-    console.log('--- Socket disconnected! ---', socket.id);
-});
+let socket = null
 
-const receiveMessage = (cb) => {
+export const initConnection = (userId) => {
+    socket = io("http://localhost:3002", { query: { userId } });
+
+    socket.on("connect", () => {
+        console.log('--- Socket connected! ---', socket.id);
+    });
+      
+    socket.on("disconnect", () => {
+        console.log('--- Socket disconnected! ---', socket.id);
+    });
+}
+
+export const receiveMessage = (cb) => {
     socket.on('message', (message) => {
         console.log('--- Message received ---', message)
         cb(message)
     })
 }
 
-const sendMessage = (senderId, receiverId, message) => {
+export const sendMessage = (senderId, receiverId, message) => {
     console.log('--- Message sent ---')
     /*  Message format:
         {
@@ -30,8 +35,3 @@ const sendMessage = (senderId, receiverId, message) => {
 
 window.sendMessage = sendMessage
 window.receiveMessage = receiveMessage
-
-export default {
-    sendMessage,
-    receiveMessage
-}
