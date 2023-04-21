@@ -16,7 +16,7 @@ const receiveMessage = (cb) => {
     })
 }
 
-const sendMessage = (message) => {
+const sendMessage = (senderId, receiverId, message) => {
     console.log('--- Message sent ---')
     /*  Message format:
         {
@@ -25,8 +25,11 @@ const sendMessage = (message) => {
             message: 'This is a change'
         }
     */
-    socket.emit('message', message)
+    socket.emit('message', { senderId, receiverId, message })
 }
+
+window.sendMessage = sendMessage
+window.receiveMessage = receiveMessage
 
 export default {
     sendMessage,

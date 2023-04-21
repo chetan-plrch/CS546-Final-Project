@@ -6,7 +6,7 @@ import Profile from './components/profile'
 import Connections from './components/connections';
 import './App.css';
 import SignUp from './components/Signup';
-import Socket from '../src/common/common-socket/index.js';
+import Socket from '../src/common/custom-socket/index.js';
 
 const App = () => {
   return (
