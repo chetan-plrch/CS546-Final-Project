@@ -35,7 +35,7 @@ export const formatUser = (user) => {
             firstname: user.firstName,
             lastName: user.lastName,
             profilePic: user.profilePic,
-            userName: user.username,
+            username: user.username,
             role: user.role
         }
     }

@@ -142,7 +142,7 @@ const checkLogged = async (username, password) => {
   }
 
   try {
-    username = validation.checkString(username, "username");
+    username = validation.checkString(username, "Username");
   } catch (e) {
     errors.push(e);
   }
