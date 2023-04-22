@@ -25,6 +25,7 @@ export const formatUser = (user) => {
             _id: user._id.toString(),
             firstname: 'Anonymous',
             lastname: 'User',
+            profilePic: null,
             username: user._id.toString(),
             role: user.role
         }
@@ -33,6 +34,7 @@ export const formatUser = (user) => {
             _id: user._id.toString(),
             firstname: user.firstName,
             lastName: user.lastName,
+            profilePic: user.profilePic,
             userName: user.username,
             role: user.role
         }

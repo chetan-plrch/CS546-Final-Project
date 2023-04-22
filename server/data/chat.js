@@ -183,7 +183,7 @@ const addMessagesToChat = async (sId, rId, message) => {
     }
 }
 
-const chatHistory = async (uId, anUserId) => {
+const activeChat = async (uId, anUserId, onlyUsers) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
     const userId = validators.checkId(uId, 'userId')
@@ -202,13 +202,17 @@ const chatHistory = async (uId, anUserId) => {
 
     const chat = await chatsCtx.findOne({ users: { $all: [userId, anotherUserId] }});
     if (!chat) {
-        throw new Error('No chat found')
+        throw errorObject(errorType.BAD_INPUT, 'No chat found')
     } else {
-        return chat
+        const { users, chats } = await getfilteredChatAndUsers([chat], user1.connections.blocked)
+        if (onlyUsers) {
+            return { users };
+        }
+        return { users, chats }
     }
 }
 
-const activeChats = async (userId) => {
+const allActiveChats = async (userId, onlyUsers) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
 
@@ -221,16 +225,25 @@ const activeChats = async (userId) => {
     if (!chatsObj) {
         throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
     } else {
-        const filteredChats = removeBlockedChats(chatsObj, user.connections.blocked)
-        if (filteredChats.length === 0) {
-            throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
+        const { users, chats } = await getfilteredChatAndUsers(chatsObj, user.connections.blocked)
+        if (onlyUsers) {
+            return { users };
         }
-        const chatUserIds = getChatUserIds(filteredChats)
-        const maskedUsers = await getUsersByIds(chatUserIds)
-        return {
-            chats: filteredChats,
-            users: maskedUsers
-        }
+        return { users, chats }
+    }
+}
+
+const getfilteredChatAndUsers = async (chatsObj, blocked) => {
+    const filteredChats = removeBlockedChats(chatsObj, blocked)
+    if (filteredChats.length === 0) {
+        throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
+    }
+    const chatUserIds = getChatUserIds(filteredChats)
+    const maskedUsers = await getUsersByIds(chatUserIds)
+    const usersWithLastMessage = getUserWithLastMessage(maskedUsers, filteredChats)
+    return {
+        chats: filteredChats,
+        users: usersWithLastMessage
     }
 }
 
@@ -238,6 +251,21 @@ const getUsersByIds = async (ids) => {
     const usersCtx = await users()
     const usersArr = await usersCtx.find({ _id: {$in: ids} }).toArray();
     return usersArr.map((user) => formatUser(user));
+}
+
+const getUserWithLastMessage = async (users, chats) => {
+    return users.map((user) => {
+        const userId = user._id;
+        const chatFound = chats.find((chat) => chat.users.includes(userId));
+
+        if (chatFound && chatFound.conversation && chatFound.conversation.length > 0)  {
+            const lastChat = chatFound.conversation[chatFound.conversation.length - 1]
+            const lastMessage = lastChat.message
+            return { ...user, lastMessage }
+        } else {
+            return { ...user, lastMessage: 'No last message' }
+        }
+    })
 }
 
 const mapSocketIdToUser = async ({ socketId, userId }) => {
@@ -259,4 +287,4 @@ const mapSocketIdToUser = async ({ socketId, userId }) => {
     }
 }
 
-export { addConnection, blockConnection, unblockConnection, addMessagesToChat, activeChats, chatHistory, mapSocketIdToUser };
+export { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser };
