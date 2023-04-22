@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import ProfileImage from "../common/custom-profile-picture";
 import CommonMessage from "../common/custom-message";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const defaultUser = {
   username: "",
@@ -35,6 +35,7 @@ const SignUp = (props) => {
   const [apiStatus, setApiStatus] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
   const [saving, setSaving] = React.useState(null);
+  const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -83,15 +84,18 @@ const SignUp = (props) => {
           success: false,
           message: data,
         });
+        setSaving(false);
       } else {
         setApiStatus({
           error: false,
           success: true,
-          message: ["Sign up successful!"],
+          message: ["Sign up successful! Redirecting..."],
         });
-        redirect('/user/login')
+        setTimeout(() => {
+          navigate('/user/login')
+          setSaving(false);
+        }, 2000)
       }
-      setSaving(false);
     }
   };
 

@@ -1,9 +1,10 @@
-const constructResponse = (response, responseJson) => {
-  if (response.status === 200) {
+const constructResponse = (status, responseJson) => {
+  console.log(status, responseJson)
+  if (status === 200) {
     return [false, responseJson];
-  } else if (response.status === 400) {
+  } else if (status === 400) {
     return [true, formatErrorMessage(responseJson)]
-  } else if (response.status === 404) {
+  } else if (status === 404) {
     return [true, formatErrorMessage(responseJson)]
   } else {
     return [true, formatErrorMessage(responseJson)]
@@ -12,9 +13,9 @@ const constructResponse = (response, responseJson) => {
 
 const formatErrorMessage = (errorResponse) => {
   if (Array.isArray(errorResponse.errors)) {
-    return errorResponse.errors.splice.slice(0, 2)
+    return errorResponse.errors.slice(0, 2)
   } else {
-    return [errorResponse.message]
+    return [errorResponse.error]
   }
 }
 
@@ -31,7 +32,7 @@ const createUserAccount = async (user) => {
     return constructResponse(response.status, responseJson)
   } catch (e) {
     console.log("error occurred", e);
-    return [true, 'Some error occurred']
+    return constructResponse(e.status, e)
   }
 };
 
