@@ -20,7 +20,7 @@ const Connections = () => {
     chatList.length ? (
       <div className='conversation-container'>
         <CustomList list={chatList} />
-        <ChatWindow allowSearch={true} allowBlocking={true} />
+        <ChatWindow allowSearch={true} allowBlocking={true} allowMessaging={true} />
       </div>
     ) : (
       <span>

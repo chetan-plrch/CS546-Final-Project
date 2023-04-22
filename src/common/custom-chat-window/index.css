@@ -1,3 +1,22 @@
-.button-container {
+/* TODO - Remove if unused from template as well */
+/* .container {
     display: flex;
+} */
+.header-container {
+    display: flex;
+    border-width: 0.5px;
+    border-color: grey;
+}
+.footer-container {
+    display: flex;
+    border-width: 0.5px;
+    border-color: grey;
+}
+.chat-container {
+    display: flex;
+    border-width: 0.5px;
+    border-color: grey;
+    border-style: solid;
+    height: 400px;
+    width: 350px;
 }

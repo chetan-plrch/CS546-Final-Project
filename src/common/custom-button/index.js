@@ -3,11 +3,11 @@ import React from 'react';
 import Button from "@mui/material/Button";
 
 function CustomButton(props) {
-    const { theme, styles, title, loading, disabled } = props;
+    // TODO - Add themes and pass style prop
+    const { theme, styles, title, disabled } = props;
     return (
         <div>
             <Button
-             loading={loading}
              disabled={disabled}
             >
                 {title}
@@ -19,7 +19,6 @@ function CustomButton(props) {
 CustomButton.defaultProps = {
     styles: {},
     title: 'Okay',
-    loading: false,
     disabled: false,
     theme: 'Primary'
 }
