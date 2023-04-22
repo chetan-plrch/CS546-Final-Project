@@ -1,4 +1,5 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb'
+import { errorObject, errorType } from './util.js';
 
 const exportedMethods = {
   checkString(strVal, varName) {
@@ -59,12 +60,12 @@ const exportedMethods = {
     return role
   },
   checkId(id, varName) {
-    if (!id) throw `${varName} need to have valid values`;
-    if (typeof id !== "string") throw `Error:${varName}  must be a string`;
+    if (!id) throw errorObject(errorType.BAD_INPUT, `${varName} need to have valid values`);
+    if (typeof id !== "string") throw errorObject(errorType.BAD_INPUT, `Error:${varName} must be a string`);
     id = id.trim();
     if (id.length === 0)
-      throw `Error: ${varName}  cannot be an empty string or just spaces`;
-    if (!ObjectId.isValid(id)) throw `Error: ${varName}  invalid object ID`;
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot be an empty string or just spaces`);
+    if (!ObjectId.isValid(id)) throw errorObject(errorType.BAD_INPUT, `Error: ${varName} invalid object ID`);
     return id.trim();
   },
   checkRating(rate, varName){

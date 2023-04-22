@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import configureRoutes from './routes/index.js';
+import socket from './sockets/index.js';
 
 const app = express();
 const port = 3001

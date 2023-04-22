@@ -18,6 +18,9 @@ const getCollectionFn = (collection) => {
 /* Now, you can list your collections here: */
 export const users = getCollectionFn('users');
 export const feedBack = getCollectionFn('feedBack');
+export const chats = getCollectionFn('chats')
+export const sockets = getCollectionFn('sockets')
+
 /**
  * User authentication
  * 

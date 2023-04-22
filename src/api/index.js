@@ -11,10 +11,10 @@ const constructResponse = (response, responseJson) => {
 }
 
 const formatErrorMessage = (errorResponse) => {
-  if (Array.isArray(errorResponse.Allerrors)) {
-    return errorResponse.Allerrors.join('\n')
+  if (Array.isArray(errorResponse.errors)) {
+    return errorResponse.errors.splice.slice(0, 2)
   } else {
-    return errorResponse.message
+    return [errorResponse.message]
   }
 }
 
@@ -28,7 +28,6 @@ const createUserAccount = async (user) => {
       body: JSON.stringify(user),
     });
     const responseJson = await response.json();
-    console.log('--- responseJson ---', response)
     return constructResponse(response.status, responseJson)
   } catch (e) {
     console.log("error occurred", e);
