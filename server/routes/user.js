@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { errorType, roleType } from "../util.js";
+import { roleType } from "../util.js";
 import { authenticate, authorize } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
 import jwt from "jsonwebtoken";
-import { feedBackData } from "../data/index.js";
 const router = Router();
 
 router.get("/user", authenticate, async (req, res) => {
@@ -36,7 +35,7 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    userInfo.userName = validation.checkString(userInfo.userName, "User name");
+    userInfo.username = validation.checkString(userInfo.username, "User name");
   } catch (e) {
     errors.push(e);
   }
@@ -131,7 +130,7 @@ router.post("/login",async (req, res) => {
     //validation for the req body
     let errors = [];
 
-    if (userObj.userName.trim() === "" || !userObj.userName) {
+    if (userObj.username.trim() === "" || !userObj.username) {
       errors.push("Error: Enter username");
     }
     if (userObj.password.trim() === "" || !userObj.password) {
@@ -139,12 +138,12 @@ router.post("/login",async (req, res) => {
     }
 
     try {
-      userObj.userName = validation.checkString(userObj.userName, "Username");
+      userObj.username = validation.checkString(userObj.username, "Username");
     } catch (e) {
       errors.push(e);
     }
     try {
-      userObj.userName = validation.checkUsername(userObj.userName);
+      userObj.username = validation.checkUsername(userObj.username);
     } catch (e) {
       errors.push(e);
     }
@@ -162,7 +161,7 @@ router.post("/login",async (req, res) => {
 
     try {
       const token = await userData.checkLogged(
-        userObj.userName.trim(),
+        userObj.username.trim(),
         userObj.password.trim()
       );
       //console.log(token);

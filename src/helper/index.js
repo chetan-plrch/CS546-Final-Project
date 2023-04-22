@@ -2,12 +2,12 @@ const validUsername = (username) => {
     return /^(?=.{6,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(username)
 }
 
-const validFirstname = (firstname) => {
-    return /^[a-zA-Z ]+$/.test(firstname)
+const validFirstname = (firstName) => {
+    return /^[a-zA-Z ]+$/.test(firstName)
 }
 
-const validLastname = (lastname) => {
-    return validFirstname(lastname)
+const validLastname = (lastName) => {
+    return validFirstname(lastName)
 }
 
 const validEmail = (email) => {
@@ -37,14 +37,14 @@ const isUsernameValid = (username) => {
     return validUsername(username)
 }
 
-const isFirstnameValid = (firstname) => {
-    if(!firstname) return true;
-    return validFirstname(firstname)
+const isFirstnameValid = (firstName) => {
+    if(!firstName) return true;
+    return validFirstname(firstName)
 }
 
-const isLastnameValid = (lastname) => {
-    if(!lastname) return true;
-    return validLastname(lastname)
+const isLastnameValid = (lastName) => {
+    if(!lastName) return true;
+    return validLastname(lastName)
 }
 
 const isValidEmail = (email) => {
@@ -73,43 +73,89 @@ const capitalizeFirst = (str) => {
     return str[0].toUpperCase() + str.slice(1, str.length)
 }
 
-const validator = (user, errorObj) => {
+const validator = (user, key, err) => {
+    console.log('validator', key)
+    const errorObj = {}
     Object.keys(user).forEach((key) => {
-        errorObj[key] = { ...(errorObj[key] || {}) }
+        errorObj[key] = { ...(err[key] || {}) }
     })
 
-    if (!isUsernameValid(user.username)) {
-        errorObj.username.helperText = `Username is invalid`
+    if (((key) && (key === 'username')) || !key) {
+        if (!isUsernameValid(user.username)) {
+            errorObj.username.helperText = `Username is invalid`
+        } else if(user.username) {
+            errorObj.username.helperText = ''
+        }
     }
 
-    if (!isFirstnameValid(user.firstname)) {
-        errorObj.firstname.helperText = `Firstname is invalid`
+    if (((key) && (key === 'firstName')) || !key) {
+        if (!isFirstnameValid(user.firstName)) {
+            errorObj.firstName.helperText = `Firstname is invalid`
+        } else if(user.firstName) {
+            errorObj.firstName.helperText = ''
+        }
+    }   
+    
+    if (((key) && (key === 'lastName')) || !key) {
+        if (!isLastnameValid(user.lastName)) {
+            errorObj.lastName.helperText = `Lastname is invalid`
+        } else if(user.lastName) {
+            errorObj.lastName.helperText = ''
+        }
     }
 
-    if (!isLastnameValid(user.lastname)) {
-        errorObj.lastname.helperText = `Lastname is invalid`
+    if (((key) && (key === 'email')) || !key) {
+        if (!isValidEmail(user.email)) {
+            errorObj.email.helperText = `Email is invalid`
+        } else if(user.email) {
+            errorObj.email.helperText = ''
+        }
     }
 
-    if (!isValidEmail(user.email)) {
-        errorObj.email.helperText = `Email is invalid`
+    if (((key) && (key === 'password')) || !key) {
+        if (!isValidPassword(user.password)) {
+            errorObj.password.helperText = 'Password is invalid'
+        } else if(user.password) {
+            errorObj.password.helperText = ''
+        }
     }
 
-    if (!isValidPassword(user.password)) {
-        errorObj.password.helperText = 'Password is invalid'
+    if (((key) && (key === 'age')) || !key) {
+        if(!isValidAge(user.age)) {
+            errorObj.age.helperText = 'Age is invalid'
+        } else if(user.age) {
+            errorObj.age.helperText = '';
+        }
     }
 
-    if(!isValidAge(user.age)) {
-        errorObj.age.helperText = 'Age is invalid'
+    if (((key) && (key === 'gender')) || !key) {
+        if(user.gender) {
+            errorObj.gender.helperText = '';
+        }
     }
 
-    if(!isValidCity(user.city)) {
-        errorObj.city.helperText = 'City is invalid'
+    if (((key) && (key === 'role')) || !key) {
+        if(user.role) {
+            errorObj.role.helperText = '';
+        }
     }
 
-    if(!isValidCity(user.state)) {
-        errorObj.state.helperText = 'State is invalid'
+    if (((key) && (key === 'city')) || !key) {
+        if(!isValidCity(user.city)) {
+            errorObj.city.helperText = 'City is invalid'
+        } else if(user.city) {
+            errorObj.city.helperText = ''
+        }
     }
 
+    if (((key) && (key === 'state')) || !key) {
+        if(!isValidCity(user.state)) {
+            errorObj.state.helperText = 'State is invalid'
+        } else if(user.state) {
+            errorObj.state.helperText = ''
+        }
+    }
+    
     return errorObj
 }
 

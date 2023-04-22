@@ -3,7 +3,6 @@ import { createUserAccount } from "../api/index";
 import "./Signup.css";
 import CustomTextField from "../common/custom-textfield";
 import h from "../helper/index";
-// import "../../public/luffy.jpeg"
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -14,10 +13,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import ProfileImage from "../common/custom-profile-picture";
 import CommonMessage from "../common/custom-message";
-import io from 'socket.io-client'
 import { redirect } from "react-router-dom";
-
-const s = io("http://localhost:3002")
 
 const defaultUser = {
   username: "",
@@ -28,7 +24,7 @@ const defaultUser = {
   gender: "",
   age: "",
   role: "",
-  profileUrl: "",
+  profilePic: "",
   city: "",
   state: "",
 };
@@ -54,7 +50,7 @@ const SignUp = (props) => {
     let allFields = new Set(Object.keys(defaultUser))
     allFields.delete('city')
     allFields.delete('state')
-    allFields.delete('profileUrl')
+    allFields.delete('profilePic')
     let requiredFields = Array.from(allFields)
     
     let errorsObj = {}
@@ -91,7 +87,7 @@ const SignUp = (props) => {
         setApiStatus({
           error: false,
           success: true,
-          message: "Sign up successful!",
+          message: ["Sign up successful!"],
         });
         redirect('/user/login')
       }
@@ -99,8 +95,11 @@ const SignUp = (props) => {
     }
   };
 
-  const onBlur = () => {
-    setErrors(h.validator(user, errors))
+  const onBlur = (name) => {
+    console.log('on blur', name)
+    const err = h.validator(user, name, errors)
+    console.log('err', err)
+    setErrors({ ...err })
   };
 
   const getHelperText = (key) => {
@@ -110,10 +109,11 @@ const SignUp = (props) => {
     return ''
   }
 
+  console.log('user', user)
   return (
     <div className="container-dialog">
       <div className="dialog">
-        <ProfileImage name='profileUrl' image={user.profileUrl} onChange={onChangeOfValue} />
+        <ProfileImage name='profilePic' image={user.profilePic} onChange={onChangeOfValue} />
         <div className="input-dialog">
           <div className="header-dialog">Sign up here!</div>
           <CustomTextField

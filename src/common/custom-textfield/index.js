@@ -7,10 +7,14 @@ export default function CustomTextField(props) {
         props.onChange(props.name, e.target.value)
     }
 
+    const onBlur = (e) => {
+        props.onBlur(props.name)
+    }
+
     return (
         <TextField 
             className="signup-input"
-            onBlur={props.onBlur}
+            onBlur={onBlur}
             size="small"
             id={props.name}
             name={props.name}
