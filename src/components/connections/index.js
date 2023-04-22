@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './index.css'
 import CustomList from "../../common/custom-list";
+import ChatWindow from '../../common/custom-chat-window';
 
 const Connections = () => {
   const [chatList, setChatList] = useState([
@@ -14,10 +15,13 @@ const Connections = () => {
     }
   ])
   return (
-    <div className="container">
+    <div className='container'>
     {
     chatList.length ? (
-      <CustomList list={chatList} />
+      <div className='conversation-container'>
+        <CustomList list={chatList} />
+        <ChatWindow allowSearch={true} allowBlocking={true} />
+      </div>
     ) : (
       <span>
         Please connect with professionals to get help
