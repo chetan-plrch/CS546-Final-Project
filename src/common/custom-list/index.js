@@ -28,7 +28,7 @@ export default function CustomList(props) {
           {list?.map(function(chat) {
               return  <ListItem>
                           <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                              <Avatar src="/static/images/avatar/1.jpg" />
+                              <Avatar src="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F47%2F2020%2F06%2F26%2Ftiny-white-kitten-873941684-2000.jpg" />
                           </ListItemDecorator>
                           <ListItemContent>
                               <Typography>{chat.userName}</Typography>
