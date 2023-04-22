@@ -65,7 +65,7 @@
 
 .signup-message-spacing {
   margin-left: 96px !important;
-  height: 20px;
+  min-height: 20px;
 }
 
 .MuiFormGroup-root {
