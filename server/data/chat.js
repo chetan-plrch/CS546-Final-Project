@@ -253,7 +253,7 @@ const getUsersByIds = async (ids) => {
     return usersArr.map((user) => formatUser(user));
 }
 
-const getUserWithLastMessage = async (users, chats) => {
+const getUserWithLastMessage = (users, chats) => {
     return users.map((user) => {
         const userId = user._id;
         const chatFound = chats.find((chat) => chat.users.includes(userId));
