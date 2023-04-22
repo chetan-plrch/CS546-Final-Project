@@ -34,7 +34,7 @@ const create = async (
   }
 
   try {
-    userName = validation.checkString(userName, "Username");
+    username = validation.checkString(username, "Username");
   } catch (e) {
     errors.push(e);
   }
@@ -131,10 +131,10 @@ const create = async (
   return res;
 };
 
-const checkLogged = async (userName, password) => {
+const checkLogged = async (username, password) => {
   let errors = []
 
-  if(userName.trim() === "" || !userName){
+  if(username.trim() === "" || !username){
     errors.push("Error: Enter username")
   }
   if(password.trim() === "" || !password){
@@ -142,12 +142,12 @@ const checkLogged = async (userName, password) => {
   }
 
   try {
-    userName = validation.checkString(userName, "Username");
+    username = validation.checkString(username, "Username");
   } catch (e) {
     errors.push(e);
   }
   try {
-    userName = validation.checkUsername(userName);
+    username = validation.checkUsername(username);
   } catch (e) {
     errors.push(e);
   }
