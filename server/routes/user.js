@@ -186,15 +186,15 @@ router.post("/login",async (req, res) => {
 
       res.cookie("userId", user._id, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: false,
       });
       res.cookie("firstname", user.firstName, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: false,
       });
       res.cookie("role", user.role, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: false,
       });
 
       if(user.isAnonymous){
