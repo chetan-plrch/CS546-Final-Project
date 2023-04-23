@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 import Cookies from "js-cookie";
+import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+import "react-toastify/dist/ReactToastify.css";
 
 const FeedBackForm = () => {
   const [rate1, setRate1] = useState("");
@@ -47,16 +49,17 @@ const FeedBackForm = () => {
       },
       body: JSON.stringify(feedback),
     });
-
     if (response.ok) {
       console.log("Feedback submitted successfully");
+      toast.success("Feedback submitted successfully")
       resetForm();
     } else {
-      console.error("Failed to submit feedback");
+      toast.error("Failed to submit feedback")
     }
   };
 
   return (
+    <>
     <Container maxWidth="sm">
       <Box
         component="form"
@@ -111,6 +114,8 @@ const FeedBackForm = () => {
         </Button>
       </Box>
     </Container>
+    <ToastContainer />
+    </>
   );
 };
 
