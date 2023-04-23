@@ -1,12 +1,20 @@
 import { feedBackData } from "./server/data/index.js";
 import {userData } from "./server/data/index.js"
 
-try {
-  let users = await userData.getAllUser(false)
-  console.log(users);
-} catch (e) {
-  console.log(e);
+try{
+    const upFeed = await feedBackData.update("64456db258cb930fc0044ca8","false",3,5,4,"test")
+    console.log(upFeed);
+}catch(e){
+    console.log(e);
 }
+
+
+// try {
+//   let users = await userData.getAllUser(false)
+//   console.log(users);
+// } catch (e) {
+//   console.log(e);
+// }
 // try {
 //   let users = await feedBackData.getAll()
 //   console.log(users);

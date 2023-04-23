@@ -83,14 +83,14 @@ const createFeedBack = async (
 const getAll = async (isview) => {
   const feedBackCollection = await feedBack();
   let res = [];
-  if(isview === true || isview === "true"){
-    res = await feedBackCollection.find({isPublic :true}).toArray();
-  }else if(isview === false || isview === "false"){
-    res = await feedBackCollection.find({isPublic :false}).toArray();
-  }else{
+  if (isview === true || isview === "true") {
+    res = await feedBackCollection.find({ isPublic: true }).toArray();
+  } else if (isview === false || isview === "false") {
+    res = await feedBackCollection.find({ isPublic: false }).toArray();
+  } else {
     res = await feedBackCollection.find({}).toArray();
   }
-  
+
   if (res.length > 0) {
     res.forEach((obj) => {
       obj._id = obj._id.toString();
@@ -123,7 +123,7 @@ const getByUserId = async (userID) => {
   return res;
 };
 
-const getByID = async (id) => {
+const getByFeedID = async (id) => {
   id = validation.checkId(id, "feedBack ID");
 
   const feedBackCollection = await feedBack();
@@ -169,14 +169,7 @@ const removeByUserId = async (userID) => {
   return ans;
 };
 
-const update = async (
-  id,
-  isPublic,
-  rate1,
-  rate2,
-  rate3,
-  description
-) => {
+const update = async (id, isPublic, rate1, rate2, rate3, description) => {
   //validations
   let errors = [];
   try {
@@ -213,14 +206,15 @@ const update = async (
     satisfied_with_chat: rate2,
     listener_rating: rate3,
   };
+
   let now = new Date();
   let feedBackDate = now.toISOString();
-  let updatedFeedBack =  {
-    isPublic:isPublic,
+  let updatedFeedBack = {
+    isPublic: isPublic,
     rating,
-    description:description,
-    feedBackDate
-  }
+    description: description,
+    feedBackDate,
+  };
   const feedBackCollection = await feedBack();
   const updateInfo = await feedBackCollection.findOneAndUpdate(
     { _id: new ObjectId(id) },
@@ -229,15 +223,19 @@ const update = async (
   );
   if (updateInfo.lastErrorObject.n === 0)
     throw [404, "Error: Update failed! Could not update post"];
-  return updateInfo.value;
+  const ans = updateInfo.value;
+  ans._id = ans._id.toString();
+  ans.userID = ans.userID.toString();
+  ans.chatId = ans.chatId.toString();
+  return ans;
 };
 
 export default {
   createFeedBack,
   getAll,
   getByUserId,
-  getByID,
+  getByFeedID,
   remove,
   removeByUserId,
-  update
+  update,
 };

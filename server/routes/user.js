@@ -18,6 +18,7 @@ router.post("/signup", async (req, res) => {
       .status(400)
       .json({ error: "There are no fields in the request body" });
   }
+  
   //validating the request body
   let errors = [];
   try {
@@ -214,7 +215,6 @@ router.post("/login",async (req, res) => {
   },
   authenticate
 );
-
 
 router.get("/check", authenticate, authorize(roleType.ADMIN), (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
