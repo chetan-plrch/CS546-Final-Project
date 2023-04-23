@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert,
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,10 +25,10 @@ const Login = () => {
       password,
     };
 
-    const response = await fetch('/user/login', {
-      method: 'POST',
+    const response = await fetch("/user/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(loginData),
     });
@@ -28,14 +36,16 @@ const Login = () => {
     const responseData = await response.json();
 
     if (response.ok) {
-      console.log('Login successful');
+      console.log("Login successful");
       toast.success(responseData.message);
       setTimeout(() => {
         navigate("/");
       }, 2000);
     } else {
-      console.error('Login failed');
-      toast.error(responseData.message);
+      console.error("Login failed");
+      console.log(responseData.error);
+      setErrors([responseData.error]); 
+      toast.error("Error in Logging in");
     }
   };
 
@@ -54,7 +64,12 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <Box component="form" width="100%" marginTop={1} onSubmit={handleSubmit}>
+        <Box
+          component="form"
+          width="100%"
+          marginTop={1}
+          onSubmit={handleSubmit}
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -90,6 +105,15 @@ const Login = () => {
           >
             Login
           </Button>
+          {errors && (
+            <Box marginTop={2}>
+              <Alert severity="error">
+                {errors.map((error, index) => (
+                  <div key={index}>{error}</div>
+                ))}
+              </Alert>
+            </Box>
+          )}
         </Box>
       </Box>
     </Container>
