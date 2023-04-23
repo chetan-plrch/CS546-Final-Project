@@ -5,6 +5,7 @@ import { userData } from "../data/index.js";
 import validation from "../validations.js";
 import jwt from "jsonwebtoken";
 const router = Router();
+import jwtConfig from "../config/jwtConfig.js";
 
 router.get("/user", authenticate, async (req, res) => {
   return res.send(req.user);
@@ -56,25 +57,32 @@ router.post("/signup", async (req, res) => {
   } catch (e) {
     errors.push(e);
   }
+  if(userInfo.password !== userInfo.confirmPassword){
+    errors.push("Passwords do not match")
+  }
 
   try {
     userInfo.age = validation.checkAge(userInfo.age);
   } catch (e) {
     errors.push(e);
   }
-
-  try {
-    userInfo.city = validation.checkString(userInfo.city, "city");
-  } catch (e) {
-    errors.push(e);
+ 
+  if(userInfo.city){
+    try {
+      userInfo.city = validation.checkString(userInfo.city, "city");
+    } catch (e) {
+      errors.push(e);
+    }
   }
-
-  try {
-    userInfo.state = validation.checkString(userInfo.state, "state");
-  } catch (e) {
-    errors.push(e);
+  
+  if(userInfo.state){
+    try {
+      userInfo.state = validation.checkString(userInfo.state, "state");
+    } catch (e) {
+      errors.push(e);
+    }
   }
-
+  
   try {
     userInfo.gender = validation.checkGender(userInfo.gender);
   } catch (e) {
@@ -160,18 +168,42 @@ router.post("/login",async (req, res) => {
     }
 
     try {
-      const token = await userData.checkLogged(
+      const user = await userData.checkLogged(
         userObj.username.trim(),
         userObj.password.trim()
       );
-      //console.log(token);
-      const fn = jwt.decode(token);
+
+      const token = jwt.sign(
+        {  username: user.username,firstName: user.firstName, role: user.role},
+        jwtConfig.secret
+      );
+
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      const message = `${fn.firstName}, Welcome Back`;
-      return res.status(200).send({ message });
+
+      res.cookie("userId", user._id, {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      res.cookie("firstname", user.firstName, {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      res.cookie("role", user.role, {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+
+      if(user.isAnonymous){
+        const message = "AnonymousFruit, Welcome Back"
+        return res.status(200).send({ message });
+      }else{
+        const message = `${user.firstName}, Welcome Back`;
+        return res.status(200).send({ message });
+      }
+      
     } catch (e) {
       let status = e[0] ? e[0] : 500;
       let message = e[1] ? e[1] : "Internal Server Error";

@@ -1,8 +1,7 @@
 import { users } from "../config/mongoCollections.js";
 import validation from "../validations.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import jwtConfig from "../config/jwtConfig.js";
+
 
 
 const create = async (
@@ -62,18 +61,23 @@ const create = async (
     errors.push(e);
   }
 
-  try {
-    city = validation.checkString(city, "city");
-  } catch (e) {
-    errors.push(e);
-  }
 
-  try {
-    state = validation.checkString(state, "state");
-  } catch (e) {
-    errors.push(e);
+  if(city){
+    try {
+      city = validation.checkString(city, "city");
+    } catch (e) {
+      errors.push(e);
+    }
   }
-
+  
+  if(state){
+    try {
+      state = validation.checkString(state, "state");
+    } catch (e) {
+      errors.push(e);
+    }
+  }
+  
   try {
     gender = validation.checkGender(gender)
   } catch (e) {
@@ -92,8 +96,12 @@ const create = async (
 
   const userCollection = await users();
   const userNameExits = await userCollection.findOne({ username });
+  const emailExits = await userCollection.findOne({email});
   if (userNameExits) {
     throw [404, "Error: username already used"];
+  }
+  if (emailExits) {
+    throw [404, "Error: email already used"];
   }
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -161,6 +169,7 @@ const checkLogged = async (username, password) => {
   if(errors.length > 0){
     throw [400,errors]
   }
+
   const userCollection = await users();
 
   const user = await userCollection.findOne({ username });
@@ -173,13 +182,28 @@ const checkLogged = async (username, password) => {
     throw [400, "username/password one of them is incorrect"];
   }
 
-  const token = jwt.sign(
-    { _id: user._id, username: user.username,firstName: user.firstName },
-    jwtConfig.secret
-  );
-  //console.log(token);
-
-  return token;
+  return user;
 };
 
-export default { create, checkLogged };
+const getAllUser = async (anonimity)=>{
+  const userCtx = await users()
+  let res = [];
+
+  if(anonimity === true || anonimity === "true"){
+    res = await userCtx.find({isAnonymous: true}).toArray();
+  }else if(anonimity === false || anonimity === "false"){
+    res = await userCtx.find({isAnonymous: false}).toArray();
+  }else{
+    res = await userCtx.find({}).toArray();
+  }
+  
+  if (res.length > 0) {
+    res.forEach((obj) => {
+      obj._id = obj._id.toString();
+    });
+  } else {
+    throw [404, "Error: No user found in the database"];
+  }
+  return res;
+}
+export default { create, checkLogged, getAllUser };

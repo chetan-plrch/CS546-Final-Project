@@ -46,18 +46,18 @@ const exportedMethods = {
     return username.trim().toLowerCase()
   },
   checkGender(gender){
-    const allowedGenders = ["M", "F", "male", "female","m","f"];
+    const allowedGenders = ["M", "F", "male", "female","m","f","other"];
     if(!allowedGenders.includes(gender.toLowerCase())){
       throw "Error: Enter valid gender"
     }
-    return gender
+    return gender.toLowerCase()
   },
   checkRole(role){
     const allowedRole = ["listener","seeker"];
     if(!allowedRole.includes(role.toLowerCase())){
       throw "Error: Enter valid role"
     }
-    return role
+    return role.toLowerCase()
   },
   checkId(id, varName) {
     if (!id) throw errorObject(errorType.BAD_INPUT, `${varName} need to have valid values`);

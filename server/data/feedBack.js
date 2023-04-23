@@ -80,10 +80,17 @@ const createFeedBack = async (
   return res;
 };
 
-const getAll = async () => {
+const getAll = async (isview) => {
   const feedBackCollection = await feedBack();
   let res = [];
-  res = await feedBackCollection.find({}).toArray();
+  if(isview === true || isview === "true"){
+    res = await feedBackCollection.find({isPublic :true}).toArray();
+  }else if(isview === false || isview === "false"){
+    res = await feedBackCollection.find({isPublic :false}).toArray();
+  }else{
+    res = await feedBackCollection.find({}).toArray();
+  }
+  
   if (res.length > 0) {
     res.forEach((obj) => {
       obj._id = obj._id.toString();
