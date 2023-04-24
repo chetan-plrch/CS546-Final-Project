@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Container, Typography, Box } from "@mui/material";
+import { TextField, Button, Container, Typography, Box, Alert } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const FeedBackForm = () => {
   const [rate1, setRate1] = useState("");
@@ -11,6 +12,7 @@ const FeedBackForm = () => {
   const [rate3, setRate3] = useState("");
   const [description, setDescription] = useState("");
   const [userId, setUserId] = useState(null);
+  const [errors, setErrors] = useState("");
 
   useEffect(() => {
     const fetchedUserId = Cookies.get('userId');
@@ -49,12 +51,17 @@ const FeedBackForm = () => {
       },
       body: JSON.stringify(feedback),
     });
+
+    const responseData = await response.json();
+
     if (response.ok) {
       console.log("Feedback submitted successfully");
       toast.success("Feedback submitted successfully")
       resetForm();
     } else {
       toast.error("Failed to submit feedback")
+      console.log(responseData.errors);
+      setErrors([responseData.errors]);
     }
   };
 
@@ -112,6 +119,15 @@ const FeedBackForm = () => {
         >
           Submit
         </Button>
+        {errors && (
+            <Box marginTop={2}>
+              <Alert severity="error">
+                {errors.map((error, index) => (
+                  <div key={index}>{error}</div>
+                ))}
+              </Alert>
+            </Box>
+          )}
       </Box>
     </Container>
     <ToastContainer />
