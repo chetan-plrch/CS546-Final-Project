@@ -14,8 +14,8 @@ const Connections = () => {
       lastMessage: 'I feel better now. Thank you Anisha.'
     }
   ]);
-  // user1={'644406498781b6017e69fb98'}
-  // user2={'644406898781b6017e69fb99'}
+  // user1={'6447089a9170fd2d3e34ecc5'} Listener - chrome - testuserone
+  // user2={'644708c99170fd2d3e34ecc6'} Seeker - safari - testusertwo
   const [chatHistory, setChatHistory] = useState({
     "_id": "5c7997a2-c0d2-4f8c-b27a-6a1d4b5b6318",
     "users": [
