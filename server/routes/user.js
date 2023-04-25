@@ -178,7 +178,7 @@ router.post("/login",async (req, res) => {
       );
 
       const token = jwt.sign(
-        {  username: user.username,firstName: user.firstName, role: user.role},
+        {  _id: user._id.toString(), username: user.username,firstName: user.firstName, role: user.role},
         jwtConfig.secret
       );
 
