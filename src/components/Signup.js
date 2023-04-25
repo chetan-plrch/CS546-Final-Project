@@ -21,6 +21,7 @@ const defaultUser = {
   lastName: "",
   email: "",
   password: "",
+  confirmPassword: "",
   gender: "",
   age: "",
   role: "",
@@ -34,15 +35,16 @@ const SignUp = (props) => {
   const [errors, setErrors] = React.useState(defaultUser);
   const [apiStatus, setApiStatus] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [saving, setSaving] = React.useState(null);
   const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
 
   const handleMouseDownPassword = (e) => e.preventDefault();
 
   const onChangeOfValue = (key, value) => {
-    console.log('key', key, value)
     setUser({ ...user, [key]: value });
   }
 
@@ -100,9 +102,7 @@ const SignUp = (props) => {
   };
 
   const onBlur = (name) => {
-    console.log('on blur', name)
     const err = h.validator(user, name, errors)
-    console.log('err', err)
     setErrors({ ...err })
   };
 
@@ -113,7 +113,6 @@ const SignUp = (props) => {
     return ''
   }
 
-  console.log('user', user)
   return (
     <div className="container-dialog">
       <div className="dialog">
@@ -172,6 +171,30 @@ const SignUp = (props) => {
                     edge="end"
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <CustomTextField
+            onBlur={onBlur}
+            error={getHelperText('confirmPassword')}
+            helperText={getHelperText('confirmPassword')}
+            name="confirmPassword"
+            label="Confirm Password"
+            type={showConfirmPassword ? "text" : "password"}
+            value={user.confirmPassword}
+            onChange={onChangeOfValue}
+            inputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirm password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
