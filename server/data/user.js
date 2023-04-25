@@ -89,6 +89,9 @@ const create = async (
   } catch (e) {
     errors.push(e)
   }
+  if(role === "listener"){
+    isAnonymous = false;
+  }
 
   if (errors.length > 0) {
     throw [400, errors];

@@ -95,6 +95,9 @@ router.post("/signup", async (req, res) => {
   } catch (e) {
     errors.push(e);
   }
+  if(userInfo.role === "listener"){
+    userInfo.isAnonymous = false
+  }
 
   if (errors.length > 0) {
     res.status(400).send({ errors });

@@ -6,7 +6,7 @@ const Feedback = () => {
   return (
     <>
     <div><FeedBackForm /></div>
-    <div><FeedBackPop /></div>
+    {/* <div><FeedBackPop /></div> */}
     </>
   )
 }
