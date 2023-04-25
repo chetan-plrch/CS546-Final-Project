@@ -20,6 +20,7 @@
     border-style: solid;
     height: 400px;
     width: 350px;
+    overflow: scroll;
 }
 .sent-message {
     text-align: right;

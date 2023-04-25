@@ -5,20 +5,27 @@ import SearchIcon from '@mui/icons-material/Search';
 import CustomTextField from '../custom-textfield';
 import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
 
+// TODO - Remove from here package.json and here once API is in place
+import { browserName } from "react-device-detect"
+
 export default function ChatWindow(props) {
     const {allowSearch = false, allowBlocking = false, allowMessaging = false, chatHistory = {}, updateConversation} = props;
     let conversation = chatHistory?.conversation;
     const [currentMessage, setCurrentMessage] = useState('');
-    // TODO - store logged in users id
-    const currentUserId = '644406498781b6017e69fb98';
+    // TODO - store logged in users id as senderId
+    let senderId = browserName === 'Chrome' ? '6447089a9170fd2d3e34ecc5' : '644708c99170fd2d3e34ecc6';
     // TODO - get from chathistory
-    const receiverId = '644406898781b6017e69fb99';
-    // // TODO - remove this var once msgs are properly updated in parent component and in api
+    let receiverId = browserName === 'Chrome' ? '644708c99170fd2d3e34ecc6' : '6447089a9170fd2d3e34ecc5';
 
     useEffect(() => {
-        initConnection('644406498781b6017e69fb98')
+        // TODO - Remove once cookie is in place
+        // TODO - uncomment once API is in place. Should not get called twice. Verify
+        initConnection(senderId)
         receiveMessage(addMessageToHistory)
-    });
+        let element = document.getElementById("chat-container");
+        element.scrollTop = element.scrollHeight - element.clientHeight
+        // window.scrollTo(0,element.offsetHeight);
+    }, [conversation]);
     const changeCurrentMessage = (msg) => {
         // console.log('current message on blur', currentMessage);
         // setCurrentMessage(msg);
@@ -28,12 +35,12 @@ export default function ChatWindow(props) {
         setCurrentMessage(value);
     };
     const sendText = () => {
-        sendMessage(currentUserId, receiverId, currentMessage);
+        sendMessage(senderId, receiverId, currentMessage);
         // TODO - how should it be sent? via api or socket is fine?
         const msgObj = {
             sentAt: new Date().toString(), // Should be sent by sender and not formed here
             message: currentMessage,
-            senderId: currentUserId
+            senderId
         }
         updateConversation(msgObj);
         setCurrentMessage('')
@@ -41,7 +48,7 @@ export default function ChatWindow(props) {
     const addMessageToHistory = (msgObj) => {
         // TODO - Have to update in chatHistory?.conversation in parent and in API
         console.log('msg received', msgObj);
-        updateConversation(message);
+        updateConversation(msgObj);
     };
     const blockUser = () => {
         // Hide chat once users are blocked
@@ -62,20 +69,15 @@ export default function ChatWindow(props) {
                     allowBlocking ? <CustomButton title={'Block User'} onClick={blockUser} /> : null
                 }
             </div>
-            <div className='chat-container'>
+            <div className='chat-container' id="chat-container">
                 {/* TODO - change to messages once messages useState is in place */}
                 {conversation?.map(function(item) {
-                    return <>
-                        {
-                            item?.senderId === currentUserId ? (
-                                // Current user sender - Show on right side
-                                <span className='sent-message' key={item.sentAt}>{item.message}</span>
-                            ) : (
-                                // other persons msg - show on left side
-                                <span className='received-message' key={item.sentAt}>{item.message}</span>
-                            )
-                        }
-                    </>
+                    return <span
+                                key={item?.sentAt}
+                                className={item?.senderId === senderId ? "sent-message" : "received-message"}
+                            >
+                                {item?.message}
+                            </span>
                 })}
             </div>
             {
