@@ -33,5 +33,12 @@ export const sendMessage = (senderId, receiverId, message) => {
     socket.emit('message', { senderId, receiverId, message })
 }
 
+export const onError = (cb) => {
+    socket.on('error', function (err) {
+        console.log(' --- Error in socket --- ', err)
+        cb(err)
+    });
+}
+
 window.sendMessage = sendMessage
 window.receiveMessage = receiveMessage
