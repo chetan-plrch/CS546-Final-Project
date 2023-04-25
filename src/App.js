@@ -8,6 +8,7 @@ import './App.css';
 import SignUp from './components/Signup';
 import Chat from '../src/common/custom-chat/index.js';
 import Chat2 from '../src/common/custom-chat/index2.js';
+import Feedback from './components/feedBack/feedback';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route exact path="/user/signup" element={ <SignUp /> } />
           <Route exact path="/user/login" element={ <Login /> } />
           <Route exact path="/user/profile" element={ <Profile /> } />
+          <Route exact path="/feedbacks" element = {<Feedback />} />
           <Route exact path="/user/connections" element={ <Connections /> } />
           <Route exact path="/chat-1" element={<Chat 
             user1={'6438d7ac8e1c21e45686e198'}
