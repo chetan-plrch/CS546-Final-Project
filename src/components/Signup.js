@@ -28,6 +28,7 @@ const defaultUser = {
   profilePic: "",
   city: "",
   state: "",
+  isAnonymous: false
 };
 
 const SignUp = (props) => {
@@ -36,6 +37,7 @@ const SignUp = (props) => {
   const [apiStatus, setApiStatus] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [anonymousDisabled, setAnonymousDisabled] = React.useState(false);
   const [saving, setSaving] = React.useState(null);
   const navigate = useNavigate()
 
@@ -45,7 +47,17 @@ const SignUp = (props) => {
   const handleMouseDownPassword = (e) => e.preventDefault();
 
   const onChangeOfValue = (key, value) => {
-    setUser({ ...user, [key]: value });
+    if (key === 'role') {
+      if (value === 'LISTENER') {
+        setUser({ ...user, [key]: value, isAnonymous: false });
+        setAnonymousDisabled(true)
+      } else {
+        setUser({ ...user, [key]: value });
+        setAnonymousDisabled(false)
+      }
+    } else {
+      setUser({ ...user, [key]: value });
+    }
   }
 
   const submissionValidation = () => {
@@ -54,6 +66,7 @@ const SignUp = (props) => {
     allFields.delete('city')
     allFields.delete('state')
     allFields.delete('profilePic')
+    allFields.delete('isAnonymous')
     let requiredFields = Array.from(allFields)
     
     let errorsObj = {}
@@ -201,6 +214,7 @@ const SignUp = (props) => {
             }}
           />
           <CustomCheckbox
+            disabled={anonymousDisabled}
             className="anonymous-input"
             name="isAnonymous"
             checked={user.isAnonymous}

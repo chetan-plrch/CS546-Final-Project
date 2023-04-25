@@ -15,6 +15,7 @@ export default function CustomCheckbox(props) {
         className={props.className}
         checked={props.checked}
         onChange={onChange}
+        disabled={props.disabled}
       />
       {props.text}
     </div>
