@@ -6,11 +6,17 @@
     display: flex;
     border-width: 0.5px;
     border-color: grey;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 .footer-container {
     display: flex;
     border-width: 0.5px;
     border-color: grey;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 .chat-container {
     display: flex;

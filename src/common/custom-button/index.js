@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { PropTypes } from 'prop-types';
 import Button from "@mui/material/Button";
 
 function CustomButton(props) {
@@ -21,7 +21,16 @@ CustomButton.defaultProps = {
     styles: {},
     title: 'Okay',
     disabled: false,
-    theme: 'Primary'
-}
+    theme: 'Primary',
+    onClick: () => {}
+};
+
+CustomButton.propTypes = {
+    styles: PropTypes.object,
+    title: PropTypes.string,
+    disabled: PropTypes.bool,
+    theme: PropTypes.string,
+    onClick: PropTypes.func.isRequired
+};
 
 export default CustomButton;
