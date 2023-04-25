@@ -4,6 +4,7 @@ import HomePage from './layouts/HomePage'
 import Login from './components/login';
 import Profile from './components/profile'
 import Connections from './components/connections';
+import Users from './components/users';
 import './App.css';
 import SignUp from './components/Signup';
 import Chat from '../src/common/custom-chat/index.js';
@@ -21,6 +22,8 @@ const App = () => {
           <Route exact path="/user/profile" element={ <Profile /> } />
           <Route exact path="/feedbacks" element = {<Feedback />} />
           <Route exact path="/user/connections" element={ <Connections /> } />
+          {/* Logged in user can only search for experts */}
+          <Route exact path="/experts" element={ <Users /> } />
           <Route exact path="/chat-1" element={<Chat 
             user1={'644406498781b6017e69fb98'}
             user2={'644406898781b6017e69fb99'}

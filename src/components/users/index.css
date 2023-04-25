@@ -1,0 +1,14 @@
+.user-container {
+    display: flex;
+    background-color: white;
+    height: 600px;
+    width: 800px;
+}
+
+.search-container {
+    display: flex;
+    width: 100%;
+    height: 10%;
+    justify-content: center;
+    align-items: center;
+}
