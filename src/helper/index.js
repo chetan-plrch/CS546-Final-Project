@@ -120,6 +120,14 @@ const validator = (user, key, err) => {
         }
     }
 
+    if (((key) && (key === 'confirmPassword')) || !key) {
+        if (user.password !== user.confirmPassword) {
+            errorObj.confirmPassword.helperText = 'Password\'s do not match'
+        } else if(user.password) {
+            errorObj.confirmPassword.helperText = ''
+        }
+    }
+
     if (((key) && (key === 'age')) || !key) {
         if(!isValidAge(user.age)) {
             errorObj.age.helperText = 'Age is invalid'
