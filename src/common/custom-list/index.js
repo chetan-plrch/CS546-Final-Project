@@ -24,17 +24,17 @@ function CustomList(props) {
     return (
       <Box sx={{ width: 320 }}>
         <Typography
-          id="ellipsis-list-demo"
-          level="body4"
-          textTransform="uppercase"
-          fontWeight="xl"
+          id='ellipsis-list-demo'
+          level='body4'
+          textTransform='uppercase'
+          fontWeight='xl'
           mb={1}
           sx={{ letterSpacing: '0.15rem' }}
         >
           Conversations
         </Typography>
         <List
-          aria-labelledby="ellipsis-list-demo"
+          aria-labelledby='ellipsis-list-demo'
           sx={{ '--ListItemDecorator-size': '56px' }}
         >
           {list?.map(function(item) {
@@ -44,11 +44,11 @@ function CustomList(props) {
                         onClick={() => onSelectionChange(item.id)}
                       >
                           <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                              <Avatar src="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F47%2F2020%2F06%2F26%2Ftiny-white-kitten-873941684-2000.jpg" />
+                              <Avatar src='https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F47%2F2020%2F06%2F26%2Ftiny-white-kitten-873941684-2000.jpg' />
                           </ListItemDecorator>
                           <ListItemContent>
                               <Typography>{item.title}</Typography>
-                              <Typography level="body2" noWrap>
+                              <Typography level='body2' noWrap>
                                   {item.content}
                               </Typography>
                           </ListItemContent>

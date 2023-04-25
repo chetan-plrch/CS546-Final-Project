@@ -25,10 +25,10 @@ const blockUser = async (blockConnectionId) => {
 };
 
 // Gets all active connections for logged in user
-const getAllConnections = async (loggedInUserId) => {
+const getAllConnections = async () => {
     try {
-        const allConnectionsResponse = await axiosApi.get(`/chat/active/${loggedInUserId}`);
-        return allConnectionsResponse;
+        const response = await axiosApi.get(`/chat/all-connections`);
+        return response;
     } catch (e) {
         console.log("error occurred", e);
     };

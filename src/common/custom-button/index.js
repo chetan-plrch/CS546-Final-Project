@@ -1,19 +1,19 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import Button from "@mui/material/Button";
+import Button from '@mui/material/Button';
 
 function CustomButton(props) {
     // TODO - Add themes and pass style prop
-    const { theme, styles, title, disabled, onClick } = props;
+    const { isPrimary, styles, title, disabled, onClick } = props;
     return (
-        <div>
-            <Button
-             disabled={disabled}
-             onClick={onClick}
-            >
-                {title}
-            </Button>
-        </div>
+    <Button
+        disabled={disabled}
+        onClick={onClick}
+        classes={styles}
+        color={isPrimary ? 'primary' : 'secondary'}
+    >
+        {title}
+    </Button>
     )
 }
 
@@ -21,15 +21,15 @@ CustomButton.defaultProps = {
     styles: {},
     title: 'Okay',
     disabled: false,
-    theme: 'Primary',
+    isPrimary: true,
     onClick: () => {}
 };
 
 CustomButton.propTypes = {
-    styles: PropTypes.object,
     title: PropTypes.string,
     disabled: PropTypes.bool,
-    theme: PropTypes.string,
+    styles: PropTypes.object,
+    isPrimary: PropTypes.bool,
     onClick: PropTypes.func.isRequired
 };
 

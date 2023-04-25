@@ -16,11 +16,11 @@ const Connections = () => {
   // Stores the chat history of the selected connection
   const [chatHistory, setChatHistory] = useState(CHAT_HISTORY);
 
-  // TODO - get from API and set in state
+  // TODO - set connections from API call
   // useEffect(async () => {
-  //   const connections = await getAllConnections();
-  //   console.log('connections', connections);
-  //   setChatList(connections);
+  //   const allConnections = await getAllConnections();
+  //   console.log('allConnections', allConnections);
+  //   setConnections(allConnections);
   // }, []);
 
   // API call not required since socket is used
