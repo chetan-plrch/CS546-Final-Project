@@ -10,13 +10,12 @@ import Chat from '../src/common/custom-chat/index.js';
 import Chat2 from '../src/common/custom-chat/index2.js';
 import Feedback from './components/feedBack/feedback';
 import FeedBackEditForm from './components/feedBack/feedBackEditForm';
-import helper from './helper';
 import NotFound from './components/notfound';
 const App = () => {
 
-  useEffect(() => {
-    helper.checkLoggedIn()
-  }, [])
+  // useEffect(() => {
+  //   helper.checkLoggedIn()
+  // }, [])
 
   return (
     <div className="App">

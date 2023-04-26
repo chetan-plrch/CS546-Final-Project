@@ -22,8 +22,8 @@ const FeedBackPop = (props) => {
   };
 
   const handleAgree = () => {
-    // navigate('/feedbacks/',{state: {chatId}});
-    navigate('/feedbacks/')
+    
+    navigate('/feedbacks/',{state:{chatId : props.chatId}})
     setOpen(false)
   };
 
@@ -52,7 +52,6 @@ const FeedBackPop = (props) => {
             Maybe Later
           </Button>
           <Button onClick={handleAgree} color="primary" autoFocus>
-          {/* <Button onClick={()=>handleAgree(props.chatId)} color="primary" autoFocus> */}
             Agree
           </Button>
         </DialogActions>
