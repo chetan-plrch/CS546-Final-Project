@@ -27,11 +27,9 @@ const Feedback = () => {
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        {/* Pass the handleFeedbackSubmit function to the FeedBackForm */}
         <FeedBackForm userId={userId} onSubmit={handleFeedbackSubmit} />
       </div>
       <div >
-        {/* Pass the updateKey state to the FeedBackList */}
         <FeedBackList userId={userId} updateKey={updateKey} />
       </div>
       {/* <FeedBackPop /> */}
