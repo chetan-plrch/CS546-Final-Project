@@ -52,4 +52,15 @@ const signUpUser = async ({ email, password }) => {
   }
 };
 
-export { createUserAccount, signUpUser };
+const loginUser = async (loginData)=>{
+  const response = await fetch("/user/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  });
+  return response
+}
+
+export { createUserAccount, signUpUser, loginUser };

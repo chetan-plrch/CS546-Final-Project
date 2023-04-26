@@ -1,27 +1,10 @@
-import { Router } from "express";
+  import { Router } from "express";
 import { feedBackData } from "../data/index.js";
 import validation from "../validations.js";
 const router = Router();
 
 router
   .route("/")
-  .get(async (req, res) => {
-    let feedBackInfo = req.body;
-    if (!feedBackInfo || Object.keys(feedBackInfo).length === 0) {
-      return res
-        .status(400)
-        .json({ error: "There are no fields in the request body" });
-    }
-    
-    try {
-      let feedBackList = await feedBackData.getByuserId(feedBackInfo.userId);
-      res.json(feedBackList);
-    } catch (e) {
-      let status = e[0] ? e[0] : 500;
-      let message = e[1] ? e[1] : "Internal Server Error";
-      res.status(status).send({ error: message });
-    }
-  })
   .post(async (req, res) => {
     let feedBackInfo = req.body;
     if (!feedBackInfo || Object.keys(feedBackInfo).length === 0) {
@@ -45,6 +28,26 @@ router
       let status = e[0] ? e[0] : 500;
       let message = e[1] ? e[1] : "Internal Server Error";
       res.status(status).send({ errors: message });
+    }
+  })
+
+router
+  .route("/user")
+  .post(async (req, res) => {
+    let feedBackInfo = req.body;
+    if (!feedBackInfo || Object.keys(feedBackInfo).length === 0) {
+      return res
+        .status(400)
+        .json({ error: "There are no fields in the request body" });
+    }
+    
+    try {
+      let feedBackList = await feedBackData.getByuserId(feedBackInfo.userId);
+      res.json(feedBackList);
+    } catch (e) {
+      let status = e[0] ? e[0] : 500;
+      let message = e[1] ? e[1] : "Internal Server Error";
+      res.status(status).send({ error: message });
     }
   })
 
