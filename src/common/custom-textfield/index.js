@@ -2,7 +2,7 @@ import React from 'react'
 import TextField from '@mui/material/TextField';
 import h from '../../helper'
 
-export default function CustomTextField(props) {
+function CustomTextField(props) {
     const onChange = (e) => {
         props.onChange(props.name, e.target.value)
     }
@@ -29,3 +29,13 @@ export default function CustomTextField(props) {
         />
     );
 }
+
+CustomTextField.defaultProps = {
+    error: false,
+    helperText: '',
+    type: 'text',
+    onBlur: () => {},
+    onChange: () => {}
+};
+
+export default CustomTextField;

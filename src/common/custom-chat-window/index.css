@@ -1,0 +1,43 @@
+.header-container {
+    display: flex;
+    border-width: 0.5px;
+    border-color: grey;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+.footer-container {
+    display: flex;
+    border-width: 0.5px;
+    border-color: grey;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    border-width: 0.5px;
+    border-color: grey;
+    border-style: solid;
+    height: 400px;
+    width: 350px;
+    overflow: scroll;
+}
+.no-chat-container {
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    color: grey;
+}
+.sent-message {
+    text-align: right;
+    padding-right: 10px;
+    padding-top: 1px;
+    color: green;
+}
+.received-message {
+    padding-left: 10px;
+    padding-top: 1px;
+    color: orange;
+}

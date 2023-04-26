@@ -30,12 +30,12 @@ const App = () => {
           
           <Route exact path="/connections" element={ <Connections /> } />
           <Route exact path="/chat-1" element={<Chat 
-            user1={'6438d7ac8e1c21e45686e198'}
-            user2={'6439851768f667131bd19b4a'}
+            user1={'644406498781b6017e69fb98'}
+            user2={'644406898781b6017e69fb99'}
           /> } />
           <Route exact path="/chat-2" element={<Chat2 
-            user1={'6439851768f667131bd19b4a'}
-            user2={'6438d7ac8e1c21e45686e198'}
+            user1={'644406898781b6017e69fb99'}
+            user2={'644406498781b6017e69fb98'}
           /> } />
           <Route path='*' element={<NotFound />}/>
         </Routes>
