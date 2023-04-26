@@ -10,7 +10,6 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
-//import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -57,6 +56,10 @@ const FeedBackForm = (props) => {
       console.log("Feedback submitted successfully");
       toast.success("Feedback submitted successfully");
       resetForm();
+
+      // Call the onSubmit prop when the form is submitted successfully
+      props.onSubmit();
+
     } else {
       toast.error("Failed to submit feedback");
       console.log(responseData.errors);
@@ -86,7 +89,7 @@ const FeedBackForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label="reconnect_probability"
+              label="Willing to reconnect"
               type="number"
               value={rate1}
               onChange={(e) => setRate1(e.target.value)}
@@ -94,7 +97,7 @@ const FeedBackForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label="satisfied_with_chat"
+              label="Will you recommend the listener"
               type="number"
               value={rate2}
               onChange={(e) => setRate2(e.target.value)}
@@ -102,7 +105,7 @@ const FeedBackForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label="listener_rating"
+              label="OverAll rating for the listener"
               type="number"
               value={rate3}
               onChange={(e) => setRate3(e.target.value)}
@@ -113,6 +116,8 @@ const FeedBackForm = (props) => {
               label="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              multiline
+              rows={4}
             />
             <FormControlLabel
               control={

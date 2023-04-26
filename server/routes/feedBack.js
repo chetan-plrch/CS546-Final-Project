@@ -54,7 +54,7 @@ router
 
 router
   .route("/feedback")
-  .get(async(req,res)=>{
+  .post(async(req,res)=>{
     let feedBackInfo = req.body;
     if (!feedBackInfo || Object.keys(feedBackInfo).length === 0) {
       return res

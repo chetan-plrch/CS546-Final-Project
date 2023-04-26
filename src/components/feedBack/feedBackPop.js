@@ -7,9 +7,11 @@ import {
   DialogContentText,
   DialogActions,
 } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
-const FeedBackPop = () => {
+const FeedBackPop = (props) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -20,7 +22,9 @@ const FeedBackPop = () => {
   };
 
   const handleAgree = () => {
-    window.location.href = '/feedbacks/';
+    // navigate('/feedbacks/',{state: {chatId}});
+    navigate('/feedbacks/')
+    setOpen(false)
   };
 
   return (
@@ -48,6 +52,7 @@ const FeedBackPop = () => {
             Maybe Later
           </Button>
           <Button onClick={handleAgree} color="primary" autoFocus>
+          {/* <Button onClick={()=>handleAgree(props.chatId)} color="primary" autoFocus> */}
             Agree
           </Button>
         </DialogActions>
