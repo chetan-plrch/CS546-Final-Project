@@ -13,8 +13,7 @@ router.get("/user", authenticate, async (req, res) => {
 
 router.get("/all-users", authenticate, async (req, res) => {
   try {
-    console.log('req.body', req.body);
-    const response = await userData.getAllUsers(req.body);
+    const response = await userData.getAllUsers(req.query);
     return res.status(200).send(response);
   } catch (e) {
     return res.status(e[0] || 500).send({ message: e[1] || "Internal Server Error" });
