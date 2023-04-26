@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 const validUsername = (username) => {
     return /^(?=.{6,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(username)
 }
@@ -167,9 +169,25 @@ const validator = (user, key, err) => {
     return errorObj
 }
 
+function initialPage() {
+  const path = window.location.pathname
+  return path === '/login' || path.includes('/signup')
+}
+
+function checkLoggedIn() {
+  const userId = Cookies.get('userId')
+  const token = Cookies.get('token')
+  
+  if (!userId && !token && !initialPage()) {
+    window.location = '/login'
+  }
+}
+
 const helper = {
     capitalizeFirst,
-    validator
+    validator,
+    checkLoggedIn,
+    initialPage
 }
 
 export default helper
