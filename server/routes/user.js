@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { roleType } from "../util.js";
-import { authenticate, authorize } from "../middleware/index.js";
+import { authenticate } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
 import jwt from "jsonwebtoken";
@@ -219,8 +219,12 @@ router.post("/login",async (req, res) => {
   authenticate
 );
 
-router.get("/check", authenticate, authorize(roleType.ADMIN), (req, res) => {
-  return res.status(200).send({ message: "This is authorized" });
-});
+router.post("/logout",async(req,res)=>{
+  
+})
+
+// router.get("/check", (req, res) => {
+//   return res.status(200).send({ message: "This is authorized" });
+// });
 
 export default router;

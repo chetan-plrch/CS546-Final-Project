@@ -1,4 +1,4 @@
-  import { Router } from "express";
+import { Router } from "express";
 import { feedBackData } from "../data/index.js";
 import validation from "../validations.js";
 const router = Router();

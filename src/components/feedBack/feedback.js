@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { useLocation } from "react-router-dom";
 
 const Feedback = () => {
+  
   const extractedUserId = Cookies.get('userId');
   const regex = /"([^"]+)"/;
   const userId = extractedUserId.match(regex)[1];
