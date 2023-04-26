@@ -1,6 +1,8 @@
 .App {
   display: flex;
   background-image: url('./theme.png');
+  background-repeat: 'no-repeat';
+  background-size: 100vw 100vh;
   min-height: 100vh;
   flex-direction: row;
   justify-content: center;

@@ -33,6 +33,7 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
+    "start-mac": "export PORT=3000 && react-scripts start",
     "server": "nodemon server/app.js",
     "build": "react-scripts build",
     "test": "export PORT=3000 && react-scripts start &",
