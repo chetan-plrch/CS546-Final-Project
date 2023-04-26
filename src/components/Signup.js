@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import ProfileImage from "../common/custom-profile-picture";
 import CommonMessage from "../common/custom-message";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const defaultUser = {
   username: "",
@@ -21,12 +21,14 @@ const defaultUser = {
   lastName: "",
   email: "",
   password: "",
+  confirmPassword: "",
   gender: "",
   age: "",
   role: "",
   profilePic: "",
   city: "",
   state: "",
+  isAnonymous: false
 };
 
 const SignUp = (props) => {
@@ -34,15 +36,28 @@ const SignUp = (props) => {
   const [errors, setErrors] = React.useState(defaultUser);
   const [apiStatus, setApiStatus] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [anonymousDisabled, setAnonymousDisabled] = React.useState(false);
   const [saving, setSaving] = React.useState(null);
+  const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
 
   const handleMouseDownPassword = (e) => e.preventDefault();
 
   const onChangeOfValue = (key, value) => {
-    console.log('key', key, value)
-    setUser({ ...user, [key]: value });
+    if (key === 'role') {
+      if (value === 'LISTENER') {
+        setUser({ ...user, [key]: value, isAnonymous: false });
+        setAnonymousDisabled(true)
+      } else {
+        setUser({ ...user, [key]: value });
+        setAnonymousDisabled(false)
+      }
+    } else {
+      setUser({ ...user, [key]: value });
+    }
   }
 
   const submissionValidation = () => {
@@ -51,6 +66,7 @@ const SignUp = (props) => {
     allFields.delete('city')
     allFields.delete('state')
     allFields.delete('profilePic')
+    allFields.delete('isAnonymous')
     let requiredFields = Array.from(allFields)
     
     let errorsObj = {}
@@ -83,22 +99,23 @@ const SignUp = (props) => {
           success: false,
           message: data,
         });
+        setSaving(false);
       } else {
         setApiStatus({
           error: false,
           success: true,
-          message: ["Sign up successful!"],
+          message: ["Sign up successful! Redirecting..."],
         });
-        redirect('/user/login')
+        setTimeout(() => {
+          navigate('/user/login')
+          setSaving(false);
+        }, 2000)
       }
-      setSaving(false);
     }
   };
 
   const onBlur = (name) => {
-    console.log('on blur', name)
     const err = h.validator(user, name, errors)
-    console.log('err', err)
     setErrors({ ...err })
   };
 
@@ -109,7 +126,6 @@ const SignUp = (props) => {
     return ''
   }
 
-  console.log('user', user)
   return (
     <div className="container-dialog">
       <div className="dialog">
@@ -173,7 +189,32 @@ const SignUp = (props) => {
               ),
             }}
           />
+          <CustomTextField
+            onBlur={onBlur}
+            error={getHelperText('confirmPassword')}
+            helperText={getHelperText('confirmPassword')}
+            name="confirmPassword"
+            label="Confirm Password"
+            type={showConfirmPassword ? "text" : "password"}
+            value={user.confirmPassword}
+            onChange={onChangeOfValue}
+            inputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirm password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
           <CustomCheckbox
+            disabled={anonymousDisabled}
             className="anonymous-input"
             name="isAnonymous"
             checked={user.isAnonymous}
