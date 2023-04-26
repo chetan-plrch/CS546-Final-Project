@@ -21,6 +21,7 @@
     "fs": "^0.0.1-security",
     "js-cookie": "^3.0.4",
     "jsonwebtoken": "^9.0.0",
+    "mongo-sanitize": "^1.1.0",
     "mongodb": "^5.1.0",
     "nodemon": "^2.0.22",
     "react": "^18.2.0",

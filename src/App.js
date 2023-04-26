@@ -12,7 +12,6 @@ import Feedback from './components/feedBack/feedback';
 import FeedBackEditForm from './components/feedBack/feedBackEditForm';
 import helper from './helper';
 import NotFound from './components/notfound';
-
 const App = () => {
 
   useEffect(() => {
