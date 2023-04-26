@@ -1,7 +1,3 @@
-/* TODO - Remove if unused from template as well */
-/* .container {
-    display: flex;
-} */
 .header-container {
     display: flex;
     border-width: 0.5px;

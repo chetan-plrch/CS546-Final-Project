@@ -3,20 +3,12 @@ import './index.css'
 import CustomList from "../../common/custom-list";
 import ChatWindow from '../../common/custom-chat-window';
 
-import { getAllConnections, getChatHistory } from '../../api/connections';
-
-// TODO - remove this mock data and use api calls
-import { CONNECTIONS, CHAT_HISTORY } from './constants';
+import { getAllConnections } from '../../api/connections';
 
 const Connections = () => {
-  // Stores the list of connections
-  const [connections, setConnections] = useState(CONNECTIONS);
-  // By default, first connection is selected
-  const [selectedConnectionId, setSelectedConnectionId] = useState(connections[0]?.id);
-  // Stores the chat history of the selected connection
-  const [chatHistory, setChatHistory] = useState({...CHAT_HISTORY});
+  const [connections, setConnections] = useState();
+  const [selectedConnectionId, setSelectedConnectionId] = useState();
 
-  // TODO - set connections from API call
   useEffect(() => {
     async function fetchConnections() {
       const response = await getAllConnections();
@@ -25,30 +17,22 @@ const Connections = () => {
         users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastname}`}));
         setConnections(users?.length ? users : []);
         if (users?.length) {
-          setSelectedConnectionId(users[0]?._id);
+          // TODO - point to 1st connnection once api issue is fixed
+          setSelectedConnectionId(users[1]?._id);
         };
       };
     };
     fetchConnections();
   }, []);
 
-  // API call not required since socket is used
-  const updateConversation = (message) => {
-    const latestChat = chatHistory.conversation.concat([message]);
-    setChatHistory({...chatHistory, conversation: latestChat});
-  };
-
   const getConversation = async (connectionId) => {
-    // TODO - Uncomment this once API is ready
-    // const conversation = await getChatHistory(connectionId);
-    // setChatHistory(conversation);
     setSelectedConnectionId(connectionId);
   };
 
   return (
     <div className='container'>
     {
-    connections.length ? (
+    connections?.length ? (
       <div className='conversation-container'>
         <CustomList
           list={connections}
@@ -62,8 +46,7 @@ const Connections = () => {
           allowSearch={true}
           allowBlocking={true}
           allowMessaging={true}
-          chatHistory={chatHistory}
-          updateConversation={updateConversation}
+          connectionId={selectedConnectionId}
           />
       </div>
     ) : (

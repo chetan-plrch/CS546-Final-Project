@@ -1,11 +1,9 @@
 import { axiosApi } from "./api-interceptor";
 
 // Gets history of chat between two users
-const getChatHistory = async (users) => {
+const getChatHistory = async (connectionId) => {
     try {
-        const chatHistoryResponse = await axiosApi.post("/chat/history", {
-            users
-        });
+        const chatHistoryResponse = await axiosApi.get(`/chat/active-chat/${connectionId}`);
         return chatHistoryResponse;
     } catch (e) {
         console.log("error occurred", e);
