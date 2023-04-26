@@ -1,13 +1,19 @@
 import { feedBackData } from "./server/data/index.js";
 import {userData } from "./server/data/index.js"
 
-try{
-    const upFeed = await feedBackData.update("64456db258cb930fc0044ca8","false",3,5,4,"test")
-    console.log(upFeed);
-}catch(e){
-    console.log(e);
-}
 
+
+try {
+    const firstuser = await userData.create("naruto","uzimaki","hokage","naruto@5tails.com","#Naruto1234","m",23,"leaf","jwfkjvn",true,"seeker")
+} catch (e) {
+    console.log(e);    
+}
+// try{
+//     const upFeed = await feedBackData.update("64456db258cb930fc0044ca8","false",3,5,4,"test")
+//     console.log(upFeed);
+// }catch(e){
+//     console.log(e);
+// }
 
 // try {
 //   let users = await userData.getAllUser(false)

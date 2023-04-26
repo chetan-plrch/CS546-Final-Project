@@ -10,6 +10,7 @@ import {
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,16 +26,8 @@ const Login = () => {
       password,
     };
 
-    const response = await fetch("/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    });
-
+    const response = await loginUser(loginData)
     const responseData = await response.json();
-
     if (response.ok) {
       console.log("Login successful");
       toast.success(responseData.message);

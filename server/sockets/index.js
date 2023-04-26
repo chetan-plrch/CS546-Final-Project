@@ -9,13 +9,6 @@ const ioS = new Server(3002, {
     },
 })
 
-// Middleware for authentication
-// ioS.use((socket, next) => {
-//     console.log(socket.handshake.auth)
-  
-//     next()
-// });
-
 ioS.on("connection", async socket => {
     const userId = socket.handshake.query.userId
     if (userId) {

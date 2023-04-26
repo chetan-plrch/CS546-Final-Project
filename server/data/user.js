@@ -208,5 +208,6 @@ const getAllUser = async (anonimity)=>{
     throw [404, "Error: No user found in the database"];
   }
   return res;
-}
+};
+
 export default { create, checkLogged, getAllUser };

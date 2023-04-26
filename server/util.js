@@ -24,7 +24,7 @@ export const formatUser = (user) => {
         return {
             _id: user._id.toString(),
             firstname: 'Anonymous',
-            lastname: 'User',
+            lastName: 'User',
             profilePic: null,
             username: user._id.toString(),
             role: user.role

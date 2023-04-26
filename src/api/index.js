@@ -36,4 +36,32 @@ const createUserAccount = async (user) => {
   }
 };
 
-export { createUserAccount };
+const signUpUser = async ({ email, password }) => {
+  try {
+    const response = await fetch("https://lmel2.wiremockapi.cloud/json/1", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const responseJson = await response.json();
+    return responseJson;
+  } catch (e) {
+    console.log("error occurred", e);
+    return false;
+  }
+};
+
+const loginUser = async (loginData)=>{
+  const response = await fetch("/user/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  });
+  return response
+}
+
+export { createUserAccount, signUpUser, loginUser };

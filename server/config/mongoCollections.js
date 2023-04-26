@@ -20,38 +20,3 @@ export const users = getCollectionFn('users');
 export const feedBack = getCollectionFn('feedBack');
 export const chats = getCollectionFn('chats')
 export const sockets = getCollectionFn('sockets')
-
-/**
- * User authentication
- * 
- * User model:
- * {
- *  id,
- *  username, 
- *  firstname, 
- *  lastname,
- *  password,
- *  email,
- *  gender
- *  type
- * }
- * 
- * API's
- * POST - /signup
- * POST - /login
- * GET - /user
- * 
- * Chat model:
- * {
- *   id,
- *   members: [user1, user2],
- *   sender: user,
- *   message,
- *   timestamp
- * }
- * 
- * API's
- * GET - /chat - Get the chat history of the two users
- * POST - /chat - Post the chat/message of the chat between two users
- * 
- */
