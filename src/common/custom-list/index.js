@@ -37,10 +37,10 @@ function CustomList(props) {
           aria-labelledby='ellipsis-list-demo'
           sx={{ '--ListItemDecorator-size': '56px' }}
         >
-          {list?.map(function(item) {
-            // TODO - Key needs to be unique
+          {list?.map(function(item, index) {
               return  <ListItem
-                        key={item.content} className={item[selectionKey] === selectedId ? 'select-list-item': ''}
+                        key={index}
+                        className={item[selectionKey] === selectedId ? 'select-list-item': ''}
                         onClick={() => onSelectionChange(item[selectionKey])}
                       >
                           <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>

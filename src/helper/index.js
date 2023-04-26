@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const validUsername = (username) => {
     return /^(?=.{6,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(username)
 }
@@ -167,6 +169,12 @@ const validator = (user, key, err) => {
     return errorObj
 }
 
+export const getUserId = () => {
+    let userId = Cookies.get('userId');
+    userId = userId?.split(':')?.[1];
+    userId = userId?.replace(/"/g, "")
+    return userId;
+};
 const helper = {
     capitalizeFirst,
     validator

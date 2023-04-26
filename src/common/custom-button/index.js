@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 import Button from '@mui/material/Button';
 
 function CustomButton(props) {
-    // TODO - Add themes and pass style prop
     const { isPrimary, styles, title, disabled, onClick } = props;
     return (
     <Button

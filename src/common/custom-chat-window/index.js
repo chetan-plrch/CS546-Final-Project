@@ -4,24 +4,36 @@ import './index.css'
 import CustomButton from '../custom-button';
 import CustomTextField from '../custom-textfield';
 import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
-import { blockUser } from '../../api/connections';
-
-// TODO - Remove from here package.json and here once API is in place
-import { browserName } from 'react-device-detect'
+import { blockUser, getChatHistory } from '../../api/connections';
+import { getUserId } from '../../helper';
 
 function ChatWindow(props) {
-    const {allowSearch, allowBlocking, allowMessaging, chatHistory, updateConversation} = props;
-    let conversation = chatHistory?.conversation;
+    const {allowSearch, allowBlocking, allowMessaging, connectionId} = props;
+    const [conversation, setConversation] = useState([]);
     const [filteredChats, setFilterChats] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    // TODO - store logged in users id as senderId
-    let senderId = browserName === 'Chrome' ? '6447089a9170fd2d3e34ecc5' : '644708c99170fd2d3e34ecc6';
-    // TODO - get from chathistory
-    let receiverId = browserName === 'Chrome' ? '644708c99170fd2d3e34ecc6' : '6447089a9170fd2d3e34ecc5';
+    const [senderId, setSenderId] = useState('');
 
     useEffect(() => {
-        // TODO - use correct senderId
+        const senderId = getUserId();
+        setSenderId(senderId);
+    }, []);
+
+    useEffect(() => {
+        if (connectionId) {
+            setConversation([]);
+            async function fetchConversation() {
+                const response = await getChatHistory(connectionId);
+                if (response?.data?.chats?.length) {
+                    setConversation(response.data.chats[0]?.conversation);
+                };
+            };
+            fetchConversation();
+        };
+    }, [connectionId]);
+
+    useEffect(() => {
         initConnection(senderId)
         receiveMessage(addMessageToHistory);
         let element = document.getElementById('chat-container');
@@ -34,24 +46,19 @@ function ChatWindow(props) {
         setCurrentMessage(value);
     };
     const sendText = () => {
-        sendMessage(senderId, receiverId, currentMessage);
-        // TODO - how should it be sent? via api or socket is fine?
+        sendMessage(senderId, connectionId, currentMessage);
         const msgObj = {
-            sentAt: new Date().toString(), // Should be sent by sender and not formed here
+            sentAt: new Date().toString(),
             message: currentMessage,
             senderId
         };
-        updateConversation(msgObj);
+        setConversation(conversation => conversation.concat([msgObj]));
         setCurrentMessage('')
     };
     const addMessageToHistory = (msgObj) => {
-        // TODO - Have to update in chatHistory?.conversation in parent and in API
-        // const msg = {
-        //     sentAt: new Date().toString(), // Should be sent by sender and not formed here
-        //     message: msgObj?.message,
-        //     senderId: msgObj?.receiverId
-        // };
-        updateConversation({...msgObj, sentAt: new Date().toString()});
+        if (msgObj?.senderId === connectionId) {
+            setConversation(conversation => conversation.concat([{...msgObj, sentAt: new Date().toString()}]));
+        };
     };
     const blockConnection = async () => {
         const response = await blockUser(receiverId);
@@ -118,22 +125,18 @@ function ChatWindow(props) {
     )
 };
 
-// allowSearch = false, allowBlocking = false, allowMessaging = false, chatHistory = {}, updateConversation
-
 ChatWindow.defaultProps = {
     allowSearch: false,
     allowBlocking: false,
     allowMessaging: false,
-    chatHistory: {},
-    updateConversation: () => {}
+    connectionId: '',
 };
 
 ChatWindow.propTypes = {
     allowSearch: PropTypes.bool,
     allowBlocking: PropTypes.bool,
     allowMessaging: PropTypes.bool,
-    chatHistory: PropTypes.object,
-    updateConversation: PropTypes.func
+    connectionId: PropTypes.string,
 };
 
 export default ChatWindow;
