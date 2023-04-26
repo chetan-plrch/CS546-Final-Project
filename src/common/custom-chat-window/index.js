@@ -11,8 +11,8 @@ import { browserName } from 'react-device-detect'
 
 function ChatWindow(props) {
     const {allowSearch, allowBlocking, allowMessaging, chatHistory, updateConversation} = props;
-    const originalChats = JSON.parse(JSON.stringify(chatHistory.conversation));
-    const [conversation, setConversation] = useState(chatHistory.conversation);
+    let conversation = chatHistory?.conversation;
+    const [filteredChats, setFilterChats] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     // TODO - store logged in users id as senderId
@@ -23,7 +23,7 @@ function ChatWindow(props) {
     useEffect(() => {
         // TODO - use correct senderId
         initConnection(senderId)
-        receiveMessage(addMessageToHistory)
+        receiveMessage(addMessageToHistory);
         let element = document.getElementById('chat-container');
         if (element) {
             element.scrollTop = element.scrollHeight - element.clientHeight
@@ -40,26 +40,31 @@ function ChatWindow(props) {
             sentAt: new Date().toString(), // Should be sent by sender and not formed here
             message: currentMessage,
             senderId
-        }
+        };
         updateConversation(msgObj);
         setCurrentMessage('')
     };
     const addMessageToHistory = (msgObj) => {
         // TODO - Have to update in chatHistory?.conversation in parent and in API
-        console.log('msg received', msgObj);
-        updateConversation(msgObj);
+        // const msg = {
+        //     sentAt: new Date().toString(), // Should be sent by sender and not formed here
+        //     message: msgObj?.message,
+        //     senderId: msgObj?.receiverId
+        // };
+        updateConversation({...msgObj, sentAt: new Date().toString()});
     };
     const blockConnection = async () => {
         const response = await blockUser(receiverId);
         // TODO - update parent to remove current connection from list
     };
-    const onUpdateSearchTerm = (key, value) => {
+    const onUpdateSearchTerm = (_key, value) => {
         setSearchTerm(value);
         if (!value) {
-            setConversation(originalChats);
+            setFilterChats(conversation);
         } else {
-            const filteredChats = originalChats.filter((msgObj) => msgObj?.message?.toLowerCase().includes(value?.toLowerCase()));
-            setConversation(filteredChats);
+            let searchResults = JSON.parse(JSON.stringify(conversation));
+            searchResults = searchResults?.filter((msgObj) => msgObj?.message?.toLowerCase().includes(value?.toLowerCase()));
+            setFilterChats(searchResults);
         };
     };
 
@@ -80,17 +85,17 @@ function ChatWindow(props) {
                 }
             </div>
             {
-                conversation?.length ? (
+                (conversation?.length || (searchTerm && filteredChats.length)) ? (
                     <div className='chat-container' id='chat-container'>
-                    {conversation?.map(function(item) {
-                        return <span
-                                    key={item?.sentAt}
-                                    className={item?.senderId === senderId ? 'sent-message' : 'received-message'}
-                                >
-                                    {item?.message}
-                                </span>
-                    })}
-                </div>
+                        {(searchTerm ? filteredChats : conversation)?.map(function(item) {
+                            return <span
+                                        key={item?.sentAt}
+                                        className={item?.senderId === senderId ? 'sent-message' : 'received-message'}
+                                    >
+                                        {item?.message}
+                                    </span>
+                        })}
+                    </div>
                 ) : (
                     <div className='chat-container no-chat-container'>
                         No chats to display

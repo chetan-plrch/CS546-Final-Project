@@ -12,16 +12,25 @@ const Connections = () => {
   // Stores the list of connections
   const [connections, setConnections] = useState(CONNECTIONS);
   // By default, first connection is selected
-  const [selectedId, setSelectedId] = useState(connections[0]?.id);
+  const [selectedConnectionId, setSelectedConnectionId] = useState(connections[0]?.id);
   // Stores the chat history of the selected connection
-  const [chatHistory, setChatHistory] = useState(CHAT_HISTORY);
+  const [chatHistory, setChatHistory] = useState({...CHAT_HISTORY});
 
   // TODO - set connections from API call
-  // useEffect(async () => {
-  //   const allConnections = await getAllConnections();
-  //   console.log('allConnections', allConnections);
-  //   setConnections(allConnections);
-  // }, []);
+  useEffect(() => {
+    async function fetchConnections() {
+      const response = await getAllConnections();
+      if (response?.data?.users) {
+        let { users } = response.data;
+        users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastname}`}));
+        setConnections(users?.length ? users : []);
+        if (users?.length) {
+          setSelectedConnectionId(users[0]?._id);
+        };
+      };
+    };
+    fetchConnections();
+  }, []);
 
   // API call not required since socket is used
   const updateConversation = (message) => {
@@ -33,7 +42,7 @@ const Connections = () => {
     // TODO - Uncomment this once API is ready
     // const conversation = await getChatHistory(connectionId);
     // setChatHistory(conversation);
-    setSelectedId(connectionId);
+    setSelectedConnectionId(connectionId);
   };
 
   return (
@@ -43,7 +52,10 @@ const Connections = () => {
       <div className='conversation-container'>
         <CustomList
           list={connections}
-          selectedId={selectedId}
+          selectedId={selectedConnectionId}
+          titleKey='fullName'
+          contentKey='lastMessage'
+          selectionKey='_id'
           onSelectionChange={(connectionId) => getConversation(connectionId)}
         />
         <ChatWindow
