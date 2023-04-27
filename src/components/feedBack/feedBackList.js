@@ -1,9 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '@mui/material';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { feedBackList } from '../../api/feedback';
+
 const FeedBackList = ({ userId, updateKey }) => {
   const [feedbacks, setFeedbacks] = useState([]);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const FeedBackList = ({ userId, updateKey }) => {
         Feedbacks
       </Typography>
       {feedbacks.length > 0 ? (
-        <Box sx={{ width: '100%', maxWidth: '1200px', bgcolor: 'rgba(245, 245, 245, 0.8)', borderRadius: '4px', padding: '16px' }}>
+        <Box sx={{ width: '100%', maxWidth: '1200px', bgcolor: 'rgba(245, 245, 245, 0.8)', borderRadius: '4px', padding: '16px' }} >
           <List>
             {formattedFeedbacks.map((feedback, index) => (
               <React.Fragment key={index}>

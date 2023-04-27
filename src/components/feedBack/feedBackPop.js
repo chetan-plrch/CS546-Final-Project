@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 
+
+//In props I need a chatId ,username
 const FeedBackPop = (props) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();

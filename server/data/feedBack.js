@@ -50,6 +50,11 @@ const createFeedBack = async (
   }
 
   const feedBackCollection = await feedBack();
+  const FeedBackExistsForChat = await feedBackCollection.findOne({userId: new ObjectId(userId),chatId: new ObjectId(chatId)})
+  if(FeedBackExistsForChat){
+    throw [404, "FeedBack already exist,cannot give a new Feedback, you can only update the Feedback"]
+  }
+
   userId = new ObjectId(userId);
   chatId = new ObjectId(chatId);
   let now = new Date();
@@ -117,9 +122,10 @@ const getByuserId = async (userId) => {
       obj.userId = obj.userId.toString();
       obj.chatId = obj.chatId.toString();
     });
-  } else {
-    throw [404, "Error: No feedback found in the database"];
-  }
+  } 
+  // else {
+  //   throw [404, "Error: No feedback found in the database"];
+  // }
   return res;
 };
 
