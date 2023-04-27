@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import { feedbackDelete, feedbackEdit } from "../../api/feedback";
+import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
 
 const FeedBackEditForm = () => {
   const navigate = useNavigate();
@@ -30,13 +29,7 @@ const FeedBackEditForm = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/feedbacks/feedback", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ feedBackId: feedId }),
-        });
+        const response = await getFeedback(feedId)
         const result = await response.json();
         console.log(result);
         setData({
@@ -201,6 +194,15 @@ const FeedBackEditForm = () => {
               onClick={handleDelete}
             >
               Delete
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              type="btn"
+              sx={{ mt: 2 }}
+              onClick={()=>navigate("/feedbacks")}
+            >
+              Go Back
             </Button>
             <Button
               variant="contained"

@@ -127,7 +127,17 @@ const FeedBackForm = (props) => {
               label="isPublic"
             />
           </Box>
-          <Box alignSelf="flex-end">
+          <Box display="flex" justifyContent="space-between" width="100%">
+          <Button
+              variant="contained"
+              color="primary"
+              endIcon={<SendIcon />}
+              type="submit"
+              sx={{ mt: 2 }}
+              onClick={()=>navigate('/connections')}
+            >
+              GO Back
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -137,7 +147,9 @@ const FeedBackForm = (props) => {
             >
               Submit
             </Button>
-            {errors && (
+          </Box>
+          <Box>
+          {errors && (
               <Box marginTop={2}>
                 <Alert severity="error">
                   {errors.map((error, index) => (
