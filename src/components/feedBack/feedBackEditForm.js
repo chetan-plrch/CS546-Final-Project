@@ -11,9 +11,10 @@ import {
 } from '@mui/material';
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useNavigate } from 'react-router-dom';
 
 const FeedBackEditForm = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const feedId = location.state.feedbackId;
 
@@ -73,9 +74,14 @@ const FeedBackEditForm = () => {
       if (response.ok) {
         console.log(response.data);
         toast.success("Feedback Deleted Successfully")
+        setTimeout(() => {
+          navigate("/feedbacks");
+        }, 2000);
+
       } else {
         console.log(response.data)
         toast.error("Error in deleting feedback, try again")
+        
       }
     } catch (error) {
       console.error("Error deleting feedback:", error);
@@ -83,9 +89,43 @@ const FeedBackEditForm = () => {
   };
   
 
-  const handleSubmit = async (event) => {
+  const handleUpdate = async (event) => {
     event.preventDefault();
-    // Make API call to update the data
+    
+    const updatedFeedback = {
+      feedBackId : feedId,
+      isPublic : data.isPublic,
+      rate1 : data.rate1,
+      rate2 : data.rate2,
+      rate3 : data.rate3,
+      description: data.description
+    }
+    console.log(updatedFeedback);
+    try {
+      const response = await fetch("/feedbacks/feedback",{
+        method : "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFeedback)
+      })
+    const responseData = await response.json();
+
+    if (response.ok) {
+      console.log(response.data);
+      toast.success("Feedback Updated Successfully")
+      setTimeout(() => {
+        navigate("/feedbacks");
+      }, 2000);
+
+    } else {
+      console.log(response.data)
+      toast.error("Error in updateing feedback, try again")
+    }
+
+    } catch (e) {
+      console.error("Error updating feedback:", error);
+    }
   };
 
   return (
@@ -93,7 +133,7 @@ const FeedBackEditForm = () => {
       <Container maxWidth="sm">
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleUpdate}
           mt={4}
           bgcolor="rgba(245, 245, 245, 0.5)"
           p={3}

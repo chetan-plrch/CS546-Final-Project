@@ -12,6 +12,7 @@ import {
 import { Send as SendIcon } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const FeedBackForm = (props) => {
   const [rate1, setRate1] = useState("");
@@ -20,6 +21,7 @@ const FeedBackForm = (props) => {
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState("");
+  const navigate = useNavigate();
 
   const resetForm = () => {
     setRate1("");
@@ -49,6 +51,10 @@ const FeedBackForm = (props) => {
       },
       body: JSON.stringify(feedback),
     });
+    setTimeout(() => {
+      navigate("/connections");
+    }, 2000);
+
 
     const responseData = await response.json();
 
@@ -57,7 +63,7 @@ const FeedBackForm = (props) => {
       toast.success("Feedback submitted successfully");
       resetForm();
 
-      // Call the onSubmit prop when the form is submitted successfully
+
       props.onSubmit();
 
     } else {
