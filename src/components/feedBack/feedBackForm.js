@@ -13,6 +13,7 @@ import { Send as SendIcon } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { createFeedBack } from "../../api/feedback";
 
 const FeedBackForm = (props) => {
   const [rate1, setRate1] = useState("");
@@ -44,28 +45,18 @@ const FeedBackForm = (props) => {
     };
     console.log(feedback);
 
-    const response = await fetch("/feedbacks/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(feedback),
-    });
-    setTimeout(() => {
-      navigate("/connections");
-    }, 2000);
-
-
+    const response = await createFeedBack(feedback)
     const responseData = await response.json();
 
     if (response.ok) {
       console.log("Feedback submitted successfully");
       toast.success("Feedback submitted successfully");
       resetForm();
-
+      setTimeout(() => {
+        navigate("/connections");
+      }, 2000);
 
       props.onSubmit();
-
     } else {
       toast.error("Failed to submit feedback");
       console.log(responseData.errors);

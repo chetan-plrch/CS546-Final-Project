@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-
+import { feedBackList } from '../../api/feedback';
 const FeedBackList = ({ userId, updateKey }) => {
   const [feedbacks, setFeedbacks] = useState([]);
   const navigate = useNavigate();
@@ -12,9 +12,7 @@ const FeedBackList = ({ userId, updateKey }) => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await axios.post('/feedbacks/user', {
-          userId: userId,
-        });
+        const response = await feedBackList(userId)
         console.log(response);
 
         if (response.status === 200) {

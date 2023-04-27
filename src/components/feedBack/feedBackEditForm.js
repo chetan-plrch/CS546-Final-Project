@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Container,
   Box,
@@ -8,10 +8,11 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
-} from '@mui/material';
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { feedbackDelete, feedbackEdit } from "../../api/feedback";
 
 const FeedBackEditForm = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const FeedBackEditForm = () => {
     isPublic: false,
     description: "",
   });
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -62,67 +63,49 @@ const FeedBackEditForm = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch("/feedbacks/feedback", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ feedBackId: feedId }),
-      });
+      const response = await feedbackDelete(feedId);
       console.log("Request payload:", JSON.stringify({ feedbackId: feedId }));
-      
+
       if (response.ok) {
         console.log(response.data);
-        toast.success("Feedback Deleted Successfully")
+        toast.success("Feedback Deleted Successfully");
         setTimeout(() => {
           navigate("/feedbacks");
         }, 2000);
-
       } else {
-        console.log(response.data)
-        toast.error("Error in deleting feedback, try again")
-        
+        console.log(response.data);
+        toast.error("Error in deleting feedback, try again");
       }
     } catch (error) {
       console.error("Error deleting feedback:", error);
     }
   };
-  
 
   const handleUpdate = async (event) => {
     event.preventDefault();
-    
+
     const updatedFeedback = {
-      feedBackId : feedId,
-      isPublic : data.isPublic,
-      rate1 : data.rate1,
-      rate2 : data.rate2,
-      rate3 : data.rate3,
-      description: data.description
-    }
+      feedBackId: feedId,
+      isPublic: data.isPublic,
+      rate1: data.rate1,
+      rate2: data.rate2,
+      rate3: data.rate3,
+      description: data.description,
+    };
     console.log(updatedFeedback);
     try {
-      const response = await fetch("/feedbacks/feedback",{
-        method : "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedFeedback)
-      })
-    const responseData = await response.json();
-
-    if (response.ok) {
-      console.log(response.data);
-      toast.success("Feedback Updated Successfully")
-      setTimeout(() => {
-        navigate("/feedbacks");
-      }, 2000);
-
-    } else {
-      console.log(response.data)
-      toast.error("Error in updateing feedback, try again")
-    }
-
+      const response = await feedbackEdit(updatedFeedback);
+      const responseData = await response.json();
+      console.log(responseData);
+      if (response.ok) {
+        toast.success("Feedback Updated Successfully");
+        setTimeout(() => {
+          navigate("/feedbacks");
+        }, 2000);
+      } else {
+        console.log(response.data);
+        toast.error("Error in updateing feedback, try again");
+      }
     } catch (e) {
       console.error("Error updating feedback:", error);
     }
@@ -200,7 +183,9 @@ const FeedBackEditForm = () => {
                   name="isPublic"
                   checked={data.isPublic}
                   onChange={(event) =>
-                    handleChange({ target: { name: 'isPublic', value: event.target.checked } })
+                    handleChange({
+                      target: { name: "isPublic", value: event.target.checked },
+                    })
                   }
                 />
               }
@@ -208,10 +193,10 @@ const FeedBackEditForm = () => {
             />
           </Box>
           <Box display="flex" justifyContent="space-between" width="100%">
-          <Button
+            <Button
               variant="contained"
               color="secondary"
-              type="submit"
+              type="button"
               sx={{ mt: 2 }}
               onClick={handleDelete}
             >
