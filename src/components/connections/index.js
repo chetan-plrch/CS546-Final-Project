@@ -35,11 +35,12 @@ const Connections = () => {
     connections?.length ? (
       <div className='conversation-container'>
         <CustomList
-          list={connections}
-          selectedId={selectedConnectionId}
-          titleKey='fullName'
-          contentKey='lastMessage'
           selectionKey='_id'
+          list={connections}
+          titleKey='fullName'
+          listTitle='Connections'
+          contentKey='lastMessage'
+          selectedId={selectedConnectionId}
           onSelectionChange={(connectionId) => getConversation(connectionId)}
         />
         <ChatWindow
