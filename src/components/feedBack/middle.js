@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import FeedBackEditForm from "./feedBackEditForm";
 import { useLocation } from "react-router-dom";
 import styles from "./feedback.css";
-import { fetchFeedbackByChatId } from "../../api/feedback";
+import { getFeedbackByChatId } from "../../api/feedback";
 
 
 const Middle = () => {
@@ -15,7 +15,7 @@ const Middle = () => {
     const fetchData = async () => {
       try {
         if (chatId) {
-          const response = await fetchFeedbackByChatId(chatId);
+          const response = await getFeedbackByChatId(chatId);
           setFeedbackId(response._id);
         } else if (directFeedbackId) {
           setFeedbackId(directFeedbackId);

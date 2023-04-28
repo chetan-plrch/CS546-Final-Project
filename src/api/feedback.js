@@ -71,7 +71,7 @@ const getFeedback = async(feedId)=>{
   }
 }
 
-const fetchFeedbackByChatId = async (chatId) => {
+const getFeedbackByChatId = async (chatId) => {
   try {
     const response = await axios.post("/feedbacks/chatId", { chatId });
     return response.data;
@@ -80,4 +80,4 @@ const fetchFeedbackByChatId = async (chatId) => {
   }
 };
 
-export { createFeedBack, feedBackList, feedbackDelete, feedbackEdit, getFeedback, fetchFeedbackByChatId };
+export { createFeedBack, feedBackList, feedbackDelete, feedbackEdit, getFeedback, getFeedbackByChatId };
