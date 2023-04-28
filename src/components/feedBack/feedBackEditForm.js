@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -13,10 +13,9 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
 
-const FeedBackEditForm = () => {
+const FeedBackEditForm = (props) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const feedId = location.state.feedbackId;
+  const feedId = props.feedbackId;
 
   const [data, setData] = useState({
     rate1: 0,
@@ -28,8 +27,12 @@ const FeedBackEditForm = () => {
 
   useEffect(() => {
     async function fetchData() {
+      if (!props.feedbackId) {
+        return;
+      }
+      
       try {
-        const response = await getFeedback(feedId)
+        const response = await getFeedback(props.feedbackId)
         const result = await response.json();
         console.log(result);
         setData({
@@ -44,7 +47,7 @@ const FeedBackEditForm = () => {
       }
     }
     fetchData();
-  }, [feedId]);
+  }, [props.feedbackId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -63,7 +66,7 @@ const FeedBackEditForm = () => {
         console.log(response.data);
         toast.success("Feedback Deleted Successfully");
         setTimeout(() => {
-          navigate("/feedbacks");
+          navigate("/");
         }, 2000);
       } else {
         console.log(response.data);
@@ -93,7 +96,7 @@ const FeedBackEditForm = () => {
       if (response.ok) {
         toast.success("Feedback Updated Successfully");
         setTimeout(() => {
-          navigate("/feedbacks");
+          navigate("/");
         }, 2000);
       } else {
         console.log(response.data);

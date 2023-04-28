@@ -14,8 +14,10 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { createFeedBack } from "../../api/feedback";
+import Cookies from "js-cookie";
 
 const FeedBackForm = (props) => {
+  
   const [rate1, setRate1] = useState("");
   const [rate2, setRate2] = useState("");
   const [rate3, setRate3] = useState("");
@@ -36,7 +38,7 @@ const FeedBackForm = (props) => {
 
     const feedback = {
       userId: props.userId,
-      chatId: "6445696e99e0f288c0614080",
+      chatId: props.chatId,
       rate1,
       rate2,
       rate3,

@@ -3,11 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { feedBackList } from '../../api/feedback';
+import Cookies from "js-cookie";
 
-const FeedBackList = ({ userId, updateKey }) => {
+const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const navigate = useNavigate();
 
+  const extractedUserId = Cookies.get('userId');
+  const regex = /"([^"]+)"/;
+  const userId = extractedUserId.match(regex)[1];
+  console.log(extractedUserId);
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
@@ -24,7 +29,7 @@ const FeedBackList = ({ userId, updateKey }) => {
     };
 
     fetchFeedbacks();
-  }, [userId, updateKey]);
+  }, [userId]);
 
   const formattedFeedbacks = feedbacks.map((feedback) => ({
     ...feedback,
