@@ -184,9 +184,6 @@ function checkLoggedIn() {
   console.log("hitting");
   const userId = Cookies.get("userId");
   const token = Cookies.get("token");
-  console.log(userId);
-  console.log(token);
-  console.log(initialPage());
   if (!userId && !token && !initialPage()) {
     window.location = "/login";
   }

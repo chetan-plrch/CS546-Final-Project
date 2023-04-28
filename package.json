@@ -72,12 +72,14 @@
     "url": "https://github.com/chetan-plrch/CS546-Final-Project/issues"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "node-fetch": "^3.3.1"
   },
   "proxy": "http://localhost:3001"
 }
