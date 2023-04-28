@@ -228,7 +228,7 @@ router.post("/login",async (req, res) => {
 );
 
 
-router.get("/check",authenticate, (req, res) => {
+router.get("/check", authenticate, (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
 

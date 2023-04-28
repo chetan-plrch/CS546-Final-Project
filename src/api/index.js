@@ -1,5 +1,4 @@
 const constructResponse = (status, responseJson) => {
-  console.log(status, responseJson)
   if (status === 200) {
     return [false, responseJson];
   } else if (status === 400) {
@@ -36,23 +35,6 @@ const createUserAccount = async (user) => {
   }
 };
 
-const signUpUser = async ({ email, password }) => {
-  try {
-    const response = await fetch("https://lmel2.wiremockapi.cloud/json/1", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const responseJson = await response.json();
-    return responseJson;
-  } catch (e) {
-    console.log("error occurred", e);
-    return false;
-  }
-};
-
 const loginUser = async (loginData)=>{
   const response = await fetch("/user/login", {
     method: "POST",
@@ -64,4 +46,16 @@ const loginUser = async (loginData)=>{
   return response
 }
 
-export { createUserAccount, signUpUser, loginUser };
+const checkLoggedInOnBackend = async () => {
+  try {
+    const response = await fetch("/user/check");
+    if (response.status === 200) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    return false
+  }
+}
+
+export { createUserAccount, checkLoggedInOnBackend, loginUser };

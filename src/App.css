@@ -51,3 +51,9 @@
 .success-message {
   color: green;
 }
+
+.app-loader {
+  text-align: center;
+  margin-top: 48vh;
+  font-size: 30px;
+}
