@@ -76,7 +76,7 @@ function ChatWindow(props) {
     };
 
     return (
-        <div className='container'>
+        <div className='custom-chat-container'>
             <div className='header-container'>
                 {
                     allowSearch ? (

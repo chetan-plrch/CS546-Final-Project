@@ -1,8 +1,13 @@
 /* Highlight list with elevation and border */
-.select-list-item {
+.selected-item {
     background-color: lightblue;
     border: 1px solid grey;
     border-radius: 5px;
+}
+.clickable-list-item {
+    cursor: pointer;
+    /* border: 1px solid grey;
+    border-radius: 5px; */
 }
 
 .list-title {

@@ -41,3 +41,16 @@
     padding-top: 1px;
     color: orange;
 }
+.custom-chat-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 20px 35px;
+    border-radius: 10px;
+    width: 60%;
+    height: fit-content;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

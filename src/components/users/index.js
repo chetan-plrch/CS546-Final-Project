@@ -29,6 +29,7 @@ const Users = () => {
   };
   return (
     <div className='user-container'>
+      <span className='header'>Professionals</span>
       <div className='search-container'>
         <CustomTextField
           name='Search'
@@ -42,7 +43,7 @@ const Users = () => {
           list={users}
           titleKey='fullName'
           imageKey='profilePic'
-          listTitle='Users'
+          buttonTitle='Connect'
           // TODO - allow select to connect
           // selectionKey='_id'
           // selectedId={selectedConnectionId}

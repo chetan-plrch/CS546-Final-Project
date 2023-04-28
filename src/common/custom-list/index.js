@@ -7,15 +7,33 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import Typography from '@mui/joy/Typography';
+import CustomButton from '../custom-button';
 
 import './index.css';
 
 function CustomList(props) {
 
-    const { list, selectedId, onSelectionChange, titleKey, contentKey, selectionKey, listTitle, imageKey } = props
+    const {
+      list,
+      imageKey,
+      titleKey,
+      listTitle,
+      contentKey,
+      selectedId,
+      buttonTitle,
+      selectionKey,
+      onButtonClick,
+      onSelectionChange,
+    } = props
     
     // TODO - add default image
     const defaultImage = '';
+
+    const onListItemClick = (selection) => {
+      if (!buttonTitle) {
+        onSelectionChange(selection);
+      };
+    };
 
     return (
       <Box>
@@ -24,21 +42,26 @@ function CustomList(props) {
           sx={{ '--ListItemDecorator-size': '56px' }}
         >
           {list?.map(function(item, index) {
-              return  <ListItem
-                        key={index}
-                        className={selectedId && item[selectionKey] === selectedId ? 'select-list-item': ''}
-                        onClick={() => onSelectionChange(item[selectionKey])}
-                      >
-                          <ListItemDecorator>
-                              <Avatar src={item[imageKey] || defaultImage} />
-                          </ListItemDecorator>
-                          <ListItemContent>
-                              <Typography>{item[titleKey]}</Typography>
-                              <Typography level='body2' noWrap>
-                                  {item[contentKey]}
-                              </Typography>
-                          </ListItemContent>
-                      </ListItem>
+              return  (
+                <ListItem
+                  key={index}
+                  className={buttonTitle ? '' : (selectedId && item[selectionKey] === selectedId ? 'selected-item clickable-list-item': 'clickable-list-item')}
+                  onClick={() => onListItemClick(item[selectionKey])}>
+                    <ListItemDecorator>
+                      <Avatar src={item[imageKey] || defaultImage} />
+                    </ListItemDecorator>
+                    <ListItemContent>
+                      <Typography>{item[titleKey]}</Typography>
+                        <Typography level='body2' noWrap>
+                          {item[contentKey]}
+                        </Typography>
+                    </ListItemContent>
+                    {
+                      buttonTitle ? (
+                        <CustomButton title={buttonTitle} onClick={() => onButtonClick(item[selectionKey])} />
+                      ) : null
+                    }
+                </ListItem>)
           })}
         </List>
       </Box>
@@ -46,24 +69,29 @@ function CustomList(props) {
 };
 
 CustomList.defaultProps = {
-    list: [],
-    onSelectionChange: () => {},
+    list: [], // List of items to be displayed
+    listTitle: '', // Title to be displayed for list
+    buttonTitle: '', // Title to be used for button. If passed, entire list item will not be clickable
+    imageSource: null, // Holds image used for list item
     titleKey: 'title', // Key to be used for title
-    contentKey: 'content', // Key to be used for content
+    imageKey: 'image', // Key to be used for image
     selectionKey: 'id', // Key to be used for selection
-    // TODO - Remove default image source
-    imageKey: 'image' // Key to be used for image
+    contentKey: 'content', // Key to be used for content
+    onButtonClick: () => {}, // Callback function to be called on button click
+    onSelectionChange: () => {} // Callback function to be called on list item change
 };
 
 CustomList.propTypes = {
-    list: PropTypes.array.isRequired,
-    selectedId: PropTypes.string,
-    onSelectionChange: PropTypes.func,
-    titleKey: PropTypes.string.isRequired,
-    contentKey: PropTypes.string,
-    selectionKey: PropTypes.string,
+    imageSource: PropTypes.any,
     listTitle: PropTypes.string,
-    imageSource: PropTypes.any
+    contentKey: PropTypes.string,
+    selectedId: PropTypes.string,
+    buttonTitle: PropTypes.string,
+    onButtonClick: PropTypes.func,
+    selectionKey: PropTypes.string,
+    list: PropTypes.array.isRequired,
+    onSelectionChange: PropTypes.func,
+    titleKey: PropTypes.string.isRequired
 };
 
 export default CustomList;

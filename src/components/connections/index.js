@@ -30,7 +30,7 @@ const Connections = () => {
   };
 
   return (
-    <div className='container'>
+    <div className='connections-container'>
     {
     connections?.length ? (
       <div className='conversation-container'>
