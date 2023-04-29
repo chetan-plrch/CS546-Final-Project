@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Users = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -25,8 +26,13 @@ const Users = () => {
 
   const onUpdateSearchTerm = (_key, value) => {
     setSearchTerm(value);
-    // TODO - call API to get users based on search term
-    // TODO - update users state
+    if (!value) {
+        setFilteredUsers(users);
+    } else {
+        let searchResults = JSON.parse(JSON.stringify(users));
+        searchResults = searchResults?.filter((user) => user?.fullName?.toLowerCase()?.includes(value?.toLowerCase()));
+        setFilteredUsers(searchResults);
+    };
   };
 
   const goToChats = (connection) => {
@@ -46,7 +52,7 @@ const Users = () => {
       </div>
       <div className='user-list-container'>
       <CustomList
-          list={users}
+          list={searchTerm ? filteredUsers : users}
           selectionKey='_id'
           titleKey='fullName'
           imageKey='profilePic'
