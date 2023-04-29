@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './index.css'
-import CustomList from "../../common/custom-list";
+import CustomList from '../../common/custom-list';
 import ChatWindow from '../../common/custom-chat-window';
-
 import { getAllConnections } from '../../api/connections';
 
 const Connections = () => {
-  const [connections, setConnections] = useState();
+  const location = useLocation();
+  const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
 
   useEffect(() => {
@@ -14,11 +15,18 @@ const Connections = () => {
       const response = await getAllConnections();
       if (response?.data?.users) {
         let { users } = response.data;
-        users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastname}`}));
-        setConnections(users?.length ? users : []);
+        users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
         if (users?.length) {
-          // TODO - point to 1st connnection once api issue is fixed
-          setSelectedConnectionId(users[1]?._id);
+          // TODO - Reset on refresh if required
+          if (location?.state?.connection) {
+            // TODO - remove this block once api is fixed. Set connection to 0th index always.
+            setSelectedConnectionId(location.state.connection._id);
+            users = [location.state.connection, ...users];
+          } else {
+            // TODO - else block not required once api is fixed. Set connection to 0th index always.
+            setSelectedConnectionId(users[0]?._id);
+          }
+          setConnections(users);
         };
       };
     };
@@ -27,6 +35,21 @@ const Connections = () => {
 
   const getConversation = async (connectionId) => {
     setSelectedConnectionId(connectionId);
+  };
+
+  const updateConnections = (connectionId, lastMessage) => {
+    let existingConnection = false;
+    const updatedConnections = connections.map((connection) => {
+      if (connection._id === connectionId) {
+        existingConnection = true;
+        return {...connection, lastMessage};
+      };
+      return connection;
+    });
+    if (!existingConnection) {
+      updatedConnections.unshift({_id: connectionId, lastMessage, showUnreadLabel: true});
+    };
+    setConnections(updatedConnections);
   };
 
   return (
@@ -48,6 +71,7 @@ const Connections = () => {
           allowBlocking={true}
           allowMessaging={true}
           connectionId={selectedConnectionId}
+          onConnectionUpdate={updateConnections}
           />
       </div>
     ) : (

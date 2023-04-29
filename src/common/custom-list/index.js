@@ -52,13 +52,22 @@ function CustomList(props) {
                     </ListItemDecorator>
                     <ListItemContent>
                       <Typography>{item[titleKey]}</Typography>
-                        <Typography level='body2' noWrap>
-                          {item[contentKey]}
-                        </Typography>
+                      {
+                        selectedId !== item[selectionKey] ? (
+                          <Typography level='body2' noWrap>
+                            {item[contentKey]}
+                            {
+                              item.showUnreadLabel ? (
+                                <span className='unread-label'>Unread</span>
+                              ) : null
+                            }
+                          </Typography>
+                        ) : null
+                      }
                     </ListItemContent>
                     {
                       buttonTitle ? (
-                        <CustomButton title={buttonTitle} onClick={() => onButtonClick(item[selectionKey])} />
+                        <CustomButton title={buttonTitle} onClick={() => onButtonClick(item)} />
                       ) : null
                     }
                 </ListItem>)
