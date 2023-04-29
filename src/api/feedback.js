@@ -72,12 +72,8 @@ const getFeedback = async(feedId)=>{
 }
 
 const getFeedbackByChatId = async (chatId) => {
-  try {
     const response = await axios.post("/feedbacks/chatId", { chatId });
     return response.data;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 export { createFeedBack, feedBackList, feedbackDelete, feedbackEdit, getFeedback, getFeedbackByChatId };

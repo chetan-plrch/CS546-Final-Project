@@ -136,7 +136,7 @@ const FeedBackForm = (props) => {
               endIcon={<SendIcon />}
               type="submit"
               sx={{ mt: 2 }}
-              onClick={()=>navigate('/connections')}
+              onClick={()=>navigate('/')}
             >
               GO Back
             </Button>

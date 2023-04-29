@@ -13,6 +13,7 @@ import Feedback from './components/feedBack/feedback';
 import FeedBackList from './components/feedBack/feedBackList';
 import FeedBackEditForm from './components/feedBack/feedBackEditForm';
 import NotFound from './components/notfound';
+
 const App = () => {
 
   // useEffect(() => {
@@ -29,10 +30,12 @@ const App = () => {
           <Route exact path="/profile" element={ <Profile /> } />
 
           <Route exact path="/feedbacks" element = {<Feedback />} />
+          <Route exact path="/feedbacks/feedback" element = {<Middle />} />
+          
           {/* use the below link in the navbar */}
           <Route exact path="/feedbackslist" element = {<FeedBackList />} /> 
 
-          <Route exact path="/feedbacks/feedback" element = {<Middle />} />
+          
           
           <Route exact path="/connections" element={ <Connections /> } />
           <Route exact path="/chat-1" element={<Chat 
