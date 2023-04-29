@@ -41,7 +41,7 @@ const createFeedBack = async (
   }
 
   try {
-    description = validation.checkString(description, " feed back description");
+    description = validation.checkString(description, " feedback description");
   } catch (e) {
     errors.push(e);
   }
@@ -123,9 +123,9 @@ const getByuserId = async (userId) => {
       obj.chatId = obj.chatId.toString();
     });
   } 
-  // else {
-  //   throw [404, "Error: No feedback found in the database"];
-  // }
+  else {
+    throw [404, "Error: No feedback found in the database"];
+  }
   return res;
 };
 

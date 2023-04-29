@@ -3,11 +3,11 @@ import {userData } from "./server/data/index.js"
 
 
 
-try {
-    const firstuser = await userData.create("naruto","uzimaki","hokage","naruto@5tails.com","#Naruto1234","m",23,"leaf","jwfkjvn",true,"seeker")
-} catch (e) {
-    console.log(e);    
-}
+// try {
+//     const firstuser = await userData.create("naruto","uzimaki","hokage","naruto@5tails.com","#Naruto1234","m",23,"leaf","jwfkjvn",true,"seeker")
+// } catch (e) {
+//     console.log(e);    
+// }
 // try{
 //     const upFeed = await feedBackData.update("64456db258cb930fc0044ca8","false",3,5,4,"test")
 //     console.log(upFeed);
@@ -28,20 +28,20 @@ try {
 //   console.log(e);
 // }
 
-// try {
-//   let firstfeed = await feedBackData.createFeedBack(
-//     "643b7312a23709af14b68ff4",
-//     "643b7312a23709af14b68ff4",
-//     true,
-//     3,
-//     4,
-//     2,
-//     "rightNow"
-//   );
-//   console.log(firstfeed);
-// } catch (e) {
-//   console.log(e);
-// }
+try {
+  let firstfeed = await feedBackData.createFeedBack(
+    "643b7312a23709af14b68ff4",
+    "643b7312a23709af14b68ff4",
+    "true",
+    3,
+    4,
+    2,
+    "rightNow"
+  );
+  console.log(firstfeed);
+} catch (e) {
+  console.log(e);
+}
 
 // try {
 //   let secondfeed = await feedBackData.createFeedBack(

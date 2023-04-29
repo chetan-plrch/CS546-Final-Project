@@ -35,8 +35,6 @@ const App = () => {
           {/* use the below link in the navbar */}
           <Route exact path="/feedbackslist" element = {<FeedBackList />} /> 
 
-          
-          
           <Route exact path="/connections" element={ <Connections /> } />
           <Route exact path="/chat-1" element={<Chat 
             user1={'644406498781b6017e69fb98'}

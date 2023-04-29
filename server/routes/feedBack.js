@@ -11,6 +11,63 @@ router.route("/").post(async (req, res) => {
       .json({ error: "There are no fields in the request body" });
   }
 
+  //validation for the request body
+  let errors = [];
+  try {
+    feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
+  } catch (e) {
+    errors.push(e);
+  }
+
+  try {
+    feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
+  } catch (e) {
+    errors.push(e);
+  }
+
+  try {
+    feedBackInfo.isPublic = validation.checkPublic(feedBackInfo.isPublic);
+  } catch (e) {
+    errors.push(e);
+  }
+
+  try {
+    feedBackInfo.rate1 = validation.checkRating(
+      feedBackInfo.rate1,
+      "reconnect_probability"
+    );
+  } catch (e) {
+    errors.push(e);
+  }
+  try {
+    feedBackInfo.rate2 = validation.checkRating(
+      feedBackInfo.rate2,
+      "satisfied_with_chat"
+    );
+  } catch (e) {
+    errors.push(e);
+  }
+  try {
+    feedBackInfo.rate3 = validation.checkRating(
+      feedBackInfo.rate3,
+      "listener_rating"
+    );
+  } catch (e) {
+    errors.push(e);
+  }
+  try {
+    feedBackInfo.description = validation.checkString(
+      feedBackInfo.description,
+      "feedback description"
+    );
+  } catch (e) {
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).send(errors);
+  }
+
   try {
     const newFD = await feedBackData.createFeedBack(
       feedBackInfo.userId,
@@ -21,11 +78,11 @@ router.route("/").post(async (req, res) => {
       feedBackInfo.rate3,
       feedBackInfo.description
     );
-    res.json(newFD);
+    return res.json(newFD);
   } catch (e) {
     let status = e[0] ? e[0] : 500;
     let message = e[1] ? e[1] : "Internal Server Error";
-    res.status(status).send({ errors: message });
+    return res.status(status).send({ errors: message });
   }
 });
 
@@ -35,6 +92,17 @@ router.route("/user").post(async (req, res) => {
     return res
       .status(400)
       .json({ error: "There are no fields in the request body" });
+  }
+
+  //validation for the request body
+  let errors = [];
+  try {
+    feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
+  } catch (e) {
+    errors.push(e);
+  }
+  if (errors.length > 0) {
+    return res.status(400).send(errors);
   }
 
   try {
@@ -57,6 +125,20 @@ router
         .json({ error: "There are no fields in the request body" });
     }
 
+    //validation for the request body
+    let errors = [];
+    try {
+      feedBackInfo.feedBackId = validation.checkId(
+        feedBackInfo.feedBackId,
+        "feedback Id"
+      );
+    } catch (e) {
+      errors.push(e);
+    }
+    if (errors.length > 0) {
+      return res.status(400).send(errors);
+    }
+
     try {
       let feedBack = await feedBackData.getByFeedId(feedBackInfo.feedBackId);
       res.json(feedBack);
@@ -72,6 +154,56 @@ router
       return res
         .status(400)
         .json({ error: "There are no fields in the request body" });
+    }
+    
+    let errors = [];
+    try {
+      feedBackInfo.feedBackId = validation.checkId(feedBackInfo.feedBackId, "feedback Id");
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+      feedBackInfo.isPublic = validation.checkPublic(feedBackInfo.isPublic);
+    } catch (e) {
+      errors.push(e);
+    }
+  
+    try {
+      feedBackInfo.rate1 = validation.checkRating(
+        feedBackInfo.rate1,
+        "reconnect_probability"
+      );
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      feedBackInfo.rate2 = validation.checkRating(
+        feedBackInfo.rate2,
+        "satisfied_with_chat"
+      );
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      feedBackInfo.rate3 = validation.checkRating(
+        feedBackInfo.rate3,
+        "listener_rating"
+      );
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      feedBackInfo.description = validation.checkString(
+        feedBackInfo.description,
+        "feedback description"
+      );
+    } catch (e) {
+      errors.push(e);
+    }
+  
+    if (errors.length > 0) {
+      return res.status(400).send(errors);
     }
     try {
       const newFD = await feedBackData.update(
@@ -97,14 +229,26 @@ router
         .status(400)
         .json({ error: "There are no fields in the request body" });
     }
+
+    //validation for the request body
+    let errors = [];
+    try {
+      feedBackInfo.feedBackId = validation.checkId(feedBackInfo.feedBackId, "feedback Id");
+    } catch (e) {
+      errors.push(e);
+    }
+    if (errors.length > 0) {
+      return res.status(400).send(errors);
+    }
+
     try {
       let deleteFeedBack = await feedBackData.remove(feedBackInfo.feedBackId);
-      res.json(deleteFeedBack);
+      return res.json(deleteFeedBack);
     } catch (e) {
       console.log(e);
       let status = e[0] ? e[0] : 500;
       let message = e[1] ? e[1] : "Internal Server Error";
-      res.status(status).send({ error: message });
+      return res.status(status).send({ error: message });
     }
   });
 
@@ -114,6 +258,17 @@ router.route("/chatId").post(async (req, res) => {
     return res
       .status(400)
       .json({ error: "There are no fields in the request body" });
+  }
+
+  //validation for the request body
+  let errors = [];
+  try {
+    feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
+  } catch (e) {
+    errors.push(e);
+  }
+  if (errors.length > 0) {
+    return res.status(400).send(errors);
   }
 
   try {
