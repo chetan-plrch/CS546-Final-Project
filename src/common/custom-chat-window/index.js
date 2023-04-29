@@ -62,7 +62,7 @@ function ChatWindow(props) {
         setCurrentMessage('');
     };
     const onReceiveMessage = (msgObj) => {
-        if (receivedMsg?.senderId === connectionId) {
+        if (msgObj?.senderId === connectionId) {
             const receivedMsg = {
                 sentAt: new Date().toString(),
                 message: msgObj?.message,

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Link from '@mui/joy/Link';
+
 import './index.css'
 import CustomList from '../../common/custom-list';
 import ChatWindow from '../../common/custom-chat-window';
@@ -7,6 +9,7 @@ import { getAllConnections } from '../../api/connections';
 
 const Connections = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
 
@@ -27,7 +30,11 @@ const Connections = () => {
             setSelectedConnectionId(users[0]?._id);
           }
           setConnections(users);
+        } else {
+          // TODO - use getUserRole() and change content if page is listener
         };
+      } else {
+        // TODO - use getUserRole() and change content if page is listener
       };
     };
     fetchConnections();
@@ -50,6 +57,10 @@ const Connections = () => {
       updatedConnections.unshift({_id: connectionId, lastMessage, showUnreadLabel: true});
     };
     setConnections(updatedConnections);
+  };
+
+  const findExperts = () => {
+    navigate('/experts');
   };
 
   return (
@@ -76,7 +87,9 @@ const Connections = () => {
       </div>
     ) : (
       <span>
-        Please connect with professionals to get help
+        Please click
+        <Link onClick={findExperts} sx={{padding: '5px'}}>here</Link>
+         to connect with professionals to get help
       </span>
     )
     }
