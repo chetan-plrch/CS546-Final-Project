@@ -183,20 +183,20 @@ router.post("/login",async (req, res) => {
 
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true, secure: true, sameSite: 'none'
       });
 
       res.cookie("userId", user._id, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false,
+        httpOnly: false, secure: true, sameSite: 'none'
       });
       res.cookie("firstname", user.firstName, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false,
+        httpOnly: false, secure: true, sameSite: 'none'
       });
       res.cookie("role", user.role, {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false,
+        httpOnly: false, secure: true, sameSite: 'none'
       });
 
       if(user.isAnonymous){
@@ -210,16 +210,13 @@ router.post("/login",async (req, res) => {
     } catch (e) {
       let status = e[0] ? e[0] : 500;
       let message = e[1] ? e[1] : "Internal Server Error";
-      //console.log(message);
       res.status(status).json({ error: message });
-      //console.log(e);
     }
   },
   authenticate
 );
 
-
-router.get("/check", authenticate, (req, res) => {
+router.get("/is-loggedin", authenticate, (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
 
