@@ -30,7 +30,7 @@ const Login = () => {
     console.log(result);
     if (result.status === 200) {
       console.log("Login successful");
-      toast.success(response.data.message);
+      toast.success(result.data.message);
       setTimeout(() => {
         navigate("/");
       }, 2000);
