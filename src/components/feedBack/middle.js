@@ -16,6 +16,7 @@ const Middle = () => {
       try {
         if (chatId) {
           const response = await getFeedbackByChatId(chatId);
+          console.log(response);
           setFeedbackId(response._id);
         } else if (directFeedbackId) {
           setFeedbackId(directFeedbackId);

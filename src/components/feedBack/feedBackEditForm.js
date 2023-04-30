@@ -30,10 +30,10 @@ const FeedBackEditForm = (props) => {
       if (!props.feedbackId) {
         return;
       }
-      
+
       try {
-        const response = await getFeedback(props.feedbackId)
-        const result = await response.json();
+        const response = await getFeedback(props.feedbackId);
+        const result = await response.data;
         console.log(result);
         setData({
           rate1: result.rating.reconnect_probability,
@@ -58,23 +58,17 @@ const FeedBackEditForm = (props) => {
   };
 
   const handleDelete = async () => {
-    try {
       const response = await feedbackDelete(feedId);
-      console.log("Request payload:", JSON.stringify({ feedbackId: feedId }));
+      //console.log("Request payload:", JSON.stringify({ feedbackId: feedId }));
 
-      if (response.ok) {
-        console.log(response.data);
+      if (response.status === 200) {
         toast.success("Feedback Deleted Successfully");
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
-        console.log(response.data);
         toast.error("Error in deleting feedback, try again");
       }
-    } catch (error) {
-      console.error("Error deleting feedback:", error);
-    }
   };
 
   const handleUpdate = async (event) => {
@@ -88,22 +82,15 @@ const FeedBackEditForm = (props) => {
       rate3: data.rate3,
       description: data.description,
     };
-    console.log(updatedFeedback);
-    try {
-      const response = await feedbackEdit(updatedFeedback);
-      const responseData = await response.json();
-      console.log(responseData);
-      if (response.ok) {
-        toast.success("Feedback Updated Successfully");
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        console.log(response.data);
-        toast.error("Error in updateing feedback, try again");
-      }
-    } catch (e) {
-      console.error("Error updating feedback:", error);
+    const response = await feedbackEdit(updatedFeedback);
+
+    if (response.status === 200) {
+      toast.success("Feedback Updated Successfully");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } else {
+      toast.error("Error in updateing feedback, try again");
     }
   };
 
@@ -203,7 +190,7 @@ const FeedBackEditForm = (props) => {
               color="primary"
               type="btn"
               sx={{ mt: 2 }}
-              onClick={()=>navigate("/")}
+              onClick={() => navigate("/")}
             >
               Go Back
             </Button>
