@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -18,6 +19,7 @@ import { checkLogInTrace, delay } from "../../helper";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosApi } from "../../api/api-interceptor";
+import { getLoggedInUser } from "../../api";
 
 const pages = ["Home", "Users", "Connections", "Feedbacks"];
 const settings = ["Profile", "Logout"];
@@ -25,6 +27,17 @@ const settings = ["Profile", "Logout"];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [profilePic, setProfilePic] = React.useState(null)
+
+  useEffect(() => {
+    async function getProfilePic() {
+      const profilePicUrl = await getLoggedInUser()
+      setProfilePic(profilePicUrl)
+    }
+
+    getProfilePic()
+  }, [])
+
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -170,7 +183,7 @@ function ResponsiveAppBar() {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
+                      src={profilePic}
                     />
                   </IconButton>
                 </Tooltip>
