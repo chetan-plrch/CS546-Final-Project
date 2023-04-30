@@ -177,7 +177,7 @@ const validator = (user, key, err) => {
 
 export function initialPage() {
   const path = window.location.pathname;
-  return path === "/login" || path.includes("/signup");
+  return path.includes("/login") || path.includes("/signup");
 }
 
 export function checkLoggedIn() {

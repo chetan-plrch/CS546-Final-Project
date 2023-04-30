@@ -28,7 +28,9 @@ const Protected = (props) => {
             // }
         }
 
-        navigateToRoute()
+        if (props.isLoggedIn === true || props.isLoggedIn === false) {
+            navigateToRoute()
+        }
     }, [props.isLoggedIn])
 
     if (unprotect) {
