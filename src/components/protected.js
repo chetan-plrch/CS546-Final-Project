@@ -11,21 +11,21 @@ const Protected = (props) => {
 
     useEffect(() => {
         async function navigateToRoute() {
-            // if (props.isLoggedIn && initialPage()) {
-            //     // Login and signup page flow
-            //     navigate("/")
-            //     await delay(1000)
-            //     setUnprotect(true)
-            // } else if (!props.isLoggedIn && !initialPage()){
-            //     // When not loggedin
-            //     navigate("/login")
-            //     await delay(1000)
-            //     setUnprotect(true)
-            // } else {
-            //     // For all the other scenarios
-            //     await delay(1000)
+            if (props.isLoggedIn && initialPage()) {
+                // Login and signup page flow
+                navigate("/")
+                await delay(1000)
+                setUnprotect(true)
+            } else if (!props.isLoggedIn && !initialPage()){
+                // When not loggedin
+                navigate("/login")
+                await delay(1000)
+                setUnprotect(true)
+            } else {
+                // For all the other scenarios
+                await delay(1000)
                  setUnprotect(true)
-            // }
+             }
         }
 
         if (props.isLoggedIn === true || props.isLoggedIn === false) {
