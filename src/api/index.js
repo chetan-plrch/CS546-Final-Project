@@ -1,3 +1,5 @@
+import { axiosApi } from "./api-interceptor";
+
 const constructResponse = (status, responseJson) => {
   if (status === 200) {
     return [false, responseJson];
@@ -18,44 +20,38 @@ const formatErrorMessage = (errorResponse) => {
   }
 }
 
-const createUserAccount = async (user) => {
+const createUserAccountAxios =  async (user) => {
   try {
-    const response = await fetch("/user/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    const responseJson = await response.json();
-    return constructResponse(response.status, responseJson)
-  } catch (e) {
-    console.log("error occurred", e);
-    return constructResponse(e.status, e)
-  }
-};
+    const response = await axiosApi.post('/user/signup', user, {
+      headers: { "Content-Type": "application/json" }
+    })
 
-const loginUser = async (loginData)=>{
-  const response = await fetch("/user/login", {
-    method: "POST",
+    return constructResponse(response.status, response.data)
+  } catch (e) {
+    return constructResponse(e.response.status, e.response.data)
+  }
+}
+
+const loginUser = async (loginData) => {
+  const response = await axiosApi.post('/user/login', loginData, {
     headers: {
       "Content-Type": "application/json",
-    },
-    body: JSON.stringify(loginData),
-  });
+    }
+  })
   return response
 }
 
 const checkLoggedInOnBackend = async () => {
   try {
-    const response = await fetch("/user/check");
+    const response = await axiosApi.get('/user/is-loggedin')
+
     if (response.status === 200) {
-      return true;
+      return true
     }
-    return false;
+    return false
   } catch (e) {
     return false
   }
 }
 
-export { createUserAccount, checkLoggedInOnBackend, loginUser };
+export { checkLoggedInOnBackend, loginUser, createUserAccountAxios };

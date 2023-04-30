@@ -175,18 +175,20 @@ const validator = (user, key, err) => {
   return errorObj;
 };
 
-function initialPage() {
+export function initialPage() {
   const path = window.location.pathname;
   return path === "/login" || path.includes("/signup");
 }
 
-function checkLoggedIn() {
-  console.log("hitting");
+export function checkLoggedIn() {
   const userId = Cookies.get("userId");
-  const token = Cookies.get("token");
-  if (!userId && !token && !initialPage()) {
-    window.location = "/login";
-  }
+  return userId && !initialPage()
+}
+
+export function checkLogInTrace() {
+  const userId = Cookies.get('userId');
+  console.log('trace', userId)
+  return !!userId
 }
 
 // Returns the user id from the cookie
@@ -201,6 +203,10 @@ export const getUserRole = () => {
     let userRole = Cookies.get('role');
     return userRole;
 };
+
+export function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const helper = {
   capitalizeFirst,

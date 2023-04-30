@@ -5,9 +5,9 @@ import { authenticate, destroyToken, notAuthenticate } from '../middleware/index
 
 
 const routeConstructor = (app) => {
-    app.use('/user',notAuthenticate, user)
-    app.use('/feedbacks',authenticate,feedback)
-    app.use('/chat', authenticate,chat)
+    app.use('/user', user)
+    app.use('/feedbacks', authenticate, feedback)
+    app.use('/chat', authenticate, chat)
     app.use('/logout',destroyToken)
     app.use("*", (req, res) => {
         res.status(404).json({  error: 'Not Found'  })
