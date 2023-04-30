@@ -8,7 +8,13 @@ import { blockUser, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
 
 function ChatWindow(props) {
-    const {allowSearch, allowBlocking, allowMessaging, connectionId} = props;
+    const {
+        allowSearch,
+        connectionId,
+        allowBlocking,
+        allowMessaging,
+        onConnectionUpdate
+    } = props;
     const [conversation, setConversation] = useState([]);
     const [filteredChats, setFilterChats] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
@@ -35,14 +41,14 @@ function ChatWindow(props) {
 
     useEffect(() => {
         initConnection(senderId)
-        receiveMessage(addMessageToHistory);
+        receiveMessage(onReceiveMessage);
         let element = document.getElementById('chat-container');
         if (element) {
             element.scrollTop = element.scrollHeight - element.clientHeight
         };
     }, [conversation]);
 
-    const onChangeOfValue = (key, value) => {
+    const onChangeOfValue = (_key, value) => {
         setCurrentMessage(value);
     };
     const sendText = () => {
@@ -53,30 +59,38 @@ function ChatWindow(props) {
             senderId
         };
         setConversation(conversation => conversation.concat([msgObj]));
-        setCurrentMessage('')
+        setCurrentMessage('');
     };
-    const addMessageToHistory = (msgObj) => {
+    const onReceiveMessage = (msgObj) => {
         if (msgObj?.senderId === connectionId) {
-            setConversation(conversation => conversation.concat([{...msgObj, sentAt: new Date().toString()}]));
+            const receivedMsg = {
+                sentAt: new Date().toString(),
+                message: msgObj?.message,
+                senderId: msgObj?.senderId
+            };
+            setConversation(conversation => conversation.concat([receivedMsg]));
+        } else {
+            onConnectionUpdate(msgObj?.senderId, msgObj?.message);
         };
     };
     const blockConnection = async () => {
         const response = await blockUser(receiverId);
         // TODO - update parent to remove current connection from list
     };
+
     const onUpdateSearchTerm = (_key, value) => {
         setSearchTerm(value);
         if (!value) {
             setFilterChats(conversation);
         } else {
             let searchResults = JSON.parse(JSON.stringify(conversation));
-            searchResults = searchResults?.filter((msgObj) => msgObj?.message?.toLowerCase().includes(value?.toLowerCase()));
+            searchResults = searchResults?.filter((msgObj) => msgObj?.message?.toLowerCase()?.includes(value?.toLowerCase()));
             setFilterChats(searchResults);
         };
     };
 
     return (
-        <div className='container'>
+        <div className='custom-chat-container'>
             <div className='header-container'>
                 {
                     allowSearch ? (

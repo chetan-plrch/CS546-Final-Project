@@ -10,6 +10,15 @@ router.get("/user", authenticate, async (req, res) => {
   return res.send(req.user);
 });
 
+router.get("/all-users", async (req, res) => {
+  try {
+    const response = await userData.getAllUsers(req.query);
+    return res.status(200).send(response);
+  } catch (e) {
+    return res.status(e[0] || 500).send({ message: e[1] || "Internal Server Error" });
+  };
+});
+
 router.post("/signup", async (req, res) => {
   let userInfo = req.body;
   if (!userInfo || Object.keys(userInfo).length === 0) {

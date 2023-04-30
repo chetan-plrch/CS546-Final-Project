@@ -188,26 +188,18 @@ const checkLogged = async (username, password) => {
   return user;
 };
 
-const getAllUser = async (anonimity)=>{
-  const userCtx = await users()
-  let res = [];
-
-  if(anonimity === true || anonimity === "true"){
-    res = await userCtx.find({isAnonymous: true}).toArray();
-  }else if(anonimity === false || anonimity === "false"){
-    res = await userCtx.find({isAnonymous: false}).toArray();
-  }else{
-    res = await userCtx.find({}).toArray();
-  }
-  
-  if (res.length > 0) {
-    res.forEach((obj) => {
-      obj._id = obj._id.toString();
-    });
-  } else {
-    throw [404, "Error: No user found in the database"];
-  }
-  return res;
+const getAllUsers = async (queryParams) => {
+  // TODO - 1. Send all if not role provided 2. Check if active 3. Send only relevant fields
+  const userCollection = await users();
+  queryParams.isActive = queryParams.isActive === 'true';
+  const usersResponse = await userCollection.find(queryParams).toArray();
+  if (!usersResponse?.length) {
+    throw [404, "Users not found"];
+  };
+  usersResponse?.forEach((item) => {
+    item._id = item._id.toString();
+  });
+  return usersResponse;
 };
 
-export default { create, checkLogged, getAllUser };
+export default { create, checkLogged, getAllUsers };

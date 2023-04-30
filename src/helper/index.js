@@ -192,12 +192,19 @@ function checkLoggedIn() {
   }
 }
 
+// Returns the user id from the cookie
 export const getUserId = () => {
     let userId = Cookies.get('userId');
     userId = userId?.split(':')?.[1];
     userId = userId?.replace(/"/g, "")
     return userId;
 };
+
+export const getUserRole = () => {
+    let userRole = Cookies.get('role');
+    return userRole;
+};
+
 const helper = {
   capitalizeFirst,
   validator,
