@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Signup from "../components/Signup";
+//import Signup from "../components/Signup";
 import "./HomePage.css";
-import Logout from "../components/logout";
+//import Logout from "../components/logout";
 
 // import FeedBackPop from "../components/feedBack/feedBackPop";
 
