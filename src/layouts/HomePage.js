@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 //import Signup from "../components/Signup";
 import "./HomePage.css";
-import Logout from "../components/logout";
+
 
 import FeedBackPop from "../components/feedBack/feedBackPop";
 
@@ -36,9 +36,9 @@ const HomePage = () => {
       <div>
         <FeedBackPop chatId = "6445696e99e0f288c0614080" feedbackExists = {feedbackExists} username = "John Doe" />
       </div>
-      <div>
+      {/* <div>
         <Logout/>
-      </div>
+      </div> */}
     </>
   );
 };

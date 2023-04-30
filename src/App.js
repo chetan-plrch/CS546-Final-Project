@@ -17,7 +17,7 @@ import { checkLoggedInOnBackend } from "./api/index.js";
 import AppBar from "./common/custom-navbar/index.js";
 import AppFooter from "./common/custom-footer/index.js";
 import Protected from "./components/protected";
-
+import Logout from "./components/logout";
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   useEffect(() => {
@@ -136,6 +136,15 @@ const App = () => {
                   user2={"6438d7ac8e1c21e45686e198"}
                 />
               </>
+            }
+          />
+          <Route
+            exact
+            path="/logout"
+            element={
+              <Protected isLoggedIn={isLoggedIn}>
+                <Logout />
+              </Protected>
             }
           />
           <Route

@@ -14,7 +14,10 @@ import MenuItem from "@mui/material/MenuItem";
 import LeafIcon from "@mui/icons-material/Spa";
 import { teal } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-import { checkLogInTrace } from "../../helper";
+import { checkLogInTrace, delay } from "../../helper";
+import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosApi } from "../../api/api-interceptor";
 
 const pages = ["Home", "Users", "Connections", "Feedbacks"];
 const settings = ["Profile", "Logout"];
@@ -36,6 +39,20 @@ function ResponsiveAppBar() {
     navigateToPage(e.target.innerText);
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await axiosApi.post("/logout");
+      if (response.status === 200) {
+        toast.success("logged out successfully");
+        await delay(500)
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error logging out:", error);
+    }
+  };
+
   const navigateToPage = (page) => {
     if (page === "HOME") {
       navigate("/");
@@ -44,11 +61,11 @@ function ResponsiveAppBar() {
     } else if (page === "CONNECTIONS") {
       navigate("/connections");
     } else if (page === "FEEDBACKS") {
-      navigate("/feedbacks");
+      navigate("/feedbackslist");
     } else if (page === "Profile") {
       navigate("/edit-profile");
     } else if (page === "Logout") {
-      navigate("/logout");
+      handleLogout();
     }
   };
 

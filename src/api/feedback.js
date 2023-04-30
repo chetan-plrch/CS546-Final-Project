@@ -10,7 +10,7 @@ const createFeedBack = async (feedbackData) => {
     });
     return response;
   } catch (e) {
-    console.log(e);
+    return e
   }
 };
 
@@ -21,7 +21,7 @@ const feedBackList = async (userId) => {
     });
     return response;
   } catch (e) {
-    console.log(e);
+    return e
   }
 };
 
@@ -34,7 +34,7 @@ const feedbackEdit = async (updatedFeedback) => {
     });
     return response;
   } catch (e) {
-    console.log(e);
+    return e
   }
 };
 
@@ -45,7 +45,7 @@ const feedbackDelete = async (feedId) => {
     });
     return response;
   } catch (e) {
-    console.log(e);
+    return e
   }
 };
 
@@ -56,7 +56,7 @@ const getFeedback = async (feedId) => {
     });
     return response;
   } catch (e) {
-    console.log(e);
+    return e;
   }
 };
 

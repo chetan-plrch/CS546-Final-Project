@@ -25,7 +25,7 @@ const Protected = (props) => {
                 // For all the other scenarios
                 await delay(1000)
                  setUnprotect(true)
-            }
+             }
         }
 
         if (props.isLoggedIn === true || props.isLoggedIn === false) {

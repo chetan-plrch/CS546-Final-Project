@@ -18,8 +18,6 @@ const FeedBackList = () => {
     const fetchFeedbacks = async () => {
       try {
         const response = await feedBackList(userId)
-        console.log(response);
-
         if (response.status === 200) {
           setFeedbacks(response.data.map((feedback, index) => ({ ...feedback, id: index })));
         }

@@ -47,22 +47,18 @@ const FeedBackForm = (props) => {
     };
     console.log(feedback);
 
-    const response = await createFeedBack(feedback)
-    const responseData = await response.json();
+    const result = await createFeedBack(feedback)
 
-    if (response.ok) {
-      console.log("Feedback submitted successfully");
+    if (result.status === 200) {
       toast.success("Feedback submitted successfully");
       resetForm();
       setTimeout(() => {
         navigate("/connections");
       }, 2000);
-
       props.onSubmit();
     } else {
       toast.error("Failed to submit feedback");
-      console.log(responseData.errors);
-      setErrors([responseData.errors]);
+      setErrors([result.response.data]);
     }
   };
 
