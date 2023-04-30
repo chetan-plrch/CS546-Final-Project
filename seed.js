@@ -123,4 +123,8 @@ const createFakeUser = async (count) => {
     return createUsers()
 }
 
-createFakeChats()
+const runSeed = async () => {
+  await createFakeChats(200)
+}
+
+runSeed()
