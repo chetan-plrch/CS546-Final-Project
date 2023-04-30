@@ -1,13 +1,12 @@
 import axios from "axios";
+import { axiosApi } from "./api-interceptor";
 
 const createFeedBack = async (feedbackData) => {
   try {
-    const response = await fetch("/feedbacks/", {
-      method: "POST",
+    const response = await axiosApi.post("/feedbacks/", feedbackData, {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(feedbackData),
     });
     return response;
   } catch (e) {
@@ -17,7 +16,7 @@ const createFeedBack = async (feedbackData) => {
 
 const feedBackList = async (userId) => {
   try {
-    const response = await axios.post("/feedbacks/user", {
+    const response = await axiosApi.post("/feedbacks/user", {
       userId: userId,
     });
     return response;
@@ -28,12 +27,10 @@ const feedBackList = async (userId) => {
 
 const feedbackEdit = async (updatedFeedback) => {
   try {
-    const response = await fetch("/feedbacks/feedback", {
-      method: "PUT",
+    const response = await axiosApi.put("/feedbacks/feedback", updatedFeedback, {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedFeedback),
     });
     return response;
   } catch (e) {
@@ -43,12 +40,8 @@ const feedbackEdit = async (updatedFeedback) => {
 
 const feedbackDelete = async (feedId) => {
   try {
-    const response = await fetch("/feedbacks/feedback", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ feedBackId: feedId }),
+    const response = await axiosApi.post("/feedbacks/feedback", {
+      feedBackId: feedId,
     });
     return response;
   } catch (e) {
@@ -56,24 +49,27 @@ const feedbackDelete = async (feedId) => {
   }
 };
 
-const getFeedback = async(feedId)=>{
+const getFeedback = async (feedId) => {
   try {
-    const response  = await fetch("/feedbacks/feedback", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ feedBackId: feedId }),
+    const response = await axiosApi.post("/feedbacks/feedback", {
+      feedBackId: feedId,
     });
-    return response
+    return response;
   } catch (e) {
     console.log(e);
   }
-}
-
-const getFeedbackByChatId = async (chatId) => {
-    const response = await axios.post("/feedbacks/chatId", { chatId });
-    return response.data;
 };
 
-export { createFeedBack, feedBackList, feedbackDelete, feedbackEdit, getFeedback, getFeedbackByChatId };
+const getFeedbackByChatId = async (chatId) => {
+  const response = await axiosApi.post("/feedbacks/chatId", { chatId });
+  return response.data;
+};
+
+export {
+  createFeedBack,
+  feedBackList,
+  feedbackDelete,
+  feedbackEdit,
+  getFeedback,
+  getFeedbackByChatId,
+};
