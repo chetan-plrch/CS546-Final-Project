@@ -26,17 +26,17 @@ const Login = () => {
       password,
     };
 
-    const response = await loginUser(loginData)
-    if (response) {
+    const result = await loginUser(loginData)
+    console.log(result);
+    if (result.status === 200) {
       console.log("Login successful");
       toast.success(response.data.message);
       setTimeout(() => {
         navigate("/");
       }, 2000);
-    } else {
-      console.error("Login failed");
-      console.log(responseData.error);
-      setErrors([responseData.error]); 
+    } else { 
+      console.log(result[1]);
+      setErrors([result[1]]); 
       toast.error("Error in Logging in");
     }
   };

@@ -33,12 +33,17 @@ const createUserAccountAxios =  async (user) => {
 }
 
 const loginUser = async (loginData) => {
-  const response = await axiosApi.post('/user/login', loginData, {
-    headers: {
-      "Content-Type": "application/json",
-    }
-  })
-  return response
+  try {
+    const response = await axiosApi.post('/user/login', loginData, {
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    return response
+  }catch(e){
+    return constructResponse(e.response.status, e.response.data)
+  }
+  
 }
 
 const checkLoggedInOnBackend = async () => {
