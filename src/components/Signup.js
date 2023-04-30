@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createUserAccount } from "../api/index";
+import { createUserAccountAxios } from "../api/index";
 import "./Signup.css";
 import CustomTextField from "../common/custom-textfield";
 import h from "../helper/index";
@@ -91,7 +91,7 @@ const SignUp = (props) => {
 
     if (valid) {
       setSaving(true);
-      const response = await createUserAccount(user);
+      const response = await createUserAccountAxios(user);
       const [error, data] = response;
       if (error) {
         setApiStatus({
@@ -107,7 +107,7 @@ const SignUp = (props) => {
           message: ["Sign up successful! Redirecting..."],
         });
         setTimeout(() => {
-          navigate('/user/login')
+          navigate('/login')
           setSaving(false);
         }, 2000)
       }
@@ -301,7 +301,7 @@ const SignUp = (props) => {
           <Button
             onClick={createUser}
             variant={saving ? "outlined" : "contained"}
-            color="success"
+            styles={{ backgroundColor: '#00796b' }}
             className="signup-button"
           >
             {saving ? (

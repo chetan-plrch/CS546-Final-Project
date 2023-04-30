@@ -40,21 +40,17 @@ export const destroyToken = async (req, res, next) => {
     try {
         // Setting the token cookie to an empty value and expire it immediately
         res.cookie('token', '', {
-            expires: new Date(0),
-            httpOnly: true, 
+            expires: new Date(0)
         });
 
         res.cookie("userId", '', {
-            expires: new Date(0),
-            httpOnly: true,
+            expires: new Date(0)
           });
           res.cookie("firstname",'', {
-            expires: new Date(0),
-            httpOnly: true,
+            expires: new Date(0)
           });
           res.cookie("role", '', {
-            expires: new Date(0),
-            httpOnly: true,
+            expires: new Date(0)
           });
 
         res.status(200).json({ message: 'Logged out successfully' });
@@ -65,6 +61,10 @@ export const destroyToken = async (req, res, next) => {
 }
 
 export const notAuthenticate = async (req, res, next) => {
+    if(req.path === '/is-loggedin') {
+        return next()
+    }
+    
     try {
         const token = req.cookies.token;
 
