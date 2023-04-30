@@ -12,14 +12,19 @@ import {
 import { Send as SendIcon } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { createFeedBack } from "../../api/feedback";
+import Cookies from "js-cookie";
 
 const FeedBackForm = (props) => {
+  
   const [rate1, setRate1] = useState("");
   const [rate2, setRate2] = useState("");
   const [rate3, setRate3] = useState("");
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState("");
+  const navigate = useNavigate();
 
   const resetForm = () => {
     setRate1("");
@@ -33,7 +38,7 @@ const FeedBackForm = (props) => {
 
     const feedback = {
       userId: props.userId,
-      chatId: "6445696e99e0f288c0614080",
+      chatId: props.chatId,
       rate1,
       rate2,
       rate3,
@@ -42,24 +47,18 @@ const FeedBackForm = (props) => {
     };
     console.log(feedback);
 
-    const response = await fetch("/feedbacks/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(feedback),
-    });
-
+    const response = await createFeedBack(feedback)
     const responseData = await response.json();
 
     if (response.ok) {
       console.log("Feedback submitted successfully");
       toast.success("Feedback submitted successfully");
       resetForm();
+      setTimeout(() => {
+        navigate("/connections");
+      }, 2000);
 
-      // Call the onSubmit prop when the form is submitted successfully
       props.onSubmit();
-
     } else {
       toast.error("Failed to submit feedback");
       console.log(responseData.errors);
@@ -130,7 +129,17 @@ const FeedBackForm = (props) => {
               label="isPublic"
             />
           </Box>
-          <Box alignSelf="flex-end">
+          <Box display="flex" justifyContent="space-between" width="100%">
+          <Button
+              variant="contained"
+              color="primary"
+              endIcon={<SendIcon />}
+              type="submit"
+              sx={{ mt: 2 }}
+              onClick={()=>navigate('/')}
+            >
+              GO Back
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -140,7 +149,9 @@ const FeedBackForm = (props) => {
             >
               Submit
             </Button>
-            {errors && (
+          </Box>
+          <Box>
+          {errors && (
               <Box marginTop={2}>
                 <Alert severity="error">
                   {errors.map((error, index) => (

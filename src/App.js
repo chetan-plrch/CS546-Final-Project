@@ -8,9 +8,12 @@ import './App.css';
 import SignUp from './components/Signup';
 import Chat from '../src/common/custom-chat/index.js';
 import Chat2 from '../src/common/custom-chat/index2.js';
+import Middle from './components/feedBack/middle';
 import Feedback from './components/feedBack/feedback';
+import FeedBackList from './components/feedBack/feedBackList';
 import FeedBackEditForm from './components/feedBack/feedBackEditForm';
 import NotFound from './components/notfound';
+
 const App = () => {
 
   // useEffect(() => {
@@ -25,9 +28,13 @@ const App = () => {
           <Route exact path="/signup" element={ <SignUp /> } />
           <Route exact path="/login" element={ <Login /> } />
           <Route exact path="/profile" element={ <Profile /> } />
+
           <Route exact path="/feedbacks" element = {<Feedback />} />
-          <Route exact path="/feedbacks/feedback" element = {<FeedBackEditForm />} />
+          <Route exact path="/feedbacks/feedback" element = {<Middle />} />
           
+          {/* use the below link in the navbar */}
+          <Route exact path="/feedbackslist" element = {<FeedBackList />} /> 
+
           <Route exact path="/connections" element={ <Connections /> } />
           <Route exact path="/chat-1" element={<Chat 
             user1={'644406498781b6017e69fb98'}

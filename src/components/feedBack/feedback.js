@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import FeedBackForm from './feedBackForm';
-import FeedBackPop from './feedBackPop';
 import FeedBackList from './feedBackList';
 import styles from './feedback.css';
 import Cookies from 'js-cookie';
@@ -13,26 +12,14 @@ const Feedback = () => {
   const userId = extractedUserId.match(regex)[1];
   console.log(extractedUserId);
 
-  // const location = useLocation();
-  // const chatId = location.state.chatId;
-
-  //state to manage the update key
-  const [updateKey, setUpdateKey] = useState(0);
-
-  // Function to handle the feedback submission
-  const handleFeedbackSubmit = () => {
-    setUpdateKey((prevUpdateKey) => prevUpdateKey + 1);
-  };
+  const location = useLocation();
+  const chatId = location.state.chatId;
 
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        <FeedBackForm userId={userId} onSubmit={handleFeedbackSubmit} />
+        <FeedBackForm userId={userId} chatId= {chatId}/>
       </div>
-      <div >
-        <FeedBackList userId={userId} updateKey={updateKey} />
-      </div>
-      {/* <FeedBackPop /> */}
     </div>
   );
 };

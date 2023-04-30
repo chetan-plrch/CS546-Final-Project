@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -6,9 +6,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-} from '@mui/material';
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+//In props I need a chatId ,username
 const FeedBackPop = (props) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -22,9 +23,16 @@ const FeedBackPop = (props) => {
   };
 
   const handleAgree = () => {
-    
-    navigate('/feedbacks/',{state:{chatId : props.chatId}})
-    setOpen(false)
+    if (props.feedbackExists) {
+      navigate("/feedbacks/feedback", {
+        state: { chatId: props.chatId, username: props.username },
+      });
+    } else {
+      navigate("/feedbacks", {
+        state: { chatId: props.chatId, username: props.username },
+      });
+    }
+    setOpen(false);
   };
 
   return (
@@ -41,7 +49,9 @@ const FeedBackPop = (props) => {
         <DialogTitle id="feedback-dialog-title">Feedback</DialogTitle>
         <DialogContent>
           <DialogContentText id="feedback-dialog-description">
-            Would you like to give us feedback for the conversation you had till now?
+            {props.feedbackExists
+              ? "Would you like to update the feedback for the conversation you had?"
+              : "Would you like to give feedback for the conversation you had till now?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
