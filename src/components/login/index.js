@@ -27,10 +27,9 @@ const Login = () => {
     };
 
     const response = await loginUser(loginData)
-    const responseData = await response.json();
-    if (response.ok) {
+    if (response) {
       console.log("Login successful");
-      toast.success(responseData.message);
+      toast.success(response.data.message);
       setTimeout(() => {
         navigate("/");
       }, 2000);
