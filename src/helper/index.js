@@ -1,79 +1,81 @@
 import Cookies from 'js-cookie';
+import validations from '../validation.js'
 
 const validUsername = (username) => {
-  return /^(?=.{6,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(
-    username
-  );
+  try {
+    if (username) {
+      validations.checkUsername(username)
+    }
+    return [true, '']
+  } catch(e) {
+    return [false, formatErrorMessage(e.toString())]
+  }
 };
 
 const validFirstname = (firstName) => {
-  return /^[a-zA-Z ]+$/.test(firstName);
+  try {
+      if (firstName) {
+        validations.checkString(firstName, 'firstName')
+      }
+      return [true, '']
+  } catch(e) {
+    return [false, formatErrorMessage(e.toString())]
+  }
 };
 
 const validLastname = (lastName) => {
-  return validFirstname(lastName);
+  try {
+      if (lastName) {
+        validations.checkString(lastName, 'lastName')
+      }
+      return [true, '']
+  } catch(e) {
+    return [false, formatErrorMessage(e.toString())]
+  }
 };
 
 const validEmail = (email) => {
-  return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-    email
-  );
+  try {
+    if (email) {
+      validations.checkMailID(email)
+    }
+    return [true, '']
+  } catch (e) {
+    return [false, formatErrorMessage(e.toString())]
+  }
 };
 
 const validPassword = (password) => {
-  return /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
-    password
-  );
+  try {
+    if (password) {
+      validations.checkPassword(password)
+    }
+    return [true, '']
+  } catch(e) {
+    return [false, formatErrorMessage(e.toString())]
+  }
 };
 
 const validAge = (age) => {
-  const n = Number(age);
-  if (Number.isNaN(n)) {
-    return false;
-  } else if (n <= 0 || n > 120) {
-    return false;
+  try {
+    if (age) {
+      validations.checkAge(age)
+    }
+    return [true, '']
+  } catch(e) {
+    return [false, formatErrorMessage(e.toString())]
   }
-  return true;
 };
 
 const validCity = (city) => {
-  return /^[a-zA-Z ]+$/.test(city);
-};
-
-const isUsernameValid = (username) => {
-  if (!username) return true;
-  return validUsername(username);
-};
-
-const isFirstnameValid = (firstName) => {
-  if (!firstName) return true;
-  return validFirstname(firstName);
-};
-
-const isLastnameValid = (lastName) => {
-  if (!lastName) return true;
-  return validLastname(lastName);
-};
-
-const isValidEmail = (email) => {
-  if (!email) return true;
-  return validEmail(email);
-};
-
-const isValidPassword = (password) => {
-  if (!password) return true;
-  return validPassword(password);
-};
-
-const isValidAge = (age) => {
-  if (!age) return true;
-  return validAge(age);
-};
-
-const isValidCity = (city) => {
-  if (!city) return true;
-  if (city.length > 50) return false;
-  return validCity(city);
+  try {
+    if (city) {
+      validations.checkString(city, 'city')
+    }
+    return [true, '']
+  } catch(e) {
+    return [false, formatErrorMessage(e.toString())]
+  }
 };
 
 const capitalizeFirst = (str) => {
@@ -82,47 +84,51 @@ const capitalizeFirst = (str) => {
 };
 
 const validator = (user, key, err) => {
-  console.log("validator", key);
   const errorObj = {};
   Object.keys(user).forEach((key) => {
     errorObj[key] = { ...(err[key] || {}) };
   });
 
   if ((key && key === "username") || !key) {
-    if (!isUsernameValid(user.username)) {
-      errorObj.username.helperText = `Username is invalid`;
+    const [isValid, errTxt] = validUsername(user.username)
+    if (!isValid) {
+      errorObj.username.helperText = errTxt;
     } else if (user.username) {
       errorObj.username.helperText = "";
     }
   }
 
   if ((key && key === "firstName") || !key) {
-    if (!isFirstnameValid(user.firstName)) {
-      errorObj.firstName.helperText = `Firstname is invalid`;
+    const [isValid, errTxt] = validFirstname(user.firstName)
+    if (!isValid) {
+      errorObj.firstName.helperText = errTxt;
     } else if (user.firstName) {
       errorObj.firstName.helperText = "";
     }
   }
 
   if ((key && key === "lastName") || !key) {
-    if (!isLastnameValid(user.lastName)) {
-      errorObj.lastName.helperText = `Lastname is invalid`;
+    const [isValid, errTxt] = validLastname(user.lastName)
+    if (!isValid) {
+      errorObj.lastName.helperText = errTxt;
     } else if (user.lastName) {
       errorObj.lastName.helperText = "";
     }
   }
 
   if ((key && key === "email") || !key) {
-    if (!isValidEmail(user.email)) {
-      errorObj.email.helperText = `Email is invalid`;
+    const [isValid, errTxt] = validEmail(user.email)
+    if (!isValid) {
+      errorObj.email.helperText = errTxt;
     } else if (user.email) {
       errorObj.email.helperText = "";
     }
   }
 
   if ((key && key === "password") || !key) {
-    if (!isValidPassword(user.password)) {
-      errorObj.password.helperText = "Password is invalid";
+    const [isValid, errTxt] = validEmail(user.password)
+    if (!isValid) {
+      errorObj.password.helperText = errTxt;
     } else if (user.password) {
       errorObj.password.helperText = "";
     }
@@ -137,8 +143,9 @@ const validator = (user, key, err) => {
   }
 
   if ((key && key === "age") || !key) {
-    if (!isValidAge(user.age)) {
-      errorObj.age.helperText = "Age is invalid";
+    const [isValid, errTxt] = validAge(user.age)
+    if (!isValid) {
+      errorObj.age.helperText = errTxt;
     } else if (user.age) {
       errorObj.age.helperText = "";
     }
@@ -157,16 +164,18 @@ const validator = (user, key, err) => {
   }
 
   if ((key && key === "city") || !key) {
-    if (!isValidCity(user.city)) {
-      errorObj.city.helperText = "City is invalid";
+    const [isValid, errTxt] = validCity(user.city)
+    if (!isValid) {
+      errorObj.city.helperText = errTxt;
     } else if (user.city) {
       errorObj.city.helperText = "";
     }
   }
 
   if ((key && key === "state") || !key) {
-    if (!isValidCity(user.state)) {
-      errorObj.state.helperText = "State is invalid";
+    const [isValid, errTxt] = validCity(user.state)
+    if (!isValid) {
+      errorObj.state.helperText = errTxt;
     } else if (user.state) {
       errorObj.state.helperText = "";
     }
@@ -206,6 +215,11 @@ export const getUserRole = () => {
 
 export function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const formatErrorMessage = (msg) => {
+  if (msg) return capitalizeFirst(msg.replace('Error: ', ''))
+  return ''
 }
 
 const helper = {
