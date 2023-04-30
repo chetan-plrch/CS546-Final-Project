@@ -41,7 +41,7 @@ const createFeedBack = async (
   }
 
   try {
-    description = validation.checkString(description, " feed back description");
+    description = validation.checkString(description, " feedback description");
   } catch (e) {
     errors.push(e);
   }
@@ -50,6 +50,11 @@ const createFeedBack = async (
   }
 
   const feedBackCollection = await feedBack();
+  const feedBackExistsForChat = await feedBackCollection.findOne({userId: new ObjectId(userId),chatId: new ObjectId(chatId)})
+  if(feedBackExistsForChat){
+    throw [404, "FeedBack already exist,cannot give a new Feedback, you can only update the Feedback"]
+  }
+
   userId = new ObjectId(userId);
   chatId = new ObjectId(chatId);
   let now = new Date();
@@ -117,7 +122,8 @@ const getByuserId = async (userId) => {
       obj.userId = obj.userId.toString();
       obj.chatId = obj.chatId.toString();
     });
-  } else {
+  } 
+  else {
     throw [404, "Error: No feedback found in the database"];
   }
   return res;
@@ -129,6 +135,21 @@ const getByFeedId = async (id) => {
   const feedBackCollection = await feedBack();
   let res;
   res = await feedBackCollection.findOne({ _id: new ObjectId(id) });
+  if (res === null) {
+    throw [404, "Error: No feedback found with the ID"];
+  }
+  res._id = res._id.toString();
+  res.userId = res.userId.toString();
+  res.chatId = res.chatId.toString();
+  return res;
+};
+
+const getByChatId = async (chatId) => {
+  chatId = validation.checkId(chatId, "feedBack ID");
+
+  const feedBackCollection = await feedBack();
+  let res;
+  res = await feedBackCollection.findOne({ chatId: new ObjectId(chatId) });
   if (res === null) {
     throw [404, "Error: No feedback found with the ID"];
   }
@@ -238,4 +259,5 @@ export default {
   remove,
   removeByuserId,
   update,
+  getByChatId
 };

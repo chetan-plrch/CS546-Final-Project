@@ -1,0 +1,27 @@
+.feedbackContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .feedbackItem {
+    margin: 0;
+  }
+  
+
+  /* FeedBackList.css */
+.feedback-list-container {
+  background-color: rgba(245, 245, 245, 0.8);
+  border-radius: 4px;
+  padding: 16px;
+  max-width: 1200px;
+}
+
+.no-feedback-text {
+  font-style: italic;
+  font-weight: bold;
+  color: #f44336;
+}
+
+.edit-button {
+  margin-left: 8px;
+}

@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { roleType } from "../util.js";
-import { authenticate, authorize } from "../middleware/index.js";
+import { authenticate } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
 import jwt from "jsonwebtoken";
@@ -11,13 +10,13 @@ router.get("/user", authenticate, async (req, res) => {
   return res.send(req.user);
 });
 
-router.get("/all-users", authenticate, async (req, res) => {
+router.get("/all-users", async (req, res) => {
   try {
     const response = await userData.getAllUsers(req.query);
     return res.status(200).send(response);
   } catch (e) {
     return res.status(e[0] || 500).send({ message: e[1] || "Internal Server Error" });
-  }
+  };
 });
 
 router.post("/signup", async (req, res) => {
@@ -228,7 +227,8 @@ router.post("/login",async (req, res) => {
   authenticate
 );
 
-router.get("/check", authenticate, authorize(roleType.ADMIN), (req, res) => {
+
+router.get("/check",authenticate, (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
 
