@@ -7,14 +7,13 @@ export const authenticate = async (req, res, next) => {
     try {
         const userCtn = await users();
         const token = req.cookies.token;
-
         if (!token) {
             return res.status(401).json({ message: 'Unauthorized request' });
         }
 
         let decoded;
 
-        try {
+        try {   
             decoded = jwt.verify(token, jwtConfig.secret);
         } catch (err) {
             return res.status(401).json({ message: 'Unauthorized request: Invalid token' });

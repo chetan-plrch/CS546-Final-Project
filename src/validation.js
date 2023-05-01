@@ -61,6 +61,7 @@ const exportedMethods = {
   },
   checkId(id, varName) {
     if (!id) throw `Error : ${varName} need to have valid values`;
+    
     if (typeof id !== "string") throw `Error:${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)

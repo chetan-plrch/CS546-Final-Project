@@ -145,8 +145,8 @@ const getByFeedId = async (id) => {
 };
 
 const getByChatId = async (chatId) => {
+  //chatId = chatId.toString();
   chatId = validation.checkId(chatId, "feedBack ID");
-
   const feedBackCollection = await feedBack();
   let res;
   res = await feedBackCollection.findOne({ chatId: new ObjectId(chatId) });
