@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Footer = (props) => {
-    return <div class="footer">
+    return <div className="footer">
         <p>About Us</p>
     </div>
 }
