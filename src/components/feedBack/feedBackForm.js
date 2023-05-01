@@ -135,7 +135,7 @@ const FeedBackForm = (props) => {
           boxShadow={4}
         >
           <Box>
-            <Typography variant="h5" mb={2}>
+            <Typography variant="h1" mb={2}>
               Submit Feedback
             </Typography>
             <TextField

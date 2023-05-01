@@ -5,7 +5,7 @@ import { authenticate, destroyToken, notAuthenticate } from '../middleware/index
 
 
 const routeConstructor = (app) => {
-    app.use('/user',notAuthenticate, user)
+    app.use('/user', user)
     app.use('/feedbacks', authenticate, feedback)
     app.use('/chat', authenticate, chat)
     app.use('/logout',destroyToken)

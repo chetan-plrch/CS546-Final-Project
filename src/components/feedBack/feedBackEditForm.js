@@ -158,7 +158,7 @@ const FeedBackEditForm = (props) => {
           component="form"
           onSubmit={handleUpdate}
           mt={4}
-          bgcolor="white"
+          bgcolor="#f5f5f5"
           p={3}
           borderRadius={4}
           display="flex"
@@ -168,7 +168,7 @@ const FeedBackEditForm = (props) => {
           boxShadow={4}
         >
           <Box>
-            <Typography variant="h5" mb={2}>
+            <Typography variant="h1" mb={2} color="#222222">
               Edit Feedback
             </Typography>
             <TextField
@@ -184,6 +184,7 @@ const FeedBackEditForm = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              inputProps={{ style: { color: "#222222" } }}
             />
             <TextField
               fullWidth
@@ -198,6 +199,7 @@ const FeedBackEditForm = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              inputProps={{ style: { color: "#222222" } }}
             />
             <TextField
               fullWidth
@@ -212,6 +214,7 @@ const FeedBackEditForm = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              inputProps={{ style: { color: "#222222" } }}
             />
             <TextField
               fullWidth
@@ -224,6 +227,7 @@ const FeedBackEditForm = (props) => {
               rows={4}
               error={!!errors.description}
               helperText={errors.description}
+              inputProps={{ style: { color: "#222222" } }}
             />
             <FormControlLabel
               control={
@@ -246,7 +250,7 @@ const FeedBackEditForm = (props) => {
               variant="contained"
               color="secondary"
               type="button"
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, bgcolor: "#D32F2F" }}
               onClick={handleDelete}
             >
               Delete
@@ -255,7 +259,7 @@ const FeedBackEditForm = (props) => {
               variant="contained"
               color="primary"
               type="btn"
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, bgcolor: "#1976D2" }}
               onClick={() => navigate("/")}
             >
               Go Back
@@ -264,7 +268,7 @@ const FeedBackEditForm = (props) => {
               variant="contained"
               color="primary"
               type="submit"
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, bgcolor: "#1976D2" }}
             >
               Update
             </Button>
