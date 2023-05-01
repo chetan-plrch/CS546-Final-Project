@@ -59,4 +59,14 @@ const checkLoggedInOnBackend = async () => {
   }
 }
 
-export { checkLoggedInOnBackend, loginUser, createUserAccountAxios };
+const getLoggedInUser = async () => {
+  try {
+    const { data } = await axiosApi.get('/user/user')
+    const { profilePic } = data
+    return profilePic
+  } catch (e) {
+    return null
+  }
+}
+
+export { checkLoggedInOnBackend, loginUser, createUserAccountAxios, getLoggedInUser };
