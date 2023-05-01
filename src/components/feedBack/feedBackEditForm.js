@@ -61,7 +61,6 @@ const FeedBackEditForm = (props) => {
 
   const handleDelete = async () => {
     const response = await feedbackDelete(feedId);
-    //console.log("Request payload:", JSON.stringify({ feedbackId: feedId }));
 
     if (response.status === 200) {
       toast.success("Feedback Deleted Successfully");
@@ -159,13 +158,14 @@ const FeedBackEditForm = (props) => {
           component="form"
           onSubmit={handleUpdate}
           mt={4}
-          bgcolor="rgba(245, 245, 245, 0.5)"
+          bgcolor="white"
           p={3}
           borderRadius={4}
           display="flex"
           flexDirection="column"
           justifyContent="space-between"
           minHeight="60vh"
+          boxShadow={4}
         >
           <Box>
             <Typography variant="h5" mb={2}>

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
 import validations from "../../validation";
 
@@ -21,16 +21,35 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let newErrors = {};
 
     try {
       const validatedUsername = validations.checkUsername(username);
+    } catch (error) {
+      if (error.includes("username")) {
+        newErrors = { ...newErrors, username: error };
+      }
+    }
+
+    try {
       const validatedPassword = validations.checkPassword(password);
+    } catch (error) {
+      if (error.includes("password")) {
+        newErrors = { ...newErrors, password: error };
+      }
+    }
 
-      const loginData = {
-        username: validatedUsername,
-        password: validatedPassword,
-      };
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
+    const loginData = {
+      username: username,
+      password: password,
+    };
+
+    try {
       const result = await loginUser(loginData);
       console.log(result);
       if (result.status === 200) {
@@ -45,11 +64,7 @@ const Login = () => {
         toast.error("Error in Logging in");
       }
     } catch (error) {
-      if (error.includes("username")) {
-        setErrors({ ...errors, username: error });
-      } else if (error.includes("password")) {
-        setErrors({ ...errors, password: error });
-      }
+      console.error(error);
     }
   };
 
@@ -65,10 +80,6 @@ const Login = () => {
         boxShadow={10}
         p={3}
         borderRadius={4}
-        style={{
-          backgroundImage:
-            "url('https://www.thoughtco.com/thmb/afeWP0VLyxBFrzS_s2D-C7V2PjE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/abstract-paper-flower-pattern-656688606-5acfba2eae9ab80038461ca0.jpg')",
-        }}
       >
         <Typography component="h1" variant="h5">
           Login
@@ -129,6 +140,11 @@ const Login = () => {
           )}
         </Box>
       </Box>
+      <Link to="/signup" style={{ textDecoration: "none" }}>
+        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+          Don't have an account? Register
+        </Typography>
+      </Link>
     </Container>
   );
 };
