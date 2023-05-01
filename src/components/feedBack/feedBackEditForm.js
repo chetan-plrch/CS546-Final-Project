@@ -12,6 +12,7 @@ import {
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
+import validations from "../../validation";
 
 const FeedBackEditForm = (props) => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const FeedBackEditForm = (props) => {
     isPublic: false,
     description: "",
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     async function fetchData() {
@@ -58,39 +60,95 @@ const FeedBackEditForm = (props) => {
   };
 
   const handleDelete = async () => {
-      const response = await feedbackDelete(feedId);
-      //console.log("Request payload:", JSON.stringify({ feedbackId: feedId }));
-
-      if (response.status === 200) {
-        toast.success("Feedback Deleted Successfully");
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        toast.error("Error in deleting feedback, try again");
-      }
-  };
-
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-
-    const updatedFeedback = {
-      feedBackId: feedId,
-      isPublic: data.isPublic,
-      rate1: data.rate1,
-      rate2: data.rate2,
-      rate3: data.rate3,
-      description: data.description,
-    };
-    const response = await feedbackEdit(updatedFeedback);
+    const response = await feedbackDelete(feedId);
+    //console.log("Request payload:", JSON.stringify({ feedbackId: feedId }));
 
     if (response.status === 200) {
-      toast.success("Feedback Updated Successfully");
+      toast.success("Feedback Deleted Successfully");
       setTimeout(() => {
         navigate("/");
       }, 2000);
     } else {
-      toast.error("Error in updateing feedback, try again");
+      toast.error("Error in deleting feedback, try again");
+    }
+  };
+
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    let newErrors = {};
+
+    try {
+      const validatedIsPublic = validations.checkPublic(data.isPublic);
+
+      try {
+        const validatedRate1 = validations.checkRating(
+          data.rate1,
+          "Willing to reconnect"
+        );
+      } catch (error) {
+        if (error.includes("Willing to reconnect")) {
+          newErrors = { ...newErrors, rate1: error };
+        }
+      }
+
+      try {
+        const validatedRate2 = validations.checkRating(
+          data.rate2,
+          "Will you recommend the listener"
+        );
+      } catch (error) {
+        if (error.includes("Will you recommend the listener")) {
+          newErrors = { ...newErrors, rate2: error };
+        }
+      }
+
+      try {
+        const validatedRate3 = validations.checkRating(
+          data.rate3,
+          "Overall rating for the listener"
+        );
+      } catch (error) {
+        if (error.includes("Overall rating for the listener")) {
+          newErrors = { ...newErrors, rate3: error };
+        }
+      }
+
+      try {
+        const validatedDescription = validations.checkString(
+          data.description,
+          "Description"
+        );
+      } catch (error) {
+        if (error.includes("Description")) {
+          newErrors = { ...newErrors, description: error };
+        }
+      }
+
+      if (Object.keys(newErrors).length > 0) {
+        throw new Error("Validation errors");
+      }
+
+      const updatedFeedback = {
+        feedBackId: feedId,
+        isPublic: validatedIsPublic,
+        rate1: data.rate1,
+        rate2: data.rate2,
+        rate3: data.rate3,
+        description: data.description,
+      };
+
+      const response = await feedbackEdit(updatedFeedback);
+
+      if (response.status === 200) {
+        toast.success("Feedback Updated Successfully");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        toast.error("Error in updating feedback, try again");
+      }
+    } catch (error) {
+      setErrors(newErrors);
     }
   };
 
@@ -121,6 +179,8 @@ const FeedBackEditForm = (props) => {
               name="rate1"
               value={data.rate1}
               onChange={handleChange}
+              error={!!errors.rate1}
+              helperText={errors.rate1}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -133,6 +193,8 @@ const FeedBackEditForm = (props) => {
               name="rate2"
               value={data.rate2}
               onChange={handleChange}
+              error={!!errors.rate2}
+              helperText={errors.rate2}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -145,6 +207,8 @@ const FeedBackEditForm = (props) => {
               name="rate3"
               value={data.rate3}
               onChange={handleChange}
+              error={!!errors.rate3}
+              helperText={errors.rate3}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -158,6 +222,8 @@ const FeedBackEditForm = (props) => {
               onChange={handleChange}
               multiline
               rows={4}
+              error={!!errors.description}
+              helperText={errors.description}
             />
             <FormControlLabel
               control={
