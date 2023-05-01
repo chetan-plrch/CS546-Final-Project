@@ -38,7 +38,7 @@ const exportedMethods = {
     return email.trim().toLowerCase()
   },
   checkUsername(username){
-    //username = this.checkString(username,"username");
+    username = this.checkString(username,"username");
     const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/; // Regex to validate username
     if(!usernameRegex.test(username)){
       throw "Error: username can only contain alphanumeric characters and underscores and a length between 3 and 20 characters "
