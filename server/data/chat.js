@@ -225,7 +225,8 @@ const allActiveChats = async (userId, onlyUsers) => {
     if (!chatsObj) {
         throw errorObject(errorType.NOT_FOUND, 'No chats found for the user')
     } else {
-        const { users, chats } = await getfilteredChatAndUsers(chatsObj, user.connections.blocked)
+        let { users, chats } = await getfilteredChatAndUsers(chatsObj, user.connections.blocked)
+        users = users.filter(user => user._id !== userId)
         if (onlyUsers) {
             return { users };
         }

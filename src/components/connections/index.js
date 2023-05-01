@@ -41,15 +41,19 @@ const Connections = () => {
   }, []);
 
   const getConversation = async (connectionId) => {
+    const updatedConnections = connections.map((connection) => {
+      return {...connection, showUnreadLabel: false};
+    });
+    setConnections(updatedConnections);
     setSelectedConnectionId(connectionId);
   };
 
-  const updateConnections = (connectionId, lastMessage) => {
+  const updateConnections = (connectionId, lastMessage, showUnreadLabel) => {
     let existingConnection = false;
     const updatedConnections = connections.map((connection) => {
       if (connection._id === connectionId) {
         existingConnection = true;
-        return {...connection, lastMessage};
+        return {...connection, lastMessage, showUnreadLabel};
       };
       return connection;
     });

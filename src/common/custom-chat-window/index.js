@@ -59,6 +59,7 @@ function ChatWindow(props) {
             senderId
         };
         setConversation(conversation => conversation.concat([msgObj]));
+        onConnectionUpdate(connectionId, msgObj?.message);
         setCurrentMessage('');
     };
     const onReceiveMessage = (msgObj) => {
@@ -69,9 +70,9 @@ function ChatWindow(props) {
                 senderId: msgObj?.senderId
             };
             setConversation(conversation => conversation.concat([receivedMsg]));
-        } else {
-            onConnectionUpdate(msgObj?.senderId, msgObj?.message);
         };
+        onConnectionUpdate(msgObj?.senderId, msgObj?.message, msgObj?.senderId !== connectionId);
+
     };
     const blockConnection = async () => {
         const response = await blockUser(receiverId);

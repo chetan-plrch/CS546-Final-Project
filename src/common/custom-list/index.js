@@ -58,7 +58,7 @@ function CustomList(props) {
                             {item[contentKey]}
                             {
                               item.showUnreadLabel ? (
-                                <span className='unread-label'>Unread</span>
+                                <span className='unread-label'>New</span>
                               ) : null
                             }
                           </Typography>
