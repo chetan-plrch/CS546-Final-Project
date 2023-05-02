@@ -16,12 +16,12 @@ import LeafIcon from "@mui/icons-material/Spa";
 import { teal } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import { checkLogInTrace, delay } from "../../helper";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+import { toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosApi } from "../../api/api-interceptor";
 import { getLoggedInUser } from "../../api";
 
-const pages = ["Home", "Users", "Connections", "Feedbacks"];
+const pages = ["Home", "Listeners", "Connections", "Feedbacks"];
 const settings = ["Profile", "Logout"];
 
 function ResponsiveAppBar() {
@@ -69,8 +69,8 @@ function ResponsiveAppBar() {
   const navigateToPage = (page) => {
     if (page === "HOME") {
       navigate("/");
-    } else if (page === "USERS") {
-      navigate("/users");
+    } else if (page === "LISTENERS") {
+      navigate("/experts");
     } else if (page === "CONNECTIONS") {
       navigate("/connections");
     } else if (page === "FEEDBACKS") {

@@ -1,18 +1,23 @@
 import * as React from "react";
-import { createUserAccountAxios } from "../api/index";
-import "./Signup.css";
-import CustomTextField from "../common/custom-textfield";
-import h from "../helper/index";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
+import { createUserAccountAxios } from "../../api/index";
+import "./signup.css";
+import CustomTextField from "../../common/custom-textfield";
+import h from "../../helper/index";
+import {
+  Link,
+  Button,
+  IconButton,
+  Typography,
+  InputAdornment,
+  CircularProgress
+} from "@mui/material";
+
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import CustomSelect from "../common/custom-select";
-import CustomCheckbox from "../common/custom-checkbox";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import ProfileImage from "../common/custom-profile-picture";
-import CommonMessage from "../common/custom-message";
+import CustomSelect from "../../common/custom-select";
+import CustomCheckbox from "../../common/custom-checkbox";
+import ProfileImage from "../../common/custom-profile-picture";
+import CommonMessage from "../../common/custom-message";
 import { useNavigate } from "react-router-dom";
 
 const defaultUser = {
@@ -310,6 +315,11 @@ const SignUp = (props) => {
               "Create account"
             )}
           </Button>
+          <Typography className="login-link">
+            Click
+            <Link onClick={() => navigate("/login")} sx={{padding: '5px', cursor: 'pointer'}}>here</Link>
+            to login
+          </Typography>
         </div>
     </div>
   );

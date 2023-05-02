@@ -79,3 +79,8 @@
 .my-helper-text {
   color: #d32f2f !important;
 }
+
+.login-link {
+  text-align: center;
+  padding-top: 20px;
+}

@@ -6,7 +6,7 @@ import Connections from "./components/connections";
 import Login from "./components/login";
 import Users from "./components/users";
 import "./App.css";
-import SignUp from "./components/Signup";
+import SignUp from "./components/signup";
 import Chat from "../src/common/custom-chat/index.js";
 import Chat2 from "../src/common/custom-chat/index2.js";
 import Middle from "./components/feedBack/middle";

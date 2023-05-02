@@ -126,7 +126,7 @@ const validator = (user, key, err) => {
   }
 
   if ((key && key === "password") || !key) {
-    const [isValid, errTxt] = validEmail(user.password)
+    const [isValid, errTxt] = validPassword(user.password)
     if (!isValid) {
       errorObj.password.helperText = errTxt;
     } else if (user.password) {
