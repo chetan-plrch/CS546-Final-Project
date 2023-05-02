@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-//import Signup from "../components/Signup";
 import "./HomePage.css";
 
 
@@ -19,7 +18,6 @@ const HomePage = () => {
         if (response) {
             setFeedbackExists(true);
         } else {
-          console.log("hitting second else");
           setFeedbackExists(false);
         }
       } catch (error) {

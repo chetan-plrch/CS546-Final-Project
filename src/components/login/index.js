@@ -6,11 +6,13 @@ import {
   Button,
   Box,
   Alert,
+  Link
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../api";
+import "./index.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,7 +31,6 @@ const Login = () => {
     const result = await loginUser(loginData)
     console.log(result);
     if (result.status === 200) {
-      console.log("Login successful");
       toast.success(result.data.message);
       setTimeout(() => {
         navigate("/");
@@ -106,6 +107,11 @@ const Login = () => {
               </Alert>
             </Box>
           )}
+          <Typography className="register-link">
+            Click
+            <Link onClick={() => navigate("/signup")} sx={{padding: '5px', cursor: 'pointer'}}>here</Link>
+            to signup
+          </Typography>
         </Box>
       </Box>
     </Container>
