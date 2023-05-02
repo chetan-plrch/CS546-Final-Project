@@ -65,8 +65,8 @@ const getFeedback = async (feedId) => {
   }
 };
 
-const getFeedbackByChatId = async (chatId) => {
-  const response = await axiosApi.post("/feedbacks/chatId", { chatId });
+const getFeedbackByChatId = async (chatId, userId) => {
+  const response = await axiosApi.post("/feedbacks/chatId", { chatId , userId});
   return response.data;
 };
 

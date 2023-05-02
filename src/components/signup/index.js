@@ -15,6 +15,7 @@ import ProfileImage from "../../common/custom-profile-picture";
 import CommonMessage from "../../common/custom-message";
 import { useNavigate, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
+import {roles} from "../../constant"
 
 const defaultUser = {
   username: "",
@@ -50,7 +51,7 @@ const SignUp = (props) => {
 
   const onChangeOfValue = (key, value) => {
     if (key === "role") {
-      if (value === "LISTENER") {
+      if (value === roles.LISTENER) {
         setUser({ ...user, [key]: value, isAnonymous: false });
         setAnonymousDisabled(true);
       } else {
