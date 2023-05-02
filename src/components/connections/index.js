@@ -23,15 +23,10 @@ const Connections = () => {
         let { users } = response.data;
         users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
         if (users?.length) {
-          // TODO - Reset on refresh if required
           if (location?.state?.connection) {
-            // TODO - remove this block once api is fixed. Set connection to 0th index always.
-            setSelectedConnectionId(location.state.connection._id);
             users = [location.state.connection, ...users];
-          } else {
-            // TODO - else block not required once api is fixed. Set connection to 0th index always.
-            setSelectedConnectionId(users[0]?._id);
           }
+          setSelectedConnectionId(users[0]?._id);
           setConnections(users);
         } else {
           const role = getUserRole();
@@ -45,7 +40,7 @@ const Connections = () => {
     fetchConnections();
   }, []);
 
-  const getConversation = async (connectionId) => {
+  const changeChatWindow = async (connectionId) => {
     const updatedConnections = connections.map((connection) => {
       return {...connection, showUnreadLabel: false};
     });
@@ -84,7 +79,7 @@ const Connections = () => {
           listTitle='Connections'
           contentKey='lastMessage'
           selectedId={selectedConnectionId}
-          onSelectionChange={(connectionId) => getConversation(connectionId)}
+          onSelectionChange={(connectionId) => changeChatWindow(connectionId)}
         />
         <ChatWindow
           allowSearch={true}
@@ -103,7 +98,7 @@ const Connections = () => {
         </span>
         ) : (
           <span>
-            You can view the chats with people seeking advice from you here once you are connected with them.
+            You can view the chats with people seeking advice from you here once they reach out to you.
           </span>
         )
     )
