@@ -17,8 +17,8 @@ const blockUser = async (blockConnectionId) => {
             blockConnectionId
         });
         return blockUserResponse;
-    } catch (e) {
-        console.log('error occurred', e);
+    } catch (error) {
+        return error;
     };
 };
 
