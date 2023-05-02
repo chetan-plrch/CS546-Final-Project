@@ -54,7 +54,7 @@ function CustomList(props) {
                       <Typography>{item[titleKey]}</Typography>
                       {
                         selectedId !== item[selectionKey] ? (
-                          <Typography level='body2' noWrap>
+                          <Typography level='body2' noWrap sx={{width: '200px'}}>
                             {item[contentKey]}
                             {
                               item.showUnreadLabel ? (

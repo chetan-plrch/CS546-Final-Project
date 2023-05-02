@@ -23,10 +23,12 @@ const Connections = () => {
         let { users } = response.data;
         users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
         if (users?.length) {
-          if (location?.state?.connection) {
-            users = [location.state.connection, ...users];
-          }
-          setSelectedConnectionId(users[0]?._id);
+          const { connection: newConnection } = location?.state || {};
+          if (newConnection?._id && users.findIndex((user) => user?._id === newConnection?._id) < 0) {
+            users = [newConnection, ...users];
+            window.history.replaceState({}, document.title)
+          };
+          setSelectedConnectionId(newConnection?._id || users[0]?._id);
           setConnections(users);
         } else {
           const role = getUserRole();
