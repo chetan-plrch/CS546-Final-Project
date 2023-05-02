@@ -50,6 +50,14 @@ const Connections = () => {
     setSelectedConnectionId(connectionId);
   };
 
+  const removeUserFromList = () => {
+    const updatedConnections = connections.filter((connection) => connection._id !== selectedConnectionId);
+    setConnections(updatedConnections);
+    if (updatedConnections?.length) {
+      setSelectedConnectionId(updatedConnections[0]?._id);
+    }
+  };
+
   const updateConnections = (connectionId, lastMessage, showUnreadLabel) => {
     let existingConnection = false;
     const updatedConnections = connections.map((connection) => {
@@ -89,6 +97,7 @@ const Connections = () => {
           allowMessaging={true}
           connectionId={selectedConnectionId}
           onConnectionUpdate={updateConnections}
+          removeConnection={removeUserFromList}
           />
       </div>
     ) : (
