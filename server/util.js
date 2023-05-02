@@ -23,7 +23,7 @@ export const formatUser = (user) => {
     if (user.isAnonymous) {
         return {
             _id: user._id.toString(),
-            firstname: 'Anonymous',
+            firstName: 'Anonymous',
             lastName: 'User',
             profilePic: null,
             username: user._id.toString(),
@@ -32,7 +32,7 @@ export const formatUser = (user) => {
     } else {
         return {
             _id: user._id.toString(),
-            firstname: user.firstName,
+            firstName: user.firstName,
             lastName: user.lastName,
             profilePic: user.profilePic,
             username: user.username,

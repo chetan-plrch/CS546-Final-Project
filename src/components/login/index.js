@@ -5,13 +5,14 @@ import {
   TextField,
   Button,
   Box,
-  Alert,
+  Alert
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
 import validations from "../../validation";
+import "./index.css";
 
 const Login = () => {
   const navigate = useNavigate();

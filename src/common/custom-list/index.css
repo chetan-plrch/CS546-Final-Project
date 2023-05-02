@@ -17,3 +17,12 @@
     font-size: 15px;
     text-transform: uppercase;
 }
+
+.unread-label {
+    background-color: green;
+    color: white;
+    border-radius: 8px;
+    padding: 2px;
+    font-size: 11px;
+    margin-left: 10px;
+}
