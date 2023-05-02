@@ -144,12 +144,12 @@ const getByFeedId = async (id) => {
   return res;
 };
 
-const getByChatId = async (chatId) => {
+const getByChatId = async (chatId, userId) => {
+  //chatId = chatId.toString();
   chatId = validation.checkId(chatId, "feedBack ID");
-
   const feedBackCollection = await feedBack();
   let res;
-  res = await feedBackCollection.findOne({ chatId: new ObjectId(chatId) });
+  res = await feedBackCollection.findOne({ userId: new ObjectId(userId), chatId: new ObjectId(chatId) });
   if (res === null) {
     throw [404, "Error: No feedback found with the ID"];
   }

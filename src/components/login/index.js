@@ -5,40 +5,67 @@ import {
   TextField,
   Button,
   Box,
-  Alert,
-  Link
+  Alert
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
+import validations from "../../validation";
 import "./index.css";
 
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let newErrors = {};
+
+    try {
+      const validatedUsername = validations.checkUsername(username);
+    } catch (error) {
+      if (error.includes("username")) {
+        newErrors = { ...newErrors, username: error };
+      }
+    }
+
+    try {
+      const validatedPassword = validations.checkPassword(password);
+    } catch (error) {
+      if (error.includes("password")) {
+        newErrors = { ...newErrors, password: error };
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
     const loginData = {
-      username: username.trim(),
-      password,
+      username: username,
+      password: password,
     };
 
-    const result = await loginUser(loginData)
-    console.log(result);
-    if (result.status === 200) {
-      toast.success(result.data.message);
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    } else { 
-      console.log(result[1]);
-      setErrors([result[1]]); 
-      toast.error("Error in Logging in");
+    try {
+      const result = await loginUser(loginData);
+      console.log(result);
+      if (result.status === 200) {
+        console.log("Login successful");
+        toast.success(result.data.message);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        console.log(result[1]);
+        setErrors({ ...errors, global: [result[1]] });
+        toast.error("Error in Logging in");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -50,7 +77,8 @@ const Login = () => {
         flexDirection="column"
         alignItems="center"
         paddingTop={4}
-        bgcolor="rgb(204, 234, 209, 1)"
+        bgcolor="white"
+        boxShadow={10}
         p={3}
         borderRadius={4}
       >
@@ -75,6 +103,8 @@ const Login = () => {
             autoFocus
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            error={!!errors.username}
+            helperText={errors.username}
           />
           <TextField
             variant="outlined"
@@ -88,6 +118,8 @@ const Login = () => {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!errors.password}
+            helperText={errors.password}
           />
           <Button
             type="submit"
@@ -98,22 +130,22 @@ const Login = () => {
           >
             Login
           </Button>
-          {errors && (
+          {errors.global && (
             <Box marginTop={2}>
               <Alert severity="error">
-                {errors.map((error, index) => (
+                {errors.global.map((error, index) => (
                   <div key={index}>{error}</div>
                 ))}
               </Alert>
             </Box>
           )}
-          <Typography className="register-link">
-            Click
-            <Link onClick={() => navigate("/signup")} sx={{padding: '5px', cursor: 'pointer'}}>here</Link>
-            to signup
-          </Typography>
         </Box>
       </Box>
+      <Link to="/signup" style={{ textDecoration: "none" }}>
+        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+          Don't have an account? Register
+        </Typography>
+      </Link>
     </Container>
   );
 };
