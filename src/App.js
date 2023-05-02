@@ -7,8 +7,6 @@ import Login from "./components/login";
 import Users from "./components/users";
 import "./App.css";
 import SignUp from "./components/signup";
-import Chat from "../src/common/custom-chat/index.js";
-import Chat2 from "../src/common/custom-chat/index2.js";
 import Middle from "./components/feedBack/middle";
 import Feedback from "./components/feedBack/feedback";
 import FeedBackList from "./components/feedBack/feedBackList";
@@ -111,30 +109,6 @@ const App = () => {
               <Protected isLoggedIn={isLoggedIn}>
                 <Connections />
               </Protected>
-            }
-          />
-          <Route
-            exact
-            path="/chat-1"
-            element={
-              <>
-                <Chat
-                  user1={"6438d7ac8e1c21e45686e198"}
-                  user2={"6439851768f667131bd19b4a"}
-                />
-              </>
-            }
-          />
-          <Route
-            exact
-            path="/chat-2"
-            element={
-              <>
-                <Chat2
-                  user1={"6439851768f667131bd19b4a"}
-                  user2={"6438d7ac8e1c21e45686e198"}
-                />
-              </>
             }
           />
           <Route
