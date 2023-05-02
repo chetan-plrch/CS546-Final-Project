@@ -27,20 +27,20 @@ import fetch from 'node-fetch'
 //   console.log(e);
 // }
 
-try {
-  let firstfeed = await feedBackData.createFeedBack(
-    "643b7312a23709af14b68ff4",
-    "643b7312a23709af14b68ff4",
-    "true",
-    3,
-    4,
-    2,
-    "rightNow"
-  );
-  console.log(firstfeed);
-} catch (e) {
-  console.log(e);
-}
+// try {
+//   let firstfeed = await feedBackData.createFeedBack(
+//     "643b7312a23709af14b68ff4",
+//     "643b7312a23709af14b68ff4",
+//     "true",
+//     3,
+//     4,
+//     2,
+//     "rightNow"
+//   );
+//   console.log(firstfeed);
+// } catch (e) {
+//   console.log(e);
+// }
 const createFakeUser = async (count) => {
     function imageUrlToBase64(url) {
         return new Promise((resolve, reject) => {
@@ -124,7 +124,7 @@ const createFakeUser = async (count) => {
 }
 
 const runSeed = async () => {
-  await createFakeChats(200)
+  await createFakeUser(100)
 }
 
 runSeed()

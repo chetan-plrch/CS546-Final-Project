@@ -272,7 +272,7 @@ router.route("/chatId").post(async (req, res) => {
   }
 
   try {
-    let feedBack = await feedBackData.getByChatId(feedBackInfo.chatId);
+    let feedBack = await feedBackData.getByChatId(feedBackInfo.chatId, feedBackInfo.userId);
     res.json(feedBack);
   } catch (e) {
     let status = e[0] ? e[0] : 500;
