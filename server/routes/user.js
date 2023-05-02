@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate } from "../middleware/index.js";
+import { authenticate,notAuthenticate } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
 import jwt from "jsonwebtoken";
@@ -19,7 +19,7 @@ router.get("/all-users", async (req, res) => {
   };
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", notAuthenticate, async (req, res) => {
   let userInfo = req.body;
   if (!userInfo || Object.keys(userInfo).length === 0) {
     return res
@@ -139,7 +139,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/login",async (req, res) => {
+router.post("/login", notAuthenticate ,async (req, res) => {
     const userObj = req.body;
 
     if (!userObj || Object.keys(userObj).length === 0) {
