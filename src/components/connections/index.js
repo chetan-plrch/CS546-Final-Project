@@ -6,10 +6,13 @@ import './index.css'
 import CustomList from '../../common/custom-list';
 import ChatWindow from '../../common/custom-chat-window';
 import { getAllConnections } from '../../api/connections';
+import { getUserRole } from '../../helper'
+import { roles } from '../../constant';
 
 const Connections = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState();
   const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
 
@@ -31,10 +34,12 @@ const Connections = () => {
           }
           setConnections(users);
         } else {
-          // TODO - use getUserRole() and change content if page is listener
+          const role = getUserRole();
+          setUserRole(role);
         };
       } else {
-        // TODO - use getUserRole() and change content if page is listener
+        const role = getUserRole();
+        setUserRole(role);
       };
     };
     fetchConnections();
@@ -90,11 +95,17 @@ const Connections = () => {
           />
       </div>
     ) : (
-      <span>
-        Please click
-        <Link onClick={findExperts} sx={{padding: '5px'}}>here</Link>
-         to connect with professionals to get help
-      </span>
+        userRole === roles.SEEKER ? (
+          <span>
+          Click
+          <Link onClick={findExperts} sx={{padding: '5px'}}>here</Link>
+           to connect with professionals to get help
+        </span>
+        ) : (
+          <span>
+            You can view the chats with people seeking advice from you here once you are connected with them.
+          </span>
+        )
     )
     }
     </div>
