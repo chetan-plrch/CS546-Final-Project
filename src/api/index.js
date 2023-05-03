@@ -1,4 +1,6 @@
+import { getUserId } from "../helper";
 import { axiosApi } from "./api-interceptor";
+import Cookies from 'js-cookie';
 
 const constructResponse = (status, responseJson) => {
   if (status === 200) {
@@ -69,4 +71,90 @@ const getLoggedInUser = async () => {
   }
 }
 
-export { checkLoggedInOnBackend, loginUser, createUserAccountAxios, getLoggedInUser };
+const getUserById = async() => {
+  try{
+    const userId = getUserId()
+    console.log(`inside the useeffect api call ${userId}`);
+    const response  = await axiosApi.get(`/user/user`)
+    if (response.status === 200){
+      return response
+    }
+  }catch (e){
+    console.log(e)
+    return e
+  }
+}
+
+const getFeeds = async() => {
+  try{
+  
+    const response  = await axiosApi.get(`/feeds/feed`)
+
+    if (response.status === 200){
+      return response.data
+    }
+  }catch (e){
+    return []
+  }
+}
+
+  const editProfile = async() => {
+  const extractedUserId = Cookies.get('userId');
+  console.log(extractedUserId);
+  console.log("entering");
+  const regex = /"([^"]+)"/;
+  const userId = extractedUserId.match(regex)[1];
+  try{
+    const response = await axiosApi.put(`/user/${userId}`)
+
+    if (response.status === 200){
+      return response.data
+    }
+  } catch(e){
+    return e
+  }
+}
+
+const deleteProfile = async() => {
+  const extractedUserId = Cookies.get('userId');
+  const regex = /"([^"]+)"/;
+  const userId = extractedUserId.match(regex)[1];
+  try{
+    const response = await axiosApi.put(`/user/delete/${userId}`)
+
+    if (response.status === 200){
+      return response.data
+    }
+  } catch(e){
+    return e
+  }
+}
+
+const getBlockedUsers = async() =>{
+  try{
+    const userId = getUserId()
+    console.log(`blocked user api ${userId}`);
+    const response  = await axiosApi.get(`user/user/blocked/${userId}`)
+    if (response.status === 200){
+      return response
+    }
+  }catch (e){
+    console.log(e)
+    return e
+  }
+}
+
+const UnblockProfile = async() =>{
+  try{
+      const userId = getUserId()
+      console.log(`unblocked user api ${userId}`);
+      const response = await axiosApi.put('chat/unblock')
+      if(response.status === 200){
+        return response
+      }
+  }catch(e){
+    console.log(e)
+    return e
+  }
+}
+export { checkLoggedInOnBackend, loginUser, createUserAccountAxios ,getUserById, getFeeds, editProfile, deleteProfile, getBlockedUsers, UnblockProfile,getLoggedInUser};

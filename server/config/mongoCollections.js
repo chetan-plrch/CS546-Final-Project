@@ -20,3 +20,6 @@ export const users = getCollectionFn('users');
 export const feedBack = getCollectionFn('feedBack');
 export const chats = getCollectionFn('chats')
 export const sockets = getCollectionFn('sockets')
+export const journal = getCollectionFn('journal');
+export const feeds = getCollectionFn('feeds');
+

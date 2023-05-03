@@ -16,7 +16,7 @@ import LeafIcon from "@mui/icons-material/Spa";
 import { teal } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import { checkLogInTrace, delay } from "../../helper";
-import { toast } from "react-toastify/dist/react-toastify.js";
+import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosApi } from "../../api/api-interceptor";
 import { getLoggedInUser } from "../../api";
@@ -76,7 +76,7 @@ function ResponsiveAppBar() {
     } else if (page === "FEEDBACKS") {
       navigate("/feedbackslist");
     } else if (page === "Profile") {
-      navigate("/edit-profile");
+      navigate("/profile");
     } else if (page === "Logout") {
       handleLogout();
     }
