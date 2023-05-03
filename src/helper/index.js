@@ -204,8 +204,9 @@ export function checkLogInTrace() {
     export const getUserId = () => {
     console.log("cookie user id function");
     let userId = Cookies.get('userId');
-    userId = userId?.split(':')?.[1];
-    userId = userId?.replace(/"/g, "")
+    if (userId.startsWith('j:')) {
+      userId = userId.replace('j:', '');
+    }
     console.log(userId);
     return userId;
 };

@@ -5,6 +5,7 @@ import validation from "../validations.js";
 import jwt from "jsonwebtoken";
 import validators from '../validations.js'
 import { unblockConnection} from '../data/chat.js'
+import jwtConfig from "../config/jwtConfig.js";
 const router = Router();
 
 
@@ -183,12 +184,11 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     }
 
     try {
-      const token = await userData.checkLogged(
+      const {user,token} = await userData.checkLogged(
         userObj.username.trim(),
         userObj.password.trim()
       );
       //console.log(token);
-      const user = jwt.decode(token);
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true

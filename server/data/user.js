@@ -189,12 +189,12 @@ const checkLogged = async (username, password) => {
   }
 
   const token = jwt.sign(
-    { _id: user._id, username: user.username,firstName: user.firstName },
+    { _id: user._id, username: user.username,firstName: user.firstName, isAnonymous: user.isAnonymous },
     jwtConfig.secret
   );
   //console.log(token);
 
-  return token;
+  return {user,token};
 };
 
 const getAllUsers = async (queryParams) => {
