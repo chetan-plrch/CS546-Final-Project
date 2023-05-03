@@ -4,15 +4,13 @@ import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '
 import { useNavigate } from "react-router-dom";
 import { feedBackList } from '../../api/feedback';
 import Cookies from "js-cookie";
+import {getUserId} from  "../../helper/index"
 
 const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const navigate = useNavigate();
 
-  const extractedUserId = Cookies.get('userId');
-  const regex = /"([^"]+)"/;
-  const userId = extractedUserId.match(regex)[1];
-  console.log(extractedUserId);
+  const userId = getUserId()
 
   useEffect(() => {
     const fetchFeedbacks = async () => {

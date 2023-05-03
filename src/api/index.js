@@ -99,11 +99,7 @@ const getFeeds = async() => {
 }
 
   const editProfile = async() => {
-  const extractedUserId = Cookies.get('userId');
-  console.log(extractedUserId);
-  console.log("entering");
-  const regex = /"([^"]+)"/;
-  const userId = extractedUserId.match(regex)[1];
+  const userId = getUserId()
   try{
     const response = await axiosApi.put(`/user/${userId}`)
 
@@ -116,9 +112,7 @@ const getFeeds = async() => {
 }
 
 const deleteProfile = async() => {
-  const extractedUserId = Cookies.get('userId');
-  const regex = /"([^"]+)"/;
-  const userId = extractedUserId.match(regex)[1];
+  const userId = getUserId()
   try{
     const response = await axiosApi.put(`/user/delete/${userId}`)
 

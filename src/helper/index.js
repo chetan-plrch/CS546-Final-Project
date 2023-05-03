@@ -201,13 +201,9 @@ export function checkLogInTrace() {
 }
 
 // Returns the user id from the cookie
-    export const getUserId = () => {
-    console.log("cookie user id function");
-    let userId = Cookies.get('userId');
-    userId = userId?.split(':')?.[1];
-    userId = userId?.replace(/"/g, "")
-    console.log(userId);
-    return userId;
+export const getUserId = () => {
+  let userId = Cookies.get('userId');
+  return userId;
 };
 
 export const getUserRole = () => {
