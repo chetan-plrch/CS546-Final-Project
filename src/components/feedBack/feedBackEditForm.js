@@ -260,7 +260,7 @@ const FeedBackEditForm = (props) => {
               color="primary"
               type="btn"
               sx={{ mt: 2, bgcolor: "#1976D2" }}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/feedbackslist")}
             >
               Go Back
             </Button>
