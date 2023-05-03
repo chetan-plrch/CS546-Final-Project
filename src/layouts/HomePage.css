@@ -1,3 +1,18 @@
-.homepage {
-    
+
+.Title{
+  font-style: italic;
+  font-size:  10px;
+  text-align: center;
+  font-weight:bolder;
+  text-decoration: underline;
 }
+
+.Heading__title {
+  color: #00796b;
+  font-size:medium;
+  font-weight: bold;
+}
+
+
+
+  

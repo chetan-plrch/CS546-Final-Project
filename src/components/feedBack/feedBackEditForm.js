@@ -150,7 +150,7 @@ const FeedBackEditForm = (props) => {
       setErrors(newErrors);
     }
   };
-
+  console.log(props);
   return (
     <>
       <Container maxWidth="sm">
@@ -169,7 +169,7 @@ const FeedBackEditForm = (props) => {
         >
           <Box>
             <Typography variant="h1" mb={2} color="#222222">
-              Edit Feedback
+              Edit Feedback for {props.username}
             </Typography>
             <TextField
               fullWidth
@@ -260,7 +260,7 @@ const FeedBackEditForm = (props) => {
               color="primary"
               type="btn"
               sx={{ mt: 2, bgcolor: "#1976D2" }}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/feedbackslist")}
             >
               Go Back
             </Button>
