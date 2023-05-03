@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import styles from "./feedback.css";
 import { getFeedbackByChatId } from "../../api/feedback";
 import Cookies from 'js-cookie';
+import { getUserId } from "../../helper/index";
 
 const Middle = () => {
   const location = useLocation();
@@ -14,9 +15,7 @@ const Middle = () => {
   const [userId, setUserID] = useState();
 
   useEffect(() => {
-    const extractedUserId = Cookies.get('userId');
-    const regex = /"([^"]+)"/;
-    const matchedUserId = extractedUserId.match(regex)[1];
+    const matchedUserId = getUserId();
     setUserID(matchedUserId);
   }, []);
 

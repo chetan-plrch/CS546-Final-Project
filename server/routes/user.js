@@ -183,18 +183,16 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     }
 
     try {
-      const token = await userData.checkLogged(
+      const {user,token} = await userData.checkLogged(
         userObj.username.trim(),
         userObj.password.trim()
       );
-      //console.log(token);
-      const user = jwt.decode(token);
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true
       });
 
-      res.cookie("userId", user._id, {
+      res.cookie("userId", user._id.toString(), {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: false
       });
@@ -228,7 +226,9 @@ router.post("/login", notAuthenticate ,async (req, res) => {
 router.get("/is-loggedin", authenticate, (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
-router.route('/:id').get(async (req,res) =>{
+router
+.route('/:id')
+.get(async (req,res) =>{
   try {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) {
@@ -299,70 +299,13 @@ router.route('/:id').get(async (req,res) =>{
   }
 })
 
-
-router.route('/:id').get(async (req,res) =>{
-  try {
-    const id = req.params.id;
-    if (!ObjectId.isValid(id)) {
-      throw new Error('Invalid id');
-    }
-    const user = await userData.get(id);
-    if(!user){
-      throw new Error('No user with that id');
-    }
-    res.status(200).json({
-      _id:user._id.toString(),
-      username:user.username,
-    firstName:user.firstName,
-    lastName: user.lastName,
-    email:user.email,
-    password:user.password,
-    gender:user.gender,
-    city:user.city,
-    state:user.state,
-    age:user.age,
-    isAnonymous:user.isAnonymous,
-    role:user.role,
-    profileUrl:user.profileUrl,
-    connections:user.connections,
-    isActive:user.isActive,
-    });
-  } catch (error) {
-    if (error.message === 'Invalid id') {
-      res.status(400).json({ error: 'Invalid id' });
-    } else if (error.message === 'No user with that id') {
-      res.status(404).json({ error: 'No user with that id' });
-    } else {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  } 
-})
-
-.delete(async (req,res) =>{
-  const id = req.params.id;
-  
-  if (!ObjectId.isValid(id)) {
-    return res.status(400).json({ message: 'Invalid user ID' });
-  }
-
-  try {
-    const message = await userData.remove(id);
-    if(!message){
-      return res.status(404).json({ message: 'User not found' });
-    }
-    return res.json({ userId: id, deleted: true });
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-})
-
 router.put("/user/update/:id", authenticate, async (req, res) =>{
   try{
     const id = req.params.id;
     console.log(req.body);
     const {username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, connections, isActive} = req.body;
     
-    // validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
+    validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
     
     const updateUser = await userData.update(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, isActive, connections);
     console.log(updateUser)

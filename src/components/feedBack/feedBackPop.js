@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getFeedbackByChatId } from "../../api/feedback";
 import Cookies from 'js-cookie';
+import {getUserId} from "../../helper/index"
 
 //In props I need a chatId ,username
 const FeedBackPop = (props) => {
@@ -19,9 +20,7 @@ const FeedBackPop = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const extractedUserId = Cookies.get('userId');
-    const regex = /"([^"]+)"/;
-    const matchedUserId = extractedUserId.match(regex)[1];
+    const matchedUserId = getUserId()
     setUserID(matchedUserId);
   }, []);
 
@@ -65,7 +64,7 @@ const FeedBackPop = (props) => {
     }
     setOpen(false);
   };
-
+  
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>

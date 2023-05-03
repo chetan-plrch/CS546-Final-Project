@@ -4,14 +4,12 @@ import FeedBackList from './feedBackList';
 import styles from './feedback.css';
 import Cookies from 'js-cookie';
 import { useLocation } from "react-router-dom";
+import { getUserId } from '../../helper/index';
 
 const Feedback = () => {
   
-  const extractedUserId = Cookies.get('userId');
-  const regex = /"([^"]+)"/;
-  const userId = extractedUserId.match(regex)[1];
-  console.log(extractedUserId);
-
+  const userId = getUserId()
+  console.log("userID from feedbacks page",userId);
   const location = useLocation();
   const chatId = location.state.chatId;
   const username = location.state.username;

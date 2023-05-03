@@ -150,7 +150,7 @@ const FeedBackEditForm = (props) => {
       setErrors(newErrors);
     }
   };
-
+  console.log(props);
   return (
     <>
       <Container maxWidth="sm">
@@ -169,7 +169,7 @@ const FeedBackEditForm = (props) => {
         >
           <Box>
             <Typography variant="h1" mb={2} color="#222222">
-              Edit Feedback for {props.username.toUpperCase()}
+              Edit Feedback for {props.username}
             </Typography>
             <TextField
               fullWidth
