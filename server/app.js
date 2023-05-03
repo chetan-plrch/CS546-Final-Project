@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import configureRoutes from './routes/index.js';
 import socket from './sockets/index.js';
+import { xss } from 'express-xss-sanitizer'
 
 const app = express();
 const port = 3001
@@ -10,6 +11,7 @@ const port = 3001
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }))
+app.use(xss())
 
 var allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
 app.use(cors({
