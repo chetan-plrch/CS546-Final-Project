@@ -126,7 +126,7 @@ const Login = () => {
             fullWidth
             variant="contained"
             color="primary"
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 2, marginBottom: 2 }}
           >
             Login
           </Button>
@@ -139,13 +139,14 @@ const Login = () => {
               </Alert>
             </Box>
           )}
+          <Link to="/signup" style={{ textDecoration: "none", marginTop: '30px' }}>
+            <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+              Don't have an account? Register
+            </Typography>
+        </Link>
         </Box>
       </Box>
-      <Link to="/signup" style={{ textDecoration: "none" }}>
-        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
-          Don't have an account? Register
-        </Typography>
-      </Link>
+
     </Container>
   );
 };

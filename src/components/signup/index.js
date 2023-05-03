@@ -147,6 +147,7 @@ const SignUp = (props) => {
               name="username"
               value={user.username}
               onChange={onChangeOfValue}
+              required={true}
             />
             <CustomTextField
               onBlur={onBlur}
@@ -156,6 +157,7 @@ const SignUp = (props) => {
               label="first name"
               value={user.firstName}
               onChange={onChangeOfValue}
+              required={true}
             />
             <CustomTextField
               onBlur={onBlur}
@@ -165,6 +167,7 @@ const SignUp = (props) => {
               label="last name"
               value={user.lastName}
               onChange={onChangeOfValue}
+              required={true}
             />
             <CustomTextField
               onBlur={onBlur}
@@ -173,6 +176,7 @@ const SignUp = (props) => {
               name="email"
               value={user.email}
               onChange={onChangeOfValue}
+              required={true}
             />
             <CustomTextField
               onBlur={onBlur}
@@ -196,6 +200,7 @@ const SignUp = (props) => {
                   </InputAdornment>
                 ),
               }}
+              required={true}
             />
             <CustomTextField
               onBlur={onBlur}
@@ -220,6 +225,7 @@ const SignUp = (props) => {
                   </InputAdornment>
                 ),
               }}
+              required={true}
             />
             <CustomCheckbox
               disabled={anonymousDisabled}
@@ -238,6 +244,7 @@ const SignUp = (props) => {
               name="age"
               value={user.age}
               onChange={onChangeOfValue}
+              required={true}
             />
             <CustomSelect
               onBlur={onBlur}
@@ -261,6 +268,7 @@ const SignUp = (props) => {
                   value: "OTHER",
                 },
               ]}
+              required={true}
             />
             <CustomSelect
               onBlur={onBlur}
@@ -288,6 +296,7 @@ const SignUp = (props) => {
               label="city (optional)"
               value={user.city}
               onChange={onChangeOfValue}
+              required={true}
             />
             <CustomTextField
               onBlur={onBlur}
@@ -297,6 +306,7 @@ const SignUp = (props) => {
               label="state (optional)"
               value={user.state}
               onChange={onChangeOfValue}
+              required={true}
             />
           </div>
         </div>
@@ -320,7 +330,7 @@ const SignUp = (props) => {
           </Button>
         </div>
         <Link to="/login" style={{ textDecoration: "none" }}>
-        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+        <Typography variant="body2" align="center" sx={{ marginTop: 3 }}>
           Already have an account? Login
         </Typography>
       </Link>
