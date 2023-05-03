@@ -183,18 +183,16 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     }
 
     try {
-      const token = await userData.checkLogged(
+      const {user,token} = await userData.checkLogged(
         userObj.username.trim(),
         userObj.password.trim()
       );
-      //console.log(token);
-      const user = jwt.decode(token);
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true
       });
-      
-      res.cookie("userId", user._id, {
+
+      res.cookie("userId", user._id.toString(), {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: false
       });
@@ -228,7 +226,9 @@ router.post("/login", notAuthenticate ,async (req, res) => {
 router.get("/is-loggedin", authenticate, (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
-router.route('/:id').get(async (req,res) =>{
+router
+.route('/:id')
+.get(async (req,res) =>{
   try {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) {
@@ -356,13 +356,13 @@ router.route('/:id').get(async (req,res) =>{
   }
 })
 
-router.put("/update/:id", authenticate, async (req, res) =>{
+router.put("/user/update/:id", authenticate, async (req, res) =>{
   try{
     const id = req.params.id;
     console.log(req.body);
     const {username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, connections, isActive} = req.body;
     
-    // validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
+    validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
     
     const updateUser = await userData.update(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, isActive, connections);
     console.log(updateUser)

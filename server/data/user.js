@@ -194,7 +194,7 @@ const checkLogged = async (username, password) => {
   );
   //console.log(token);
 
-  return token;
+  return {user,token};
 };
 
 const getAllUsers = async (queryParams) => {

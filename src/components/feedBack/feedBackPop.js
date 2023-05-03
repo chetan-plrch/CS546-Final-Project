@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -8,11 +8,41 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { getFeedbackByChatId } from "../../api/feedback";
+import Cookies from 'js-cookie';
+import {getUserId} from "../../helper/index"
 
 //In props I need a chatId ,username
 const FeedBackPop = (props) => {
   const [open, setOpen] = useState(false);
+  const [feedbackExists, setFeedbackExists] = useState(false);
+  const [userId, setUserID] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const matchedUserId = getUserId()
+    setUserID(matchedUserId);
+  }, []);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const checkFeedback = async () => {
+      try {
+        const response = await getFeedbackByChatId(props.chatId, userId);
+        console.log(response);
+        if (response) {
+          setFeedbackExists(true);
+        } else {
+          setFeedbackExists(false);
+        }
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+        setFeedbackExists(false);
+      }
+    };
+    checkFeedback();
+  }, [userId]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,18 +53,18 @@ const FeedBackPop = (props) => {
   };
 
   const handleAgree = () => {
-    if (props.feedbackExists) {
+    if (feedbackExists) {
       navigate("/feedbacks/feedback", {
-        state: { chatId: props.chatId, username: props.username },
+        state: { chatId: props.chatId , username: props.username},
       });
     } else {
       navigate("/feedbacks", {
-        state: { chatId: props.chatId, username: props.username },
+        state: { chatId: props.chatId , username: props.username },
       });
     }
     setOpen(false);
   };
-
+  
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -49,7 +79,7 @@ const FeedBackPop = (props) => {
         <DialogTitle id="feedback-dialog-title">Feedback</DialogTitle>
         <DialogContent>
           <DialogContentText id="feedback-dialog-description">
-            {props.feedbackExists
+            {feedbackExists
               ? "Would you like to update the feedback for the conversation you had?"
               : "Would you like to give feedback for the conversation you had till now?"}
           </DialogContentText>

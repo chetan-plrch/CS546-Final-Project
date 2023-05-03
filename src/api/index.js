@@ -99,7 +99,7 @@ const getFeeds = async() => {
 }
 
   const editProfile = async() => {
-
+  const userId = getUserId()
   try{
     const userId = getUserId()
     console.log(`inside the useeffect api call ${userId}`);
@@ -114,9 +114,7 @@ const getFeeds = async() => {
 }
 
 const deleteProfile = async() => {
-  const extractedUserId = Cookies.get('userId');
-  const regex = /"([^"]+)"/;
-  const userId = extractedUserId.match(regex)[1];
+  const userId = getUserId()
   try{
     const response = await axiosApi.put(`/user/delete/${userId}`)
 

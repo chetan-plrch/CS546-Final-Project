@@ -26,6 +26,7 @@ function CustomTextField(props) {
             helperText={props.helperText}
             type={props.type}
             InputProps={props.inputProps}
+            required={props.required}
         />
     );
 }

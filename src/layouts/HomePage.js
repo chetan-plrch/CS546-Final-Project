@@ -167,6 +167,7 @@ import Paper from "@mui/material/Paper";
 import Carousel from "react-material-ui-carousel";
 import { getFeeds } from "../api";
 import './HomePage.css';
+import FeedBackPop from "../../src/components/feedBack/feedBackPop"
 
 const HomePage = () => {
   const [carouselItems, setCarouselItems] = useState([]);
@@ -294,6 +295,12 @@ const HomePage = () => {
           </Paper>
         </Grid>
       </Grid>
+      <div>
+        <FeedBackPop
+          chatId="6445696e99e0f288c0614080"
+          username = "john doe"
+        />
+      </div>
     </div>
   );
 };

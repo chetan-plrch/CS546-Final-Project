@@ -4,18 +4,18 @@ import { useLocation } from "react-router-dom";
 import styles from "./feedback.css";
 import { getFeedbackByChatId } from "../../api/feedback";
 import Cookies from 'js-cookie';
+import { getUserId } from "../../helper/index";
 
 const Middle = () => {
   const location = useLocation();
   const chatId = location.state.chatId;
+  const username = location.state.username;
   const directFeedbackId = location.state.feedbackId;
   const [feedbackId, setFeedbackId] = useState(null);
   const [userId, setUserID] = useState();
 
   useEffect(() => {
-    const extractedUserId = Cookies.get('userId');
-    const regex = /"([^"]+)"/;
-    const matchedUserId = extractedUserId.match(regex)[1];
+    const matchedUserId = getUserId();
     setUserID(matchedUserId);
   }, []);
 
@@ -40,7 +40,7 @@ const Middle = () => {
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        <FeedBackEditForm feedbackId={feedbackId} />
+        <FeedBackEditForm feedbackId={feedbackId} username = {username}/>
       </div>
     </div>
   );
