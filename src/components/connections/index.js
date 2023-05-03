@@ -6,7 +6,7 @@ import './index.css'
 import CustomList from '../../common/custom-list';
 import ChatWindow from '../../common/custom-chat-window';
 import { getAllConnections } from '../../api/connections';
-import { getUserRole } from '../../helper'
+import { getUserId, getUserRole } from '../../helper'
 import { roles } from '../../constant';
 
 const Connections = () => {
@@ -15,14 +15,21 @@ const Connections = () => {
   const [userRole, setUserRole] = useState();
   const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
+  const [archivedConnections, setArchivedConnections] = useState([]);
 
   useEffect(() => {
     async function fetchConnections() {
       const response = await getAllConnections();
+      const loggedInUserId = getUserId();
       if (response?.data?.users) {
         let { users } = response.data;
-        users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
         if (users?.length) {
+          users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
+          const archivedUsers = users.filter((user) => user?.archivedBy?.includes(loggedInUserId));
+          if (archivedUsers?.length) {
+            setArchivedConnections(archivedUsers);
+            users = users.filter((user) => !user?.archivedBy?.includes(loggedInUserId));
+          };
           const { connection: newConnection } = location?.state || {};
           if (newConnection?._id && users.findIndex((user) => user?._id === newConnection?._id) < 0) {
             users = [newConnection, ...users];
@@ -77,6 +84,28 @@ const Connections = () => {
     navigate('/experts');
   };
 
+  const archiveChat = (archive) => {
+    if (archive) {
+      const archivedConnection = connections.find((connection) => connection._id === selectedConnectionId);
+      const updatedArchivedConnections = [...archivedConnections, archivedConnection];
+      setArchivedConnections(updatedArchivedConnections);
+      const updatedConnections = connections.filter((connection) => connection._id !== selectedConnectionId);
+      setConnections(updatedConnections);
+      if (updatedConnections?.length) {
+        setSelectedConnectionId(updatedConnections[0]?._id);
+      };
+    } else {
+      const unarchivedConnection = archivedConnections.find((connection) => connection._id === selectedConnectionId);
+      const updatedConnections = [...connections, unarchivedConnection];
+      setConnections(updatedConnections);
+      const updatedArchivedConnections = archivedConnections.filter((connection) => connection._id !== selectedConnectionId);
+      setArchivedConnections(updatedArchivedConnections);
+      if (updatedConnections?.length) {
+        setSelectedConnectionId(updatedConnections[0]?._id);
+      };
+    };
+  };
+
   return (
     <div className='connections-container'>
     {
@@ -85,6 +114,7 @@ const Connections = () => {
         <CustomList
           selectionKey='_id'
           list={connections}
+          alternateList={archivedConnections || []}
           titleKey='fullName'
           listTitle='Connections'
           contentKey='lastMessage'
@@ -98,6 +128,7 @@ const Connections = () => {
           connectionId={selectedConnectionId}
           onConnectionUpdate={updateConnections}
           removeConnection={removeUserFromList}
+          updateArchiveStatus={archiveChat}
           />
       </div>
     ) : (

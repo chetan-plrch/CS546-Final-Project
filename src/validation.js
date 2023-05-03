@@ -82,10 +82,9 @@ const exportedMethods = {
     }
     return rate;
   },
-  checkPublic(val) {
-    const allowedVal = [true, false];
-    if (!allowedVal.includes(val)) {
-      throw "Error: Enter valid value for isPublic";
+  checkBoolean(val, varName){
+    if(typeof val !== "boolean"){
+      throw `Error: Type of ${varName} must be boolean`
     }
     return val;
   },

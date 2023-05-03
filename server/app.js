@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import configureRoutes from './routes/index.js';
+// Do not remove this import
 import socket from './sockets/index.js';
 import { xss } from 'express-xss-sanitizer'
 
