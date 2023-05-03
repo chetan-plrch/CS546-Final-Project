@@ -30,7 +30,7 @@ const FeedBackPop = (props) => {
 
     const checkFeedback = async () => {
       try {
-        const response = await getFeedbackByChatId("6445696e99e0f288c0614080", userId);
+        const response = await getFeedbackByChatId(props.chatId, userId);
         console.log(response);
         if (response) {
           setFeedbackExists(true);
@@ -56,11 +56,11 @@ const FeedBackPop = (props) => {
   const handleAgree = () => {
     if (feedbackExists) {
       navigate("/feedbacks/feedback", {
-        state: { chatId: props.chatId },
+        state: { chatId: props.chatId , username: props.username},
       });
     } else {
       navigate("/feedbacks", {
-        state: { chatId: props.chatId },
+        state: { chatId: props.chatId , username: props.username },
       });
     }
     setOpen(false);

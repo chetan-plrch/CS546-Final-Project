@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 const Middle = () => {
   const location = useLocation();
   const chatId = location.state.chatId;
+  const username = location.state.username;
   const directFeedbackId = location.state.feedbackId;
   const [feedbackId, setFeedbackId] = useState(null);
   const [userId, setUserID] = useState();
@@ -40,7 +41,7 @@ const Middle = () => {
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        <FeedBackEditForm feedbackId={feedbackId} />
+        <FeedBackEditForm feedbackId={feedbackId} username = {username}/>
       </div>
     </div>
   );

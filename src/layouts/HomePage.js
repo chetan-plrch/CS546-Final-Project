@@ -12,6 +12,7 @@ const HomePage = () => {
       <div>
         <FeedBackPop
           chatId="6445696e99e0f288c0614080"
+          username = "john doe"
         />
       </div>
     </>

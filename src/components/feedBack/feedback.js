@@ -14,11 +14,12 @@ const Feedback = () => {
 
   const location = useLocation();
   const chatId = location.state.chatId;
+  const username = location.state.username;
 
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        <FeedBackForm userId={userId} chatId= {chatId}/>
+        <FeedBackForm userId={userId} chatId= {chatId} username = {username}/>
       </div>
     </div>
   );
