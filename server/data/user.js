@@ -1,7 +1,10 @@
+import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import validation from "../validations.js";
 import bcrypt from "bcrypt";
-
+import jwt from "jsonwebtoken";
+import jwtConfig from "../config/jwtConfig.js";
+import crypto from 'crypto'
 
 
 const create = async (
@@ -61,23 +64,22 @@ const create = async (
     errors.push(e);
   }
 
-
   if(city){
-    try {
-      city = validation.checkString(city, "city");
-    } catch (e) {
-      errors.push(e);
-    }
+  try {
+    city = validation.checkString(city, "city");
+  } catch (e) {
+    errors.push(e);
   }
-  
+}
+
   if(state){
-    try {
-      state = validation.checkString(state, "state");
-    } catch (e) {
-      errors.push(e);
-    }
+  try {
+    state = validation.checkString(state, "state");
+  } catch (e) {
+    errors.push(e);
   }
-  
+}
+
   try {
     gender = validation.checkGender(gender)
   } catch (e) {
@@ -89,6 +91,7 @@ const create = async (
   } catch (e) {
     errors.push(e)
   }
+
   if(role === "listener"){
     isAnonymous = false;
   }
@@ -103,9 +106,10 @@ const create = async (
   if (userNameExits) {
     throw [404, "Error: username already used"];
   }
+
   if (emailExits) {
-    throw [404, "Error: email already used"];
-  }
+        throw [404, "Error: email already used"];
+      }
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -172,7 +176,6 @@ const checkLogged = async (username, password) => {
   if(errors.length > 0){
     throw [400,errors]
   }
-
   const userCollection = await users();
 
   const user = await userCollection.findOne({ username });
@@ -185,7 +188,13 @@ const checkLogged = async (username, password) => {
     throw [400, "username/password one of them is incorrect"];
   }
 
-  return user;
+  const token = jwt.sign(
+    { _id: user._id, username: user.username,firstName: user.firstName },
+    jwtConfig.secret
+  );
+  //console.log(token);
+
+  return token;
 };
 
 const getAllUsers = async (queryParams) => {
@@ -202,4 +211,154 @@ const getAllUsers = async (queryParams) => {
   return usersResponse;
 };
 
-export default { create, checkLogged, getAllUsers };
+ const get = async (id) => {
+
+  if (!id || typeof id !== "string" || id.trim().length === 0) {
+    throw new Error("Invalid id");
+  }
+   id = id.trim();
+
+   if (!ObjectId.isValid(id)){
+    throw new Error ('invalid object ID');
+   } 
+
+   const collection = await users();
+   const getID = await collection.findOne({_id: new ObjectId(id)});
+   if(getID === null){
+    throw new Error("No user with that id");
+   }
+
+   getID._id = getID._id.toString();
+   return getID;
+
+}
+
+ const remove = async (id) => {
+  if (!id || typeof id !== "string" || id.trim().length === 0) {
+    throw new Error("Invalid ID provided");
+  }
+  id = id.trim();
+
+  if (!ObjectId.isValid(id)){
+    throw new Error ('invalid object ID');
+   } 
+
+  const db = await users();
+
+  const user = await db.findOne({ _id: new ObjectId(id) });
+  if (!user) {
+    throw new Error("user not found");
+  }
+
+  await db.deleteOne({ _id: new ObjectId(id) });
+
+  const message = user.name + " has been successfully deleted!";
+  return message;
+};
+
+
+const updateUserRandom = async (id) => {
+  if (!id || typeof id !== "string" || id.trim().length === 0) {
+    throw new Error("Invalid ID provided");
+  }
+  id = id.trim();
+
+  if (!ObjectId.isValid(id)) {
+    throw new Error("Invalid object ID");
+  }
+
+  const db = await users();
+
+  const user = await db.findOne({ _id: new ObjectId(id) });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const newUsername = crypto.randomBytes(8).toString('hex');
+  const newPassword = crypto.randomBytes(12).toString('hex');
+
+  const updatedUser = {
+    username: newUsername,
+    password: newPassword,
+    profilePic: null,
+    firstName: deleted,
+    lastName: user,
+  };
+
+  await db.updateOne({ _id: new ObjectId(id) }, { $set: updatedUser });
+
+  const message = "User " + id + " has been updated with new username " + newUsername + " and password " + newPassword;
+  return message;
+};
+
+
+const update = async(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, isActive, connections) => {
+  console.log(connections);
+  if (!id || typeof id !== "string" || id.trim().length === 0) {
+    throw new Error("Invalid id");
+  }
+  id = id.trim();
+
+// validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, connections, isActive);
+
+  const db = await users();
+  const filter = { _id: new ObjectId(id) };
+
+  const update = {
+    $set: {
+      username, 
+      firstName, 
+      lastName, 
+      email, 
+      password, 
+      gender, 
+      city, 
+      state,
+      age,
+      isAnonymous, 
+      profilePic,
+      isActive,
+      connections,
+    
+    },
+  };
+  const options = { returnOriginal: false };
+  const result = await db.findOneAndUpdate(filter, update, options);
+
+  const updatedDoc = await db.findOne({ _id: new ObjectId(id) });
+
+  // if (validation.compareAndUpdate(updatedDoc, result.value)) {
+  //   throw new Error('No changes made to the document');
+  // }
+
+  return {
+    ...updatedDoc,
+    _id: updatedDoc._id.toString(),
+  };
+};
+
+const getAllBlockedUsers = async (Id) => {
+  if (!Id || typeof Id !== "string" || Id.trim().length === 0) {
+    throw new Error("Invalid user ID provided");
+  }
+
+  const db = await users();
+  const user = await db.findOne({ _id: new ObjectId(Id) });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const blockedUserIds = user.connections.blocked;
+  const blockedUsers = [];
+
+  for (const blockedUserId of blockedUserIds) {
+    const blockedUser = await db.findOne({ _id: new ObjectId(blockedUserId) });
+    if (blockedUser) {
+      blockedUsers.push(blockedUser.username);
+    }
+  }
+
+  return blockedUsers;
+};
+
+export default { create, checkLogged, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers };
