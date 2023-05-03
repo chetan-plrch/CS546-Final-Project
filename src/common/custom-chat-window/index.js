@@ -4,7 +4,7 @@ import './index.css'
 import CustomButton from '../custom-button';
 import CustomTextField from '../custom-textfield';
 import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
-import { blockUser, getChatHistory } from '../../api/connections';
+import { blockUser, archiveChat, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 
@@ -15,13 +15,16 @@ function ChatWindow(props) {
         allowBlocking,
         allowMessaging,
         removeConnection,
-        onConnectionUpdate
+        onConnectionUpdate,
+        updateArchiveStatus
     } = props;
     const [conversation, setConversation] = useState([]);
     const [filteredChats, setFilterChats] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [senderId, setSenderId] = useState('');
+    const [archivedBy, setArchivedBy] = useState([]);
+    const [chatId, setChatId] = useState('');
 
     useEffect(() => {
         const senderId = getUserId();
@@ -34,6 +37,8 @@ function ChatWindow(props) {
             async function fetchConversation() {
                 const response = await getChatHistory(connectionId);
                 if (response?.data?.chats?.length) {
+                    setChatId(response.data.chats[0]?._id);
+                    setArchivedBy(response.data.chats[0]?.archivedBy || []);
                     setConversation(response.data.chats[0]?.conversation);
                 };
             };
@@ -77,7 +82,7 @@ function ChatWindow(props) {
 
     };
     const blockConnection = async () => {
-        const { response } = await blockUser('578438574');
+        const { response } = await blockUser(connectionId);
         if (response?.status === 200) {
             const successMsg = response?.data?.message || 'User blocked successfully';
             toast.success(successMsg);
@@ -99,6 +104,24 @@ function ChatWindow(props) {
         };
     };
 
+    const hideCurrentChat = async () => {
+        const response = await archiveChat(chatId);
+        if (response?.status === 200) {
+            const successMsg = response?.data?.message || 'Updated archive status successfully';
+            toast.success(successMsg);
+            if (archivedBy?.includes(senderId)) {
+                archivedBy.splice(archivedBy.indexOf(senderId), 1);
+                updateArchiveStatus(false);
+            } else {
+                archivedBy.push(senderId);
+                updateArchiveStatus(true);
+            };
+        } else {
+            const errorMsg = response?.data?.error || 'Could not update archive status';
+            toast.error(errorMsg);
+        };
+    };
+
     return (
         <div className='custom-chat-container'>
             <ToastContainer />
@@ -115,6 +138,7 @@ function ChatWindow(props) {
                 {
                     allowBlocking ? <CustomButton title='Block User' onClick={blockConnection} /> : null
                 }
+                <CustomButton title={archivedBy?.includes(senderId) ? 'Unarchieve Chat' : 'Archive Chat'} onClick={hideCurrentChat} />
             </div>
             {
                 (conversation?.length || (searchTerm && filteredChats.length)) ? (
