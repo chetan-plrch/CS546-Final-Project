@@ -36,7 +36,7 @@ const Users = () => {
   };
 
   const goToChats = (connection) => {
-    navigate('/user/connections', {state: {connection}});
+    navigate('/connections', {state: {connection}});
   };
 
   return (

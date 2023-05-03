@@ -6,6 +6,7 @@ import CustomTextField from '../custom-textfield';
 import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
 import { blockUser, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
+import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 
 function ChatWindow(props) {
     const {
@@ -13,6 +14,7 @@ function ChatWindow(props) {
         connectionId,
         allowBlocking,
         allowMessaging,
+        removeConnection,
         onConnectionUpdate
     } = props;
     const [conversation, setConversation] = useState([]);
@@ -75,8 +77,15 @@ function ChatWindow(props) {
 
     };
     const blockConnection = async () => {
-        const response = await blockUser(receiverId);
-        // TODO - update parent to remove current connection from list
+        const { response } = await blockUser('578438574');
+        if (response?.status === 200) {
+            const successMsg = response?.data?.message || 'User blocked successfully';
+            toast.success(successMsg);
+            removeConnection();
+        } else {
+            const errorMsg = response?.data?.error || 'Error in blocking user';
+            toast.error(errorMsg);
+        };
     };
 
     const onUpdateSearchTerm = (_key, value) => {
@@ -92,6 +101,7 @@ function ChatWindow(props) {
 
     return (
         <div className='custom-chat-container'>
+            <ToastContainer />
             <div className='header-container'>
                 {
                     allowSearch ? (
