@@ -130,8 +130,6 @@ import feedFunction from "./server/data/feeds.js";
 // feeds
 
 const feeds = [
-
- 
   {
     "title": "Believe in Yourself",
     "description": "No one can believe in you as much as you can believe in yourself.",
