@@ -20,6 +20,7 @@
     "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-material-ui-carousel": "^3.4.2",
     "react-router-dom": "^6.10.0",
     "react-scripts": "4.0.3",
     "react-toastify": "^9.1.2",
@@ -29,6 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
+    "seed": "node seed.js",
     "start-mac": "export PORT=3000 && react-scripts start",
     "server": "nodemon server/app.js",
     "build": "react-scripts build",
@@ -57,7 +59,7 @@
     "type": "git",
     "url": "git+https://github.com/chetan-plrch/CS546-Final-Project.git"
   },
-  "author": "Section A - Group 33",
+  "author": "Section C- Group 33",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/chetan-plrch/CS546-Final-Project/issues"
