@@ -157,7 +157,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { getUserById ,getBlockedUsers} from "../../api";
 import ProfileImage from "../../common/custom-profile-picture";
-import { editProfile, deleteProfile } from "../../api/index.js";
+import { editProfile, deleteProfile , UnblockProfile} from "../../api/index.js";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 

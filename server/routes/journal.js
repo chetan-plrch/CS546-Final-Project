@@ -14,7 +14,7 @@ router.post('/journal', async (req, res) => {
         throw new Error('Invalid message');
       }
   
-      if (typeof date !== 'object' || isNaN(date.getTime())) {
+      if (typeof date !== 'object' || isNaN(date.getTime())) { 
         throw new Error('Invalid Date');
       }
   

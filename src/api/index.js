@@ -99,13 +99,11 @@ const getFeeds = async() => {
 }
 
   const editProfile = async() => {
-  const extractedUserId = Cookies.get('userId');
-  console.log(extractedUserId);
-  console.log("entering");
-  const regex = /"([^"]+)"/;
-  const userId = extractedUserId.match(regex)[1];
+
   try{
-    const response = await axiosApi.put(`/user/${userId}`)
+    const userId = getUserId()
+    console.log(`inside the useeffect api call ${userId}`);
+    const response = await axiosApi.put(`/user/update/${userId}`)
 
     if (response.status === 200){
       return response.data
@@ -144,11 +142,11 @@ const getBlockedUsers = async() =>{
   }
 }
 
-const UnblockProfile = async() =>{
+const UnblockProfile = async(unblockConnectionId) =>{
   try{
       const userId = getUserId()
       console.log(`unblocked user api ${userId}`);
-      const response = await axiosApi.put('chat/unblock')
+      const response = await axiosApi.put('/chat/unblock',{ unblockConnectionId})
       if(response.status === 200){
         return response
       }

@@ -176,7 +176,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     } catch (e) {
       errors.push(e);
     }
-
+  
     if (errors.length > 0) {
       res.status(400).send({ errors });
       return;
@@ -193,7 +193,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true
       });
-
+      
       res.cookie("userId", user._id, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: false
@@ -206,7 +206,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: false
       });
-
+    
       if(user.isAnonymous){
         const message = "AnonymousFruit, Welcome Back"
         return res.status(200).send({ message });
@@ -356,7 +356,7 @@ router.route('/:id').get(async (req,res) =>{
   }
 })
 
-router.put("/user/update/:id", authenticate, async (req, res) =>{
+router.put("/update/:id", authenticate, async (req, res) =>{
   try{
     const id = req.params.id;
     console.log(req.body);
@@ -398,23 +398,4 @@ router.route('/user/blocked/:id')
     }
   });
 
-
-  // unblock a user
-
-  router.route('user/unblock/:id').put( async (req, res) => {
-    try {
-        // const { unblockConnectionId } = req.body
-        const id = req.params.id;
-        const unblockConIdTrimmed = validators.checkId(id, 'unblockUserId')
-        await unblockConnection(req.user._id.toString(), unblockConIdTrimmed)
-        return res.status(200).send({ message: ' unblocked successfully' })
-    } catch(e) {
-        if (e.type === errorType.BAD_INPUT) {
-            return res.status(400).send({ message: e.message })
-        } else if (e.type === errorType.NOT_FOUND) {
-            return res.status(404).send({ message: e.message })
-        }
-        return res.status(500).send({ message: 'Internal server error' })
-    }
-});
 export default router;
