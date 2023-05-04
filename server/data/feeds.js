@@ -1,7 +1,8 @@
 import { feeds } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
+import validations from "../validations.js";
 
-const createFeed = async (title, description, type, images) => {
+  const createFeed = async (title, description, type, images) => {
     if (!title || typeof title !== 'string') {
       throw new Error('Title is required and must be a string');
     }
@@ -58,9 +59,30 @@ const createFeed = async (title, description, type, images) => {
   };
 
   const updateLike = async(userId, feedId, isLike)=>{
+    let errors = []
+    try{
+      userId = validations.checkId(userId,"user Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      feedId = validations.checkId(feedId,"feed Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      isLike = validations.checkBoolean(isLike,"isLike")
+    }catch(e){
+      errors.push(e)
+    }
+
+    if (errors.length > 0) {
+      throw [400, errors];
+    }
+
     const feedsCollection = await feeds();
     const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
-    
+
     if(isLike){
       //Adding the userId to the Liekd Array
       if (!feed.liked.includes(userId)) {
@@ -90,15 +112,37 @@ const createFeed = async (title, description, type, images) => {
   }
 
   const updateUnLike = async(userId, feedId, isUnLike)=>{
+    let errors = []
+    try{
+      userId = validations.checkId(userId,"user Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      feedId = validations.checkId(feedId,"feed Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      isUnLike = validations.checkBoolean(isUnLike,"isUnLike")
+    }catch(e){
+      errors.push(e)
+    }
+
+    if (errors.length > 0) {
+      throw [400, errors];
+    }
+
     const feedsCollection = await feeds();
     const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
+
     
     if(isUnLike){
       //Adding the userId to the unlikedd Array
       if (!feed.unliked.includes(userId)) {
         await feedsCollection.updateOne(
           { _id: new ObjectId(feedId) },
-          { $push: { liked: userId } }
+          { $push: { unliked: userId } }
         );
       }
 
@@ -106,7 +150,7 @@ const createFeed = async (title, description, type, images) => {
       if (feed.liked.includes(userId)) {
         await feedsCollection.updateOne(
           { _id: new ObjectId(feedId) },
-          { $pull: { unliked: userId } }
+          { $pull: { liked: userId } }
         );
       }
     }else{
@@ -114,12 +158,92 @@ const createFeed = async (title, description, type, images) => {
       if (feed.unliked.includes(userId)) {
         await feedsCollection.updateOne(
           { _id: new ObjectId(feedId) },
-          { $pull: { liked: userId } }
+          { $pull: { unliked: userId } }
+        );
+      }
+    }
+  }
+  
+  const updateComment = async (userId, feedId, message) => {
+    let errors = []
+    try{
+      userId = validations.checkId(userId,"user Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      feedId = validations.checkId(feedId,"feed Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      message = validations.checkString(message,"Comment message")
+    }catch(e){
+      errors.push(e)
+    }
+
+    if (errors.length > 0) {
+      throw [400, errors];
+    }
+
+    const feedsCollection = await feeds();
+    const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
+  
+    if (feed.comment.hasOwnProperty(userId)) {
+      // If the user has already commented, append the new message to the existing array
+      await feedsCollection.updateOne(
+        { _id: new ObjectId(feedId) },
+        { $push: { [`comment.${userId}`]: message } }
+      );
+    } else {
+      // If the user has not commented before, create a new array with the new message
+      await feedsCollection.updateOne(
+        { _id: new ObjectId(feedId) },
+        { $set: { [`comment.${userId}`]: [message] } }
+      );
+    }
+  };
+
+  const savePost = async(userId, feedId, isSave)=>{
+    let errors = []
+    try{
+      userId = validations.checkId(userId,"user Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      feedId = validations.checkId(feedId,"feed Id")
+    }catch(e){
+      errors.push(e)
+    }
+    try{
+      isSave = validations.checkBoolean(isSave,"isSave")
+    }catch(e){
+      errors.push(e)
+    }
+
+    if (errors.length > 0) {
+      throw [400, errors];
+    }
+    const feedsCollection = await feeds();
+    const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
+
+    if(isSave){
+      if (!feed.saved.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $push: { saved: userId } }
+        );
+      }
+    }else{
+      if (feed.saved.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $pull: { saved: userId } }
         );
       }
     }
   }
   
   
-
-  export default {createFeed, getAll, updateLike, updateUnLike}
+  export default {createFeed, getAll, updateLike, updateUnLike, updateComment, savePost}
