@@ -11,13 +11,22 @@ export const errorType = {
     NOT_FOUND: 'NOT_FOUND'
 }
 
+export const getError = (e) => {
+    if (e.type === errorType.BAD_INPUT) {
+        return { status: 400, message: e.message };
+    } else if (e.type === errorType.NOT_FOUND) {
+        return { status: 404, message: e.message };
+    }
+    return { status: 500, message: 'Internal server error' };
+};
+
 export const getChatUserIds = (chats) => {
     const usersSet = chats.reduce((acc, chat) => {
         chat.users.forEach(userId => acc.add(userId))
         return acc;
     }, new Set())
     return Array.from(usersSet).map(userId => new ObjectId(userId))
-}
+};
 
 export const formatUser = (user) => {
     if (user.isAnonymous) {
