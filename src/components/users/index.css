@@ -9,9 +9,9 @@
 
 .search-container {
     display: flex;
-    width: 100%;
+    width: 40%;
     height: 10%;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
