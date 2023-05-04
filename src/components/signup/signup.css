@@ -16,6 +16,15 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.update-container-dialog {
+  width: 550px;
+  background-color: white;
+  padding: 20px 35px;
+  border-radius: 10px;
+  height: fit-content;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .header-dialog {
   color: #2d842d;
   font-size: 20px;
@@ -83,4 +92,33 @@
 .login-link {
   text-align: center;
   padding-top: 20px;
+}
+
+.blocked-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px
+}
+
+.blocked-item {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+}
+
+.blocked-title {
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: .3rem;
+  background-color: lightgrey;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  margin-top: 55px;
+}
+
+.empty-blocked-list {
+  padding: 30px
 }

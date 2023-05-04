@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { users } from './config/mongoCollections.js'
 
 export const roleType = {
     ADMIN: 'ADMIN',
@@ -72,3 +73,20 @@ export const errorObject = (type, msg) => {
     e.type = type
     return e
 }
+
+export async function checkEmailExists(userId, email) {
+    const userCollection = await users()
+    const emailExists = await userCollection.findOne({ email, _id: { $ne: new ObjectId(userId) } })
+    if (emailExists) {
+        throw errorObject(errorType.BAD_INPUT, 'Error: Email already in use')
+    }
+  }
+  
+export async function checkUsernameExists(userId, username) {
+    const userCollection = await users()
+    const usernameExists = await userCollection.findOne({ username, _id: { $ne: new ObjectId(userId) }})
+    if (usernameExists) {
+        throw errorObject(errorType.BAD_INPUT, 'Error: Username already in use')
+    }
+}
+    
