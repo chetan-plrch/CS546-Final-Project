@@ -77,7 +77,7 @@ const exportedMethods = {
       throw `${varName} must be a number`;
     }
     rate = parseInt(rate);
-    if (rate > 5) {
+    if (rate > 5 || rate < 0) {
       throw `${varName} must be between 1 and 5`;
     }
     return rate;

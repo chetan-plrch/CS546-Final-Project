@@ -5,7 +5,6 @@ import {
   Container,
   Typography,
   Box,
-  Alert,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
@@ -14,8 +13,9 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { createFeedBack } from "../../api/feedback";
-import Cookies from "js-cookie";
 import validations from "../../validation";
+import { createTheme,ThemeProvider } from '@mui/material/styles';
+
 
 const FeedBackForm = (props) => {
   const [rate1, setRate1] = useState("");
@@ -33,13 +33,48 @@ const FeedBackForm = (props) => {
     setDescription("");
   };
 
+  const theme = createTheme({
+    palette: {
+      background: {
+        form: '#f4f4f4',
+      },
+      text: {
+        primary: '#707070',
+      },
+    },
+    components: {
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            "&.Mui-focused": {
+              color: "black",
+            },
+          },
+        },
+      },
+      MuiInput: {
+        styleOverrides: {
+          input: {
+            color: '#707070',
+            '&::placeholder': {
+              color: 'black',
+            },
+            '&:focus': {
+              backgroundColor: '#fff', // Add background color when input is given
+            },
+          },
+        },
+      },
+    },
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     let newErrors = {};
-  
+
     try {
       const validatedIsPublic = validations.checkPublic(isPublic);
-  
+
       try {
         const validatedRate1 = validations.checkRating(
           rate1,
@@ -50,7 +85,7 @@ const FeedBackForm = (props) => {
           newErrors = { ...newErrors, rate1: error };
         }
       }
-  
+
       try {
         const validatedRate2 = validations.checkRating(
           rate2,
@@ -61,7 +96,7 @@ const FeedBackForm = (props) => {
           newErrors = { ...newErrors, rate2: error };
         }
       }
-  
+
       try {
         const validatedRate3 = validations.checkRating(
           rate3,
@@ -72,7 +107,7 @@ const FeedBackForm = (props) => {
           newErrors = { ...newErrors, rate3: error };
         }
       }
-  
+
       try {
         const validatedDescription = validations.checkString(
           description,
@@ -83,11 +118,11 @@ const FeedBackForm = (props) => {
           newErrors = { ...newErrors, description: error };
         }
       }
-  
+
       if (Object.keys(newErrors).length > 0) {
         throw new Error("Validation errors");
       }
-  
+
       const feedback = {
         userId: props.userId,
         chatId: props.chatId,
@@ -98,9 +133,9 @@ const FeedBackForm = (props) => {
         description,
       };
       console.log(feedback);
-  
+
       const result = await createFeedBack(feedback);
-  
+
       if (result.status === 200) {
         toast.success("Feedback submitted successfully");
         resetForm();
@@ -115,116 +150,111 @@ const FeedBackForm = (props) => {
     } catch (error) {
       setErrors(newErrors);
     }
-  };
-  
+  };  
 
   return (
     <>
-      <Container maxWidth="sm">
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          mt={4}
-          bgcolor="white"
-          p={3}
-          borderRadius={4}
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          minHeight="60vh"
-          boxShadow={4}
-        >
-          <Box>
-            <Typography variant="h1" mb={2}>
-              Submit Feedback for {props.username.toUpperCase()}
-            </Typography>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Willing to reconnect"
-              type="number"
-              value={rate1}
-              onChange={(e) => setRate1(e.target.value)}
-              error={!!errors.rate1}
-              helperText={errors.rate1}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Will you recommend the listener"
-              type="number"
-              value={rate2}
-              onChange={(e) => setRate2(e.target.value)}
-              error={!!errors.rate2}
-              helperText={errors.rate2}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Overall rating for the listener"
-              type="number"
-              value={rate3}
-              onChange={(e) => setRate3(e.target.value)}
-              error={!!errors.rate3}
-              helperText={errors.rate3}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              multiline
-              rows={4}
-              error={!!errors.description}
-              helperText={errors.description}
-            />
+    <ThemeProvider theme={theme}>
+      <Box pt={10} pb={5}>
+        <Container maxWidth="sm">
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            mt={4}
+            bgcolor={theme.palette.background.form}
+            p={3}
+            borderRadius={4}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+            minHeight="60vh"
+            boxShadow={4}
+          >
+            <Box>
+              <Typography variant="h1" mb={2}>
+                Submit Feedback for {props.username.toUpperCase()}
+              </Typography>
+              
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Willing to reconnect"
+                type="number"
+                value={rate1}
+                onChange={(e) => setRate1(e.target.value)}
+                error={!!errors.rate1}
+                helperText={errors.rate1}
+                // inputProps={{ style: { color: "#2d2d2d" } }}
+              />
+          
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Will you recommend the listener"
+                type="number"
+                value={rate2}
+                onChange={(e) => setRate2(e.target.value)}
+                error={!!errors.rate2}
+                helperText={errors.rate2}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Overall rating for the listener"
+                type="number"
+                value={rate3}
+                onChange={(e) => setRate3(e.target.value)}
+                error={!!errors.rate3}
+                helperText={errors.rate3}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                multiline
+                rows={4}
+                error={!!errors.description}
+                helperText={errors.description}
+              />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="primary"
-                  checked={isPublic}
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                />
-              }
-              label="isPublic"
-            />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={isPublic}
+                    onChange={(e) => setIsPublic(e.target.checked)}
+                  />
+                }
+                label="isPublic"
+              />
+            </Box>
+            <Box display="flex" justifyContent="space-between" width="100%">
+              <Button
+                variant="contained"
+                color="primary"
+                endIcon={<SendIcon />}
+                type="submit"
+                sx={{ mt: 2 }}
+                onClick={() => navigate("/")}
+              >
+                GO Back
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                endIcon={<SendIcon />}
+                type="submit"
+                sx={{ mt: 2 }}
+              >
+                Submit
+              </Button>
+            </Box>
           </Box>
-          <Box display="flex" justifyContent="space-between" width="100%">
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<SendIcon />}
-              type="submit"
-              sx={{ mt: 2 }}
-              onClick={() => navigate("/")}
-            >
-              GO Back
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<SendIcon />}
-              type="submit"
-              sx={{ mt: 2 }}
-            >
-              Submit
-            </Button>
-          </Box>
-          <Box>
-            {errors && (
-              <Box marginTop={2}>
-                <Alert severity="error">
-                  {Object.keys(errors).map((errorKey, index) => (
-                    <div key={index}>{errors[errorKey]}</div>
-                  ))}
-                </Alert>
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
+      </ThemeProvider>
       <ToastContainer />
     </>
   );

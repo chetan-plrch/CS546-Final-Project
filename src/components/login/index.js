@@ -35,15 +35,18 @@ const Login = () => {
     try {
       const validatedPassword = validations.checkPassword(password);
     } catch (error) {
+      console.log(error);
       if (error.includes("password")) {
         newErrors = { ...newErrors, password: error };
       }
     }
 
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    setErrors(newErrors);
+    return;
+  } else {
+    setErrors({}); // reset the errors state when the inputs are valid
+  }
 
     const loginData = {
       username: username,

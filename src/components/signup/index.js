@@ -166,7 +166,7 @@ const SignUp = (props) => {
               name="lastName"
               label="last name"
               value={user.lastName}
-              onChange={onChangeOfValue}
+              onChange={onChangeOfValue}  
               required={true}
             />
             <CustomTextField
