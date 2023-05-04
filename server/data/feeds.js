@@ -46,15 +46,20 @@ import validations from "../validations.js";
     const allFeeds = await feeds();
 
     const findAll = await allFeeds.find({}).toArray();
-    return findAll;
+    // return findAll;
 
-    // return findAll.map((feed) =>({
-    //     _id: feed._id.toString(),
-    //     title: feed.title,
-    //     description: feed.description,
-    //     type: feed.type,
-    //     images: feed.images,
-    // }));
+    return findAll.map((feed) =>({
+        _id: feed._id.toString(),
+        title: feed.title,
+        description: feed.description,
+        type: feed.type,
+        images: feed.images,
+        createdAt: feed.createdAt,
+        liked: feed.liked,
+        unliked: feed.unliked,
+        comments: feed.comments,
+        saved: feed.saved
+    }));
 
   };
 

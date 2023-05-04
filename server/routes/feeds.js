@@ -14,14 +14,6 @@ router
         return res.status(404).json({ error: "No feeds found" });
       }
 
-      // const result = feeds.map((feed) => ({
-      //   _id: feed._id.toString(),
-      //   title: feed.title,
-      //   description: feed.description,
-      //   type: feed.type,
-      //   images: feed.images,
-      // }));
-
       res.status(200).json(feeds);
     } catch (e) {
       console.log(e);
