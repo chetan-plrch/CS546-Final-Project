@@ -73,8 +73,8 @@ const FeedBackForm = (props) => {
     let newErrors = {};
 
     try {
-      const validatedIsPublic = validations.checkPublic(isPublic);
-
+      const validatedIsPublic = validations.checkBoolean(isPublic, "isPublic");
+  
       try {
         const validatedRate1 = validations.checkRating(
           rate1,

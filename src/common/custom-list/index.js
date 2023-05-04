@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import List from '@mui/joy/List';
+import Link from '@mui/joy/Link';
 import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
@@ -22,12 +23,15 @@ function CustomList(props) {
       selectedId,
       buttonTitle,
       selectionKey,
+      alternateList,
       onButtonClick,
-      onSelectionChange,
+      onSelectionChange
     } = props
     
     // TODO - add default image
     const defaultImage = '';
+
+    const [showArchivedChats, setShowArchivedChats] = useState(false);
 
     const onListItemClick = (selection) => {
       if (!buttonTitle) {
@@ -35,13 +39,35 @@ function CustomList(props) {
       };
     };
 
+    const toggleArchiveChat = (selection) => {
+      setShowArchivedChats(!showArchivedChats)
+      if (showArchivedChats) {
+        onSelectionChange(list[0]?.[selectionKey]);
+      } else {
+        onSelectionChange(selection)
+      }
+    }
+
     return (
       <Box>
         <span className='list-title'>{listTitle}</span>
+        {
+            alternateList?.length ? (
+              <Link onClick={() => toggleArchiveChat(alternateList[0]?.[selectionKey])} sx={{padding: '5px', cursor: 'pointer'}}>
+                {
+                  showArchivedChats ? (
+                    <span>Hide Archived Chats</span>
+                  ) : (
+                    <span>Show Archived Chats</span>
+                   )
+                }
+              </Link>
+            ) : null
+        }
         <List
           sx={{ '--ListItemDecorator-size': '56px' }}
         >
-          {list?.map(function(item, index) {
+          {(showArchivedChats ? alternateList : list)?.map(function(item, index) {
               return  (
                 <ListItem
                   key={index}

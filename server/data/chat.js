@@ -172,7 +172,7 @@ const addMessagesToChat = async (sId, rId, message) => {
                 sentAt: new Date().toISOString(),
                 message
             }],
-            isArchived: false
+            archivedBy: []
         })
 
         if((!insertedId) || !insertedId.toString()) {
@@ -211,6 +211,36 @@ const activeChat = async (uId, anUserId, onlyUsers) => {
         return { users, chats }
     }
 }
+
+// Archive a chat
+const archiveChat = async (uId, chatId) => {
+    const chatsCtx = await chats();
+    const userId = validators.checkId(uId, 'userId');
+    const validatedChatId = validators.checkId(chatId, 'chatId');
+    const existingChat = await chatsCtx.findOne({"_id": new ObjectId(chatId)});
+    const archivedBy = existingChat?.archivedBy || [];
+    if (archivedBy.includes(userId)) {
+        // Unarchive chat
+        archivedBy.splice(archivedBy.indexOf(userId), 1);
+    } else {
+        // Archive chat
+        archivedBy.push(userId);
+    };
+    const res = await chatsCtx.findOneAndUpdate(
+        { _id: new ObjectId(validatedChatId) },
+        {
+            $set: { archivedBy },
+        },
+        { upsert: true, returnDocument: 'after', returnNewDocument: true }
+    );
+    if (res?.lastErrorObject?.updatedExisting) {
+        return true;
+    } else {
+        throw new Error('Unable to update the archived status of the chat');
+    };
+};
+
+
 
 const allActiveChats = async (userId, onlyUsers) => {
     const chatsCtx = await chats()
@@ -262,9 +292,9 @@ const getUserWithLastMessage = (users, chats) => {
         if (chatFound && chatFound.conversation && chatFound.conversation.length > 0)  {
             const lastChat = chatFound.conversation[chatFound.conversation.length - 1]
             const lastMessage = lastChat.message
-            return { ...user, lastMessage }
+            return { ...user, lastMessage, archivedBy: chatFound?.archivedBy || [] }
         } else {
-            return { ...user, lastMessage: 'No last message' }
+            return { ...user, lastMessage: 'No last message', archivedBy: [] }
         }
     })
 }
@@ -288,4 +318,4 @@ const mapSocketIdToUser = async ({ socketId, userId }) => {
     }
 }
 
-export { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser };
+export { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser, archiveChat };

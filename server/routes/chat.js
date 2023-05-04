@@ -1,5 +1,12 @@
 import { Router } from "express";
-import { addConnection, blockConnection, unblockConnection, allActiveChats, activeChat } from '../data/chat.js'
+import {
+    activeChat,
+    archiveChat,
+    addConnection,
+    allActiveChats,
+    blockConnection,
+    unblockConnection
+} from '../data/chat.js'
 import validators from '../validations.js'
 import { errorType } from "../util.js";
 
@@ -66,6 +73,23 @@ router.get('/all-connections', async (req, res) => {
         return res.status(500).send({ message: 'Internal server error' })
     }
 })
+
+// API to archive or unarchive a chat
+router.put('/archive', async (req, res) => {
+    try {
+        let { chatId } = req.body;
+        const validatedChatId = validators.checkId(chatId, 'chatId');
+        await archiveChat(req.user._id.toString(), validatedChatId);
+        return res.status(200).send({ message: 'Chat archived successfully' });
+    } catch (e) {
+        if (e.type === errorType.BAD_INPUT) {
+            return res.status(400).send({ message: e.message });
+        } else if (e.type === errorType.NOT_FOUND) {
+            return res.status(404).send({ message: e.message });
+        }
+        return res.status(500).send({ message: 'Internal server error' });
+    }
+});
 
 router.get('/all-active-chats', async (req, res) => {
     try {

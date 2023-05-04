@@ -26,7 +26,7 @@ router.route("/").post(async (req, res) => {
   }
 
   try {
-    feedBackInfo.isPublic = validation.checkPublic(feedBackInfo.isPublic);
+    feedBackInfo.isPublic = validation.checkBoolean(feedBackInfo.isPublic, 'isPublic');
   } catch (e) {
     errors.push(e);
   }
@@ -164,7 +164,7 @@ router
     }
 
     try {
-      feedBackInfo.isPublic = validation.checkPublic(feedBackInfo.isPublic);
+      feedBackInfo.isPublic = validation.checkBoolean(feedBackInfo.isPublic, 'isPublic');
     } catch (e) {
       errors.push(e);
     }
