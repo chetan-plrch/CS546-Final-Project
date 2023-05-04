@@ -14,7 +14,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { createFeedBack } from "../../api/feedback";
 import validations from "../../validation";
-import { createTheme,ThemeProvider } from '@mui/material/styles';
 
 
 const FeedBackForm = (props) => {
@@ -32,41 +31,6 @@ const FeedBackForm = (props) => {
     setRate3("");
     setDescription("");
   };
-
-  const theme = createTheme({
-    palette: {
-      background: {
-        form: '#f4f4f4',
-      },
-      text: {
-        primary: '#707070',
-      },
-    },
-    components: {
-      MuiInputLabel: {
-        styleOverrides: {
-          root: {
-            "&.Mui-focused": {
-              color: "black",
-            },
-          },
-        },
-      },
-      MuiInput: {
-        styleOverrides: {
-          input: {
-            color: '#707070',
-            '&::placeholder': {
-              color: 'black',
-            },
-            '&:focus': {
-              backgroundColor: '#fff', // Add background color when input is given
-            },
-          },
-        },
-      },
-    },
-  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -109,10 +73,12 @@ const FeedBackForm = (props) => {
       }
 
       try {
-        const validatedDescription = validations.checkString(
-          description,
-          "Description"
-        );
+        if(description){
+          const validatedDescription = validations.checkString(
+            description,
+            "Description"
+          )
+        }
       } catch (error) {
         if (error.includes("Description")) {
           newErrors = { ...newErrors, description: error };
@@ -154,14 +120,13 @@ const FeedBackForm = (props) => {
 
   return (
     <>
-    <ThemeProvider theme={theme}>
       <Box pt={10} pb={5}>
         <Container maxWidth="sm">
           <Box
             component="form"
             onSubmit={handleSubmit}
             mt={4}
-            bgcolor={theme.palette.background.form}
+            bgcolor="white"
             p={3}
             borderRadius={4}
             display="flex"
@@ -178,19 +143,18 @@ const FeedBackForm = (props) => {
               <TextField
                 fullWidth
                 margin="normal"
-                label="Willing to reconnect"
+                label="Willing to reconnect(rate:0 to 5)"
                 type="number"
                 value={rate1}
                 onChange={(e) => setRate1(e.target.value)}
                 error={!!errors.rate1}
                 helperText={errors.rate1}
-                // inputProps={{ style: { color: "#2d2d2d" } }}
               />
           
               <TextField
                 fullWidth
                 margin="normal"
-                label="Will you recommend the listener"
+                label="Will you recommend the listener(rate:0 to 5)"
                 type="number"
                 value={rate2}
                 onChange={(e) => setRate2(e.target.value)}
@@ -200,7 +164,7 @@ const FeedBackForm = (props) => {
               <TextField
                 fullWidth
                 margin="normal"
-                label="Overall rating for the listener"
+                label="Overall rating for the listener(rate:0 to 5)"
                 type="number"
                 value={rate3}
                 onChange={(e) => setRate3(e.target.value)}
@@ -210,7 +174,7 @@ const FeedBackForm = (props) => {
               <TextField
                 fullWidth
                 margin="normal"
-                label="Description"
+                label="Description(Optional)"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 multiline
@@ -254,7 +218,6 @@ const FeedBackForm = (props) => {
           </Box>
         </Container>
       </Box>
-      </ThemeProvider>
       <ToastContainer />
     </>
   );
