@@ -1,4 +1,5 @@
 import { feeds } from "../config/mongoCollections.js";
+import { ObjectId } from "mongodb";
 
 const createFeed = async (title, description, type, images) => {
     if (!title || typeof title !== 'string') {
@@ -24,8 +25,12 @@ const createFeed = async (title, description, type, images) => {
         type,
         images,
         createdAt: new Date().toISOString(),
+        liked:[],
+        unliked:[],
+        comments:{},
+        saved:[]
       };
-  
+      
       const feedsCollection = await feeds();
       const result = await feedsCollection.insertOne(feed);
       const insertedId = result.insertedId.toString();
@@ -40,15 +45,81 @@ const createFeed = async (title, description, type, images) => {
     const allFeeds = await feeds();
 
     const findAll = await allFeeds.find({}).toArray();
+    return findAll;
 
-    return findAll.map((feed) =>({
-        _id: feed._id.toString(),
-        title: feed.title,
-        description: feed.description,
-        type: feed.type,
-        images: feed.images,
-    }));
+    // return findAll.map((feed) =>({
+    //     _id: feed._id.toString(),
+    //     title: feed.title,
+    //     description: feed.description,
+    //     type: feed.type,
+    //     images: feed.images,
+    // }));
 
   };
 
-  export default {createFeed, getAll}
+  const updateLike = async(userId, feedId, isLike)=>{
+    const feedsCollection = await feeds();
+    const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
+    
+    if(isLike){
+      //Adding the userId to the Liekd Array
+      if (!feed.liked.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $push: { liked: userId } }
+        );
+      }
+
+      //removing the userID if present in the unliked Array
+      if (feed.unliked.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $pull: { unliked: userId } }
+        );
+      }
+    }else{
+      //removing the userId from the liked Array
+      if (feed.liked.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $pull: { liked: userId } }
+        );
+      }
+    }
+    
+  }
+
+  const updateUnLike = async(userId, feedId, isUnLike)=>{
+    const feedsCollection = await feeds();
+    const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
+    
+    if(isUnLike){
+      //Adding the userId to the unlikedd Array
+      if (!feed.unliked.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $push: { liked: userId } }
+        );
+      }
+
+      //removing the userID if present in the liked Array
+      if (feed.liked.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $pull: { unliked: userId } }
+        );
+      }
+    }else{
+      //removing the userId from the unliked Array
+      if (feed.unliked.includes(userId)) {
+        await feedsCollection.updateOne(
+          { _id: new ObjectId(feedId) },
+          { $pull: { liked: userId } }
+        );
+      }
+    }
+  }
+  
+  
+
+  export default {createFeed, getAll, updateLike, updateUnLike}
