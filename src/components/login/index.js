@@ -13,12 +13,44 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
 import validations from "../../validation";
 import "./index.css";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (e) => e.preventDefault();
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    try {
+      const validatedUsername = validations.checkUsername(e.target.value);
+      setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
+    } catch (error) {
+      if (error.includes("username")) {
+        setErrors((prevErrors) => ({ ...prevErrors, username: error }));
+      }
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    try {
+      const validatedPassword = validations.checkPassword(e.target.value);
+      setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
+    } catch (error) {
+      if (error.includes("password")) {
+        setErrors((prevErrors) => ({ ...prevErrors, password: error }));
+      }
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,15 +67,18 @@ const Login = () => {
     try {
       const validatedPassword = validations.checkPassword(password);
     } catch (error) {
+      console.log(error);
       if (error.includes("password")) {
         newErrors = { ...newErrors, password: error };
       }
     }
 
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    setErrors(newErrors);
+    return;
+  } else {
+    setErrors({}); // reset the errors state when the inputs are valid
+  }
 
     const loginData = {
       username: username,
@@ -52,7 +87,7 @@ const Login = () => {
 
     try {
       const result = await loginUser(loginData);
-      console.log(result);
+      //console.log(result);
       if (result.status === 200) {
         console.log("Login successful");
         toast.success(result.data.message);
@@ -102,7 +137,7 @@ const Login = () => {
             autoComplete="username"
             autoFocus
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={handleUsernameChange}
             error={!!errors.username}
             helperText={errors.username}
           />
@@ -113,11 +148,25 @@ const Login = () => {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             error={!!errors.password}
             helperText={errors.password}
           />

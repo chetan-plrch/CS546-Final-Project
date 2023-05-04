@@ -55,15 +55,18 @@ router.route("/").post(async (req, res) => {
   } catch (e) {
     errors.push(e);
   }
-  try {
-    feedBackInfo.description = validation.checkString(
-      feedBackInfo.description,
-      "feedback description"
-    );
-  } catch (e) {
-    errors.push(e);
-  }
 
+  if(feedBackInfo.description){
+    try {
+      feedBackInfo.description = validation.checkString(
+        feedBackInfo.description,
+        "feedback description"
+      );
+    } catch (e) {
+      errors.push(e);
+    }
+  }
+  
   if (errors.length > 0) {
     return res.status(400).send(errors);
   }
@@ -193,15 +196,16 @@ router
     } catch (e) {
       errors.push(e);
     }
-    try {
-      feedBackInfo.description = validation.checkString(
-        feedBackInfo.description,
-        "feedback description"
-      );
-    } catch (e) {
-      errors.push(e);
+    if(feedBackInfo.description){
+      try {
+        feedBackInfo.description = validation.checkString(
+          feedBackInfo.description,
+          "feedback description"
+        );
+      } catch (e) {
+        errors.push(e);
+      }
     }
-  
     if (errors.length > 0) {
       return res.status(400).send(errors);
     }

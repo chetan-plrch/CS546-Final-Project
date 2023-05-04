@@ -113,10 +113,12 @@ const FeedBackEditForm = (props) => {
       }
 
       try {
-        const validatedDescription = validations.checkString(
-          data.description,
-          "Description"
-        );
+        if(data.description){
+          const validatedDescription = validations.checkString(
+            data.description,
+            "Description"
+          );
+        }
       } catch (error) {
         if (error.includes("Description")) {
           newErrors = { ...newErrors, description: error };

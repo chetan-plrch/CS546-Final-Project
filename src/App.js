@@ -15,6 +15,7 @@ import { checkLoggedInOnBackend } from "./api/index.js";
 import AppBar from "./common/custom-navbar/index.js";
 import AppFooter from "./common/custom-footer/index.js";
 import Protected from "./components/protected";
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   useEffect(() => {
@@ -26,8 +27,10 @@ const App = () => {
     checkAuthorized();
   }, []);
 
+  
   return (
     <div className="App">
+      
       <BrowserRouter>
         <Routes>
           <Route
