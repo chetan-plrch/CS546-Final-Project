@@ -28,11 +28,13 @@ const ProfileImage = (props) => {
 
     setErrorMessage('')
     const reader = new FileReader();
-    reader.onload = () => {
-      setImage(reader.result);
-      props.onChange(props.name, reader.result)
+    if (render) {
+      reader.onload = () => {
+        setImage(reader?.result);
+        props.onChange(props.name, reader?.result)
+      };
+      reader.readAsDataURL(file);
     };
-    reader.readAsDataURL(file);
   };
 
   return (

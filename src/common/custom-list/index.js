@@ -18,6 +18,7 @@ function CustomList(props) {
       list,
       imageKey,
       titleKey,
+      viewImage,
       listTitle,
       contentKey,
       selectedId,
@@ -73,9 +74,13 @@ function CustomList(props) {
                   key={index}
                   className={buttonTitle ? '' : (selectedId && item[selectionKey] === selectedId ? 'selected-item clickable-list-item': 'clickable-list-item')}
                   onClick={() => onListItemClick(item[selectionKey])}>
-                    <ListItemDecorator>
-                      <Avatar src={item[imageKey] || defaultImage} />
-                    </ListItemDecorator>
+                    {
+                      viewImage ? (
+                        <ListItemDecorator>
+                          <Avatar alt='Profile Picture' src={item[imageKey] || defaultImage} />
+                        </ListItemDecorator>
+                      ) : null
+                    }
                     <ListItemContent>
                       <Typography>{item[titleKey]}</Typography>
                       {
@@ -108,6 +113,7 @@ CustomList.defaultProps = {
     listTitle: '', // Title to be displayed for list
     buttonTitle: '', // Title to be used for button. If passed, entire list item will not be clickable
     imageSource: null, // Holds image used for list item
+    viewImage: true, // Flag to indicate if image should be displayed
     titleKey: 'title', // Key to be used for title
     imageKey: 'image', // Key to be used for image
     selectionKey: 'id', // Key to be used for selection
@@ -117,6 +123,7 @@ CustomList.defaultProps = {
 };
 
 CustomList.propTypes = {
+    viewImage: PropTypes.bool,
     imageSource: PropTypes.any,
     listTitle: PropTypes.string,
     contentKey: PropTypes.string,
