@@ -28,7 +28,7 @@ import validations from "../validations.js";
         createdAt: new Date().toISOString(),
         liked:[],
         unliked:[],
-        comments:{},
+        comment:{},
         saved:[]
       };
       
@@ -57,7 +57,7 @@ import validations from "../validations.js";
         createdAt: feed.createdAt,
         liked: feed.liked,
         unliked: feed.unliked,
-        comments: feed.comments,
+        comment: feed.comment,
         saved: feed.saved
     }));
 
