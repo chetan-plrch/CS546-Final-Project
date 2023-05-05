@@ -46,6 +46,7 @@ const Login = () => {
       const validatedPassword = validations.checkPassword(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
     } catch (error) {
+      console.log(error.message);
       if (error.message.includes("password")) {
         setErrors((prevErrors) => ({ ...prevErrors, password: error.message }));
       }
@@ -55,31 +56,6 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let newErrors = {};
-
-    try {
-      const validatedUsername = validations.checkUsername(username);
-    } catch (error) {
-      if (error.includes("username")) {
-        newErrors = { ...newErrors, username: error };
-      }
-    }
-
-    try {
-      const validatedPassword = validations.checkPassword(password);
-    } catch (error) {
-      console.log(error);
-      if (error.includes("password")) {
-        newErrors = { ...newErrors, password: error };
-      }
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  } else {
-    setErrors({}); // reset the errors state when the inputs are valid
-  }
 
     const loginData = {
       username: username,
@@ -139,7 +115,6 @@ const Login = () => {
             onChange={handleUsernameChange}
             error={!!errors.username}
             helperText={errors.username}
-  
           />
           <TextField
             variant="outlined"
