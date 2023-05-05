@@ -103,6 +103,11 @@ const exportedMethods = {
       throw errorObject(errorType.BAD_INPUT, `Type of ${varName} must be boolean`)
     }
     return val;
+  },
+  checkImage(val) {
+    if (typeof val !== 'string') {
+      throw errorObject(errorType.BAD_INPUT, 'The image needs to be of string type')
+    }
   }
 };
 
