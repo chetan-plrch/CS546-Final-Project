@@ -13,6 +13,7 @@ function ChatWindow(props) {
         allowSearch,
         connectionId,
         allowBlocking,
+        allowArchiving,
         allowMessaging,
         removeConnection,
         onConnectionUpdate,
@@ -138,7 +139,9 @@ function ChatWindow(props) {
                 {
                     allowBlocking ? <CustomButton title='Block User' onClick={blockConnection} /> : null
                 }
-                <CustomButton title={archivedBy?.includes(senderId) ? 'Unarchieve Chat' : 'Archive Chat'} onClick={hideCurrentChat} />
+                {
+                    allowArchiving ? <CustomButton title={archivedBy?.includes(senderId) ? 'Unarchieve Chat' : 'Archive Chat'} onClick={hideCurrentChat} /> : null
+                }
             </div>
             {
                 (conversation?.length || (searchTerm && filteredChats.length)) ? (
@@ -178,6 +181,7 @@ ChatWindow.defaultProps = {
     allowSearch: false,
     allowBlocking: false,
     allowMessaging: false,
+    allowArchiving: false,
     connectionId: '',
 };
 
@@ -185,6 +189,7 @@ ChatWindow.propTypes = {
     allowSearch: PropTypes.bool,
     allowBlocking: PropTypes.bool,
     allowMessaging: PropTypes.bool,
+    allowArchiving: PropTypes.bool,
     connectionId: PropTypes.string,
 };
 

@@ -125,6 +125,7 @@ const Connections = () => {
           allowSearch={true}
           allowBlocking={true}
           allowMessaging={true}
+          allowArchiving={true}
           connectionId={selectedConnectionId}
           onConnectionUpdate={updateConnections}
           removeConnection={removeUserFromList}
