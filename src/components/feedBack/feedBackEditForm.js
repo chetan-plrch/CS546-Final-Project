@@ -266,7 +266,7 @@ const FeedBackEditForm = (props) => {
             <Button
               variant="contained"
               color="primary"
-              type="btn"
+              type="button"
               sx={{ mt: 2, bgcolor: "#1976D2" }}
               onClick={() => navigate("/feedbackslist")}
             >
