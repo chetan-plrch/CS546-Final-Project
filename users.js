@@ -2,7 +2,7 @@ const userInfo = {
     "users": [
     {
     "firstName": "naruto",
-    "lastName": "uzimaki",
+    "lastName": "uzumaki",
     "username": "hokage",
     "email": "naruto@5tails.com",
     "password": "#Naruto1234",
