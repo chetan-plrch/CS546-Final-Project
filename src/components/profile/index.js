@@ -197,7 +197,7 @@ const Profile = () => {
               
             />
             <CustomTextField
-              styles={{ width: 15 }}
+              styles={{ width: 15, }}
               onBlur={onBlur}
               error={getHelperText("lastName")}
               helperText={getHelperText("lastName")}

@@ -20,7 +20,7 @@ function CustomTextField(props) {
             name={props.name}
             onChange={onChange}
             value={props.value}
-            label={h.capitalizeFirst(props.label ? props.label : props.name)}
+            label={<span style={{ fontWeight: 'bold', color: 'black' }}>{h.capitalizeFirst(props.label ? props.label : props.name)}</span>}
             variant="outlined"
             error={props.error}
             helperText={props.helperText}
