@@ -4,9 +4,23 @@ import validations from "../validations.js";
 
 const router = Router();
 
-router
-  .route("/feed")
-  .get(async (req, res) => {
+router.route('/feed/:id').get(async (req, res) => {
+  try {
+    const feed = await feedData.getFeedById(req.params.id);
+
+    res.status(200).json(feed);
+  } catch (error) {
+    if (error.message.includes('not found')) {
+      res.status(404).json({ error: error.message });
+    } else {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+});
+
+
+router.route('/feed').get(async (req, res) => {
     try {
       const feeds = await feedData.getAll();
 
