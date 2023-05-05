@@ -84,3 +84,11 @@
   text-align: center;
   padding-top: 20px;
 }
+.textfield-container input {
+  font-weight: bold;
+}
+
+.my-custom-textfield {
+  color: #000 !important;
+  background-color: #fff !important;
+}
