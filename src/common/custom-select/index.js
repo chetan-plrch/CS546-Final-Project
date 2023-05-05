@@ -15,12 +15,12 @@ export default function CustomSelect(props) {
     const onBlur = () => {
       props.onBlur(props.name)
     }
-
+    
     return <FormControl onBlur={onBlur}>
       <FormLabel size="small" id={`radio-buttons-${props.name}-label`}>{h.capitalizeFirst(props.name)}</FormLabel>
       <RadioGroup
         aria-labelledby={`radio-buttons-${props.name}-label`}
-        defaultValue=""
+        defaultValue={props.value}
         name="radio-buttons-group"
         size="small"
         onChange={onChange}
@@ -30,10 +30,10 @@ export default function CustomSelect(props) {
                 '& .MuiSvgIcon-root': {
                   fontSize: 18,
                 },
-              }} 
-              value={value} 
-              control={<Radio />} 
-              label={label} 
+              }}
+              value={value}
+              control={<Radio />}
+              label={label}
             />
         })}
       </RadioGroup>

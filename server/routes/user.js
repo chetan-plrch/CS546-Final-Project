@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { authenticate,notAuthenticate } from "../middleware/index.js";
+import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
-import jwt from "jsonwebtoken";
-import validators from '../validations.js'
 import { unblockConnection} from '../data/chat.js'
+import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
 
 
 router.get("/user", authenticate, async (req, res) => {
+  delete req.user.password
   return res.send(req.user);
 });
 
@@ -31,10 +31,7 @@ router.post("/signup", notAuthenticate, async (req, res) => {
   //validating the request body
   let errors = [];
   try {
-    userInfo.firstName = validation.checkString(
-      userInfo.firstName,
-      "First name"
-    );
+    userInfo.firstName = validation.checkString(userInfo.firstName, "First name");
   } catch (e) {
     errors.push(e);
   }
@@ -219,16 +216,14 @@ router.post("/login", notAuthenticate ,async (req, res) => {
       let message = e[1] ? e[1] : "Internal Server Error";
       res.status(status).json({ error: message });
     }
-  },
-  authenticate
+  }
 );
 
 router.get("/is-loggedin", authenticate, (req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
-router
-.route('/:id')
-.get(async (req,res) =>{
+
+router.get('/:id', async (req,res) =>{
   try {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) {
@@ -264,9 +259,7 @@ router
       res.status(500).json({ error: 'Internal Server Error' });
     }
   } 
-})
-
-.delete(async (req,res) =>{
+}).delete(async (req,res) => {
   const id = req.params.id;
   
   if (!ObjectId.isValid(id)) {
@@ -284,71 +277,72 @@ router
   }
 })
 
-.put(async (req,res) =>{
-  try{
-    const id = req.params.id;
-    const {username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive} = req.body;
-    
-    validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
-    
-    const updateUser = await userData.update(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
-    
-    res.status(200).json(updateUser);
-  } catch (error){
-    res.status(400).json({ error: error.message });
-  }
-})
-
-router.put("/user/update/:id", authenticate, async (req, res) =>{
-  try{
-    const id = req.params.id;
-    console.log(req.body);
-    const {username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, connections, isActive} = req.body;
-    
-    validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, role, profileUrl, connections, isActive);
-    
-    const updateUser = await userData.update(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, isActive, connections);
-    console.log(updateUser)
-    res.status(200).json(updateUser);
-  } catch (error){
-    res.status(400).json({ error: error.message });
-  }
-})
-
-
-// Update user with specified ID and random username/password
-router.put('/delete/:id', async (req, res) => {
-  const { id } = req.params;
-
+router.put("/update", authenticate, async (req, res) => {
   try {
-    const result = await userData.updateUserRandom(id);
-    res.json({ message: result });
+    const userId = validation.checkId(req.user._id.toString());
+
+    const userInfo = req.body
+    userInfo.username = validation.checkUsername(userInfo.username);
+    userInfo.firstName = validation.checkString(userInfo.firstName);
+    userInfo.lastName = validation.checkString(userInfo.lastName);
+    userInfo.email = validation.checkMailID(userInfo.email)
+    userInfo.age = validation.checkAge(userInfo.age);
+    validation.checkBoolean(userInfo.isAnonymous, 'isAnonymous');
+
+    if (userInfo.password) {
+      userInfo.password = validation.checkPassword(userInfo.password);
+    }
+    if (userInfo.city) {
+      userInfo.city = validation.checkString(userInfo.city);
+    }
+    if (userInfo.state) {
+      userInfo.state = validation.checkString(userInfo.state);
+    }
+
+    await checkEmailExists(userId, userInfo.email)
+    await checkUsernameExists(userId, userInfo.username)
+    const updateUser = await userData.update({ id: userId, ...userInfo });
+    return res.status(200).json(updateUser);
+  } catch (e) {
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
+  }
+})
+
+router.put('/delete', authenticate, async (req, res, next) => {
+  const userId = req.user._id.toString();
+  try {
+    const result = await userData.updateUserRandom(userId, req.body);
+    
+    return destroyToken(req, res, next)
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
 
-
-// get username of the blocked user
-router.route('/user/blocked/:id')
-  .get(async (req, res) => {
-    const id = req.params.id;
+router.get('/blocked/users', authenticate, async (req, res) => {
     try {
-      const blockedUsers = await userData.getAllBlockedUsers(id);
-      return res.json(blockedUsers);
-    } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' });
+      const userId = req.user._id.toString();
+      const blockedUsers = await userData.getAllBlockedUsers(userId);
+      return res.status(200).json(blockedUsers);
+    } catch(e) {
+      if (e.type === errorType.BAD_INPUT) {
+          return res.status(400).send({ message: e.message })
+      } else if (e.type === errorType.NOT_FOUND) {
+          return res.status(404).send({ message: e.message })
+      }
+      return res.status(500).send({ message: 'Error: Internal server error' })
     }
-  });
+});
 
 
-  // unblock a user
-
-  router.route('user/unblock/:id').put( async (req, res) => {
+router.route('user/unblock/:id').put( async (req, res) => {
     try {
         // const { unblockConnectionId } = req.body
         const id = req.params.id;
-        const unblockConIdTrimmed = validators.checkId(id, 'unblockUserId')
+        const unblockConIdTrimmed = validator.checkId(id, 'unblockUserId')
         await unblockConnection(req.user._id.toString(), unblockConIdTrimmed)
         return res.status(200).send({ message: ' unblocked successfully' })
     } catch(e) {
@@ -360,4 +354,5 @@ router.route('/user/blocked/:id')
         return res.status(500).send({ message: 'Internal server error' })
     }
 });
+
 export default router;

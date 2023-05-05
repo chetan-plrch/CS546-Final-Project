@@ -1,10 +1,9 @@
 import user from './user.js';
 import feedback from './feedBack.js';
 import chat from './chat.js';
-import { authenticate, destroyToken, notAuthenticate } from '../middleware/index.js';
+import { authenticate, destroyToken } from '../middleware/index.js';
 import journal from './journal.js';
 import feeds from './feeds.js';
-
 
 const routeConstructor = (app) => {
     app.use('/user', user)

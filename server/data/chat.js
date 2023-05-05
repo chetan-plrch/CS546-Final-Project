@@ -17,22 +17,34 @@ const addConnection = async (userId, connectionUserId) => {
     } else if (!connectingUser) {
         throw errorObject(errorType.NOT_FOUND, 'Connecting user not found in the system')
     }
-    const activeConnections = new Set(user.connections.active)
-    if(activeConnections.has(connectionUserId)) {
+    const user1ActiveCon = new Set(user.connections.active)
+    const user2ActiveCon = new Set(connectingUser.connections.active)
+    let active = user.connections.active
+    let active2 = connectingUser.connections.active
+    if(!user1ActiveCon.has(connectionUserId)) {
+        active = [...active, connectionUserId]
+    }
+    
+    if(!user2ActiveCon.has(userId)) {
+        active2 = [...active2, userId]
+    }
+
+    const updatedDoc = await userCtn.findOneAndUpdate(
+        { _id: new ObjectId(userId) }, 
+        { $set: { 'connections.active': active } },
+        { returnDocument: 'after', returnNewDocument: true }
+    )
+
+    const updatedDoc2 = await userCtn.findOneAndUpdate(
+        { _id: new ObjectId(connectionUserId) }, 
+        { $set: { 'connections.active': active2 } },
+        { returnDocument: 'after', returnNewDocument: true }
+    )
+
+    if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
         return true
     } else {
-        const active = [...user.connections.active, connectionUserId]
-        const updatedDoc = await userCtn.findOneAndUpdate(
-            { _id: new ObjectId(userId) }, 
-            { $set: { 'connections.active': active } },
-            { returnDocument: 'after', returnNewDocument: true }
-        )
-
-        if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
-            return true
-        } else {
-            throw new Error('Unable to update the users active connections')
-        }
+        throw new Error('Unable to update the users active connections')
     }
 }
 
@@ -165,6 +177,7 @@ const addMessagesToChat = async (sId, rId, message) => {
             throw new Error('Unable to udpate the conversation of the users')
         }
     } else {
+        
         const { insertedId } = await chatsCtx.insertOne({
             users: [senderId, receiverId],
             conversation: [{
@@ -179,6 +192,8 @@ const addMessagesToChat = async (sId, rId, message) => {
             throw new Error('Unable to insert band object into mongodb')
         }
         
+        await addConnection(senderId, receiverId)
+
         return insertedId
     }
 }
