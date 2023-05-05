@@ -287,7 +287,7 @@ router.put("/update", authenticate, async (req, res) => {
     userInfo.lastName = validation.checkString(userInfo.lastName);
     userInfo.email = validation.checkMailID(userInfo.email)
     userInfo.age = validation.checkAge(userInfo.age);
-    validation.checkPublic(userInfo.isAnonymous);
+    validation.checkBoolean(userInfo.isAnonymous, 'isAnonymous');
 
     if (userInfo.password) {
       userInfo.password = validation.checkPassword(userInfo.password);
