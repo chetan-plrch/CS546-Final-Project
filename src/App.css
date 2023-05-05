@@ -63,11 +63,11 @@
 
 .footer {
   position: fixed;
+  display: flex;
   left: 0;
   bottom: 0;
   width: 100%;
   background-color: #00796b;
-  color: white;
   text-align: center;
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
@@ -75,7 +75,6 @@
   flex-grow: 1;
   font-family: monospace;
   font-weight: 700;
-  letter-spacing: .3rem;
   -webkit-text-decoration: none;
   text-decoration: none;
   padding-top: 0.6rem;
