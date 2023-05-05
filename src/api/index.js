@@ -84,19 +84,6 @@ const getUserById = async() => {
   }
 }
 
-const getFeeds = async() => {
-  try{
-  
-    const response  = await axiosApi.get(`/feeds/feed`)
-
-    if (response.status === 200){
-      return response.data
-    }
-  }catch (e){
-    return []
-  }
-}
-
 const editProfile = async (user) => {
   try{
     const response = await axiosApi.put('/user/update', user)
@@ -146,4 +133,4 @@ const unblockProfile = async (unblockConnectionId) => {
     }
   }
 }
-export { checkLoggedInOnBackend, loginUser, createUserAccountAxios ,getUserById, getFeeds, editProfile, deleteProfile, getBlockedUsers, unblockProfile,getLoggedInUser};
+export { checkLoggedInOnBackend, loginUser, createUserAccountAxios ,getUserById, editProfile, deleteProfile, getBlockedUsers, unblockProfile,getLoggedInUser};
