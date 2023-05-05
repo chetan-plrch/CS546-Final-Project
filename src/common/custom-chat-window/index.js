@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
+import Filter from 'bad-words';
+
 import './index.css'
 import CustomButton from '../custom-button';
 import CustomTextField from '../custom-textfield';
@@ -7,12 +9,14 @@ import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
 import { blockUser, archiveChat, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
-import Filter from 'bad-words';
+import FeedBackPop from '../../components/feedBack/feedBackPop';
+import {feedbackTriggerCount} from '../../constant';
 
 function ChatWindow(props) {
     const {
         allowSearch,
         connectionId,
+        connectionName,
         allowBlocking,
         allowArchiving,
         allowMessaging,
@@ -20,6 +24,7 @@ function ChatWindow(props) {
         onConnectionUpdate,
         updateArchiveStatus
     } = props;
+    const [msgCount, setMsgCount] = useState(0);
     const [conversation, setConversation] = useState([]);
     const [filteredChats, setFilterChats] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
@@ -73,6 +78,7 @@ function ChatWindow(props) {
             onConnectionUpdate(connectionId, msgObj?.message);
         };
         setCurrentMessage('');
+        setMsgCount(msgCount + 1);
     };
     const onReceiveMessage = (msgObj) => {
         if (msgObj?.senderId === connectionId) {
@@ -82,6 +88,7 @@ function ChatWindow(props) {
                 senderId: msgObj?.senderId
             };
             setConversation(conversation => conversation.concat([receivedMsg]));
+            setMsgCount(msgCount + 1);
         };
         onConnectionUpdate(msgObj?.senderId, msgObj?.message, msgObj?.senderId !== connectionId);
 
@@ -177,6 +184,16 @@ function ChatWindow(props) {
                     </div>
                 ) : null
             }
+            {
+                msgCount === feedbackTriggerCount ? (
+                  <FeedBackPop
+                    chatId={chatId}
+                    username={connectionName}
+                  />
+                ) : (
+                    null
+                )
+            }
         </div>
     )
 };
@@ -187,6 +204,7 @@ ChatWindow.defaultProps = {
     allowMessaging: false,
     allowArchiving: false,
     connectionId: '',
+    connectionName: '',
 };
 
 ChatWindow.propTypes = {
@@ -195,6 +213,7 @@ ChatWindow.propTypes = {
     allowMessaging: PropTypes.bool,
     allowArchiving: PropTypes.bool,
     connectionId: PropTypes.string,
+    connectionName: PropTypes.string,
 };
 
 export default ChatWindow;

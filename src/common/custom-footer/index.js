@@ -71,6 +71,7 @@ const Footer = () => {
                 <ChatWindow
                   allowMessaging={true}
                   connectionId={selectedConnection?._id}
+                  connectionName={selectedConnection?.fullName}
                 />
               </DialogContent>
             </Dialog>

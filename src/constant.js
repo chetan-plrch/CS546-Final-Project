@@ -16,3 +16,5 @@ export const expertFilterOptions = [
 ];
 
 export const viewFooterOnPages = ['home', 'feedbackslist', 'experts', 'profile'];
+
+export const feedbackTriggerCount = 5;

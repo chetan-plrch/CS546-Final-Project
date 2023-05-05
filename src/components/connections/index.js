@@ -15,6 +15,7 @@ const Connections = () => {
   const [userRole, setUserRole] = useState();
   const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
+  const [selectedConnectionName, setSelectedConnectionName] = useState();
   const [archivedConnections, setArchivedConnections] = useState([]);
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const Connections = () => {
             window.history.replaceState({}, document.title)
           };
           setSelectedConnectionId(newConnection?._id || users[0]?._id);
+          setSelectedConnectionName(newConnection?.fullName || users[0]?.fullName);
           setConnections(users);
         } else {
           const role = getUserRole();
@@ -53,8 +55,10 @@ const Connections = () => {
     const updatedConnections = connections.map((connection) => {
       return {...connection, showUnreadLabel: false};
     });
+    const selectedConnection = connections.find((connection) => connection._id === connectionId);
     setConnections(updatedConnections);
     setSelectedConnectionId(connectionId);
+    setSelectedConnectionName(selectedConnection?.fullName);
   };
 
   const removeUserFromList = () => {
@@ -62,6 +66,7 @@ const Connections = () => {
     setConnections(updatedConnections);
     if (updatedConnections?.length) {
       setSelectedConnectionId(updatedConnections[0]?._id);
+      setSelectedConnectionName(updatedConnections[0]?.fullName);
     }
   };
 
@@ -93,6 +98,7 @@ const Connections = () => {
       setConnections(updatedConnections);
       if (updatedConnections?.length) {
         setSelectedConnectionId(updatedConnections[0]?._id);
+        setSelectedConnectionId(updatedConnections[0]?.fullName);
       };
     } else {
       const unarchivedConnection = archivedConnections.find((connection) => connection._id === selectedConnectionId);
@@ -102,6 +108,7 @@ const Connections = () => {
       setArchivedConnections(updatedArchivedConnections);
       if (updatedConnections?.length) {
         setSelectedConnectionId(updatedConnections[0]?._id);
+        setSelectedConnectionId(updatedConnections[0]?.fullName);
       };
     };
   };
@@ -127,6 +134,7 @@ const Connections = () => {
           allowMessaging={true}
           allowArchiving={true}
           connectionId={selectedConnectionId}
+          connectionName={selectedConnectionName}
           onConnectionUpdate={updateConnections}
           removeConnection={removeUserFromList}
           updateArchiveStatus={archiveChat}
