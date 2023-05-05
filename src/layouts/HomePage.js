@@ -253,41 +253,38 @@ const HomePage = () => {
                         {item.description}
                       </Typography>
                       <img
-                        src={item.images[0]}
+                        src={item.images[0]} 
+                        alt={`Motivational poster with the quote: '${item.title}'`}
                       />
                     </Paper>
                   )}
                   {item.type === "quote" && (
-                    <Paper>
-                      <Typography >
-                        {item.quote}
-                      </Typography>
-                      <img
-                        src={item.images[0]}
-                        alt={item.image.title} />
-                      <Typography
-                        variant="subtitle1"
-                        style={{ marginTop: "16px", textAlign: "right" }}
-                      >
-                        - {item.author}
-                      </Typography>
-                    </Paper>
+                    <Paper >
+                    <Typography>
+                      {item.title}
+                    </Typography>
+                    <Typography>
+                      {item.description}
+                    </Typography>
+                    <img
+                      src={item.images[0]} 
+                      alt={`Motivational quote with the title: '${item.title}'`}
+                    />
+                  </Paper>
                   )}
                   {item.type === "image" && (
+                    <Paper >
+                    <Typography>
+                      {item.title}
+                    </Typography>
+                    <Typography>
+                      {item.description}
+                    </Typography>
                     <img
-                      key={index}
-                      src={item.url}
-                      alt={item.title}
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                        cursor: "pointer",
-                        border:
-                          index === activeImageIndex
-                            ? "2px solid green"
-                            : "none",
-                      }}
+                      src={item.images[0]} 
+                      alt={`Motivational image with the title: '${item.title}'`}
                     />
+                  </Paper>
                   )}
                 </div>
               ))}

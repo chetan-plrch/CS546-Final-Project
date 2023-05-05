@@ -17,6 +17,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import {roles} from "../../constant"
 
+
 const defaultUser = {
   username: "",
   firstName: "",
@@ -141,13 +142,15 @@ const SignUp = (props) => {
           <div className="input-dialog">
             <div className="header-dialog">Sign up here!</div>
             <CustomTextField
+            className="my-custom-textfield"
               onBlur={onBlur}
               error={getHelperText("username")}
               helperText={getHelperText("username")}
               name="username"
               value={user.username}
               onChange={onChangeOfValue}
-              required={true}
+             
+            
             />
             <CustomTextField
               onBlur={onBlur}
@@ -157,7 +160,7 @@ const SignUp = (props) => {
               label="first name"
               value={user.firstName}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               onBlur={onBlur}
@@ -167,7 +170,7 @@ const SignUp = (props) => {
               label="last name"
               value={user.lastName}
               onChange={onChangeOfValue}  
-              required={true}
+              
             />
             <CustomTextField
               onBlur={onBlur}
@@ -176,7 +179,7 @@ const SignUp = (props) => {
               name="email"
               value={user.email}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               onBlur={onBlur}
@@ -200,7 +203,7 @@ const SignUp = (props) => {
                   </InputAdornment>
                 ),
               }}
-              required={true}
+              
             />
             <CustomTextField
               onBlur={onBlur}
@@ -225,7 +228,7 @@ const SignUp = (props) => {
                   </InputAdornment>
                 ),
               }}
-              required={true}
+              
             />
             <CustomCheckbox
               disabled={anonymousDisabled}
@@ -244,7 +247,7 @@ const SignUp = (props) => {
               name="age"
               value={user.age}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomSelect
               onBlur={onBlur}
@@ -268,7 +271,7 @@ const SignUp = (props) => {
                   value: "OTHER",
                 },
               ]}
-              required={true}
+              
             />
             <CustomSelect
               onBlur={onBlur}
@@ -296,7 +299,7 @@ const SignUp = (props) => {
               label="city (optional)"
               value={user.city}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               onBlur={onBlur}
@@ -306,7 +309,7 @@ const SignUp = (props) => {
               label="state (optional)"
               value={user.state}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
           </div>
         </div>
