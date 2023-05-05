@@ -22,6 +22,7 @@ const Connections = () => {
     async function fetchConnections() {
       const response = await getAllConnections();
       const loggedInUserId = getUserId();
+      const { connection: newConnection } = location?.state || {};
       if (response?.data?.users) {
         let { users } = response.data;
         if (users?.length) {
@@ -31,10 +32,8 @@ const Connections = () => {
             setArchivedConnections(archivedUsers);
             users = users.filter((user) => !user?.archivedBy?.includes(loggedInUserId));
           };
-          const { connection: newConnection } = location?.state || {};
           if (newConnection?._id && users.findIndex((user) => user?._id === newConnection?._id) < 0) {
             users = [newConnection, ...users];
-            window.history.replaceState({}, document.title)
           };
           setSelectedConnectionId(newConnection?._id || users[0]?._id);
           setSelectedConnectionName(newConnection?.fullName || users[0]?.fullName);
@@ -42,11 +41,22 @@ const Connections = () => {
         } else {
           const role = getUserRole();
           setUserRole(role);
+          if (newConnection?._id) {
+            setSelectedConnectionId(newConnection?._id);
+            setSelectedConnectionName(newConnection?.fullName);
+            setConnections([newConnection]);
+          };
         };
       } else {
         const role = getUserRole();
         setUserRole(role);
+        if (newConnection?._id) {
+          setSelectedConnectionId(newConnection?._id);
+          setSelectedConnectionName(newConnection?.fullName);
+          setConnections([newConnection]);
+        };
       };
+      window.history.replaceState({}, document.title)
     };
     fetchConnections();
   }, []);
