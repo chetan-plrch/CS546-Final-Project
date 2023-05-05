@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "./layouts/HomePage";
 import Profile from "./components/profile";
 import Connections from "./components/connections";
@@ -36,6 +36,13 @@ const App = () => {
           <Route
             exact
             path="/"
+            element={
+              <Navigate to='/home' />
+            }
+          />
+          <Route
+            exact
+            path="/home"
             element={
               <Protected isLoggedIn={isLoggedIn}>
                 <HomePage />

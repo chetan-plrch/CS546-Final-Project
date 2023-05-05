@@ -65,7 +65,7 @@ const FeedBackEditForm = (props) => {
     if (response.status === 200) {
       toast.success("Feedback Deleted Successfully");
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 2000);
     } else {
       toast.error("Error in deleting feedback, try again");
@@ -146,7 +146,7 @@ const FeedBackEditForm = (props) => {
       if (response.status === 200) {
         toast.success("Feedback Updated Successfully");
         setTimeout(() => {
-          navigate("/");
+          navigate("/home");
         }, 2000);
       } else {
         toast.error("Error in updating feedback, try again");
