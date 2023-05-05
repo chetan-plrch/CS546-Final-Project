@@ -20,7 +20,6 @@ const Footer = () => {
   const [shouldRenderFooter, setShouldRenderFooter] = useState(true);
   useEffect(() => {
     const loggedInUserId = getUserId();
-    // TODO - fetch when user is not in connection page
     async function fetchConnections() {
       const response = await getAllConnections();
       if (response?.data?.users) {
@@ -35,7 +34,6 @@ const Footer = () => {
   }, []);
 
   const openChat = (connection) => {
-    // TODO - open chat window
     console.log('open chat with', connection);
     setSelectedConnection(connection);
     setViewChatPopup(true);
