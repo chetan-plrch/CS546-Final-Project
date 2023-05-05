@@ -214,7 +214,7 @@ const HomePage = () => {
       <Grid>
       <div className = "Heading">
         <Grid >
-          <Typography variant="h2" className="Heading__title" >
+          <Typography variant="h1" className="Heading__title" >
             Welcome to New Leaf!
           </Typography>
         </Grid>
@@ -239,50 +239,56 @@ const HomePage = () => {
                   key={index}
                   style={{
                     display: "flex",
-                    flexDirection: "column",
+                    flexDirection: "row",
                     alignItems: "center",
                   }}
                   onClick={() => handleImageClick(index)}
                 >
                   {item.type === "motivational-post" && (
-                    <Paper >
-                      <Typography>
+                    <Paper style={{ border: "2px solid #00796b", borderRadius: 0 }}>
+                      <Typography variant="h4" component="h2" style={{ fontWeight: "bold" , textAlign: "center", textDecoration: "underline"}}>
                         {item.title}
                       </Typography>
-                      <Typography>
+                      <Typography variant="body1" style={{ fontStyle: "italic", textAlign: "center" }}>
                         {item.description}
                       </Typography>
                       <img
+                        className="carousel-image"
                         src={item.images[0]} 
                         alt={`Motivational poster with the quote: '${item.title}'`}
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
                       />
                     </Paper>
                   )}
                   {item.type === "quote" && (
-                    <Paper >
-                    <Typography>
+                    <Paper style={{ border: "2px solid #00796b", borderRadius: 0, width: "5000px", height: "5000px" }}>
+                    <Typography variant="h4" component="h2" style={{ fontWeight: "bold" , textAlign: "center", textDecoration: "underline"}}>
                       {item.title}
                     </Typography>
-                    <Typography>
+                    <Typography variant="body1" style={{ fontStyle: "italic", textAlign: "center" }}>
                       {item.description}
                     </Typography>
                     <img
+                    className="carousel-image"
                       src={item.images[0]} 
                       alt={`Motivational quote with the title: '${item.title}'`}
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
                     />
                   </Paper>
                   )}
                   {item.type === "image" && (
-                    <Paper >
-                    <Typography>
+                    <Paper style={{ borderWidth: "10px", borderStyle: "solid", borderColor: "transparent" }}>
+                    <Typography variant="h4" component="h2" style={{ fontWeight: "bold" , textAlign: "center", textDecoration: "underline"}}>
                       {item.title}
                     </Typography>
-                    <Typography>
+                    <Typography variant="body1" style={{ fontStyle: "italic", textAlign: "center" }}>
                       {item.description}
                     </Typography>
                     <img
+                    className="carousel-image"
                       src={item.images[0]} 
                       alt={`Motivational image with the title: '${item.title}'`}
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
                     />
                   </Paper>
                   )}
@@ -303,3 +309,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

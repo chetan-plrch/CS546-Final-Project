@@ -176,14 +176,14 @@ const Profile = () => {
           <div className="input-dialog">
             <div className="header-dialog">Update profile</div>
             <CustomTextField
-              styles={{ width: 15 }}
+              styles={{ width: 15,fontWeight: 'bold', color: 'black' }}
               onBlur={onBlur}
               error={getHelperText("username")}
               helperText={getHelperText("username")}
               name="username"
               value={user.username}
               onChange={onChangeOfValue}
-              required={true}
+             
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -194,7 +194,7 @@ const Profile = () => {
               label="first name"
               value={user.firstName}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -205,7 +205,7 @@ const Profile = () => {
               label="last name"
               value={user.lastName}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -215,7 +215,7 @@ const Profile = () => {
               name="email"
               value={user.email}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -240,7 +240,7 @@ const Profile = () => {
                   </InputAdornment>
                 ),
               }}
-              required={true}
+              
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -250,7 +250,7 @@ const Profile = () => {
               name="age"
               value={user.age}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -261,7 +261,7 @@ const Profile = () => {
               label="city (optional)"
               value={user.city}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             <CustomTextField
               styles={{ width: 15 }}
@@ -272,7 +272,7 @@ const Profile = () => {
               label="state (optional)"
               value={user.state}
               onChange={onChangeOfValue}
-              required={true}
+              
             />
             {anonymousDisabled ? null : (
               <CustomCheckbox
