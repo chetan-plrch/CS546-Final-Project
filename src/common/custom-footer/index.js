@@ -44,19 +44,15 @@ const Footer = () => {
   }, [navigate]);
 
   return (
-    shouldRenderFooter ? (
+    shouldRenderFooter && connections?.length ? (
         <div className='footer'>
         {
-          connections?.length ? (
-            connections.map((connection) => (
-              <div key={connection?._id} className='each-chat' onClick={() => openChat(connection)}>
-                <Avatar alt='Connection Profile' src={connection?.profilePic} />
-                <span>{connection?.fullName}</span>
-              </div>
-            ))
-          ) : (
-            null
-          )
+          connections.map((connection) => (
+            <div key={connection?._id} className='each-chat' onClick={() => openChat(connection)}>
+              <Avatar alt='Connection Profile' src={connection?.profilePic} />
+              <span>{connection?.fullName}</span>
+            </div>
+          ))
         }
         {
           viewChatPopup ? (
@@ -75,6 +71,7 @@ const Footer = () => {
                 <ChatWindow
                   allowMessaging={true}
                   connectionId={selectedConnection?._id}
+                  connectionName={selectedConnection?.fullName}
                 />
               </DialogContent>
             </Dialog>

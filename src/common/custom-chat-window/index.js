@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
+import Filter from 'bad-words';
+
 import './index.css'
 import CustomButton from '../custom-button';
 import CustomTextField from '../custom-textfield';
@@ -7,11 +9,14 @@ import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
 import { blockUser, archiveChat, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
+import FeedBackPop from '../../components/feedBack/feedBackPop';
+import {feedbackTriggerCount} from '../../constant';
 
 function ChatWindow(props) {
     const {
         allowSearch,
         connectionId,
+        connectionName,
         allowBlocking,
         allowArchiving,
         allowMessaging,
@@ -19,6 +24,7 @@ function ChatWindow(props) {
         onConnectionUpdate,
         updateArchiveStatus
     } = props;
+    const [msgCount, setMsgCount] = useState(0);
     const [conversation, setConversation] = useState([]);
     const [filteredChats, setFilterChats] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
@@ -26,6 +32,8 @@ function ChatWindow(props) {
     const [senderId, setSenderId] = useState('');
     const [archivedBy, setArchivedBy] = useState([]);
     const [chatId, setChatId] = useState('');
+    const filter = new Filter();
+    const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
 
     useEffect(() => {
         const senderId = getUserId();
@@ -60,15 +68,21 @@ function ChatWindow(props) {
         setCurrentMessage(value);
     };
     const sendText = () => {
-        sendMessage(senderId, connectionId, currentMessage);
+        sendMessage(senderId, connectionId, filter.clean(currentMessage));
         const msgObj = {
             sentAt: new Date().toString(),
-            message: currentMessage,
+            message: filter.clean(currentMessage),
             senderId
         };
         setConversation(conversation => conversation.concat([msgObj]));
-        onConnectionUpdate(connectionId, msgObj?.message);
+        if (onConnectionUpdate) {
+            onConnectionUpdate(connectionId, msgObj?.message);
+        };
         setCurrentMessage('');
+        setMsgCount(msgCount + 1);
+        if (msgCount + 1 === feedbackTriggerCount && !openFeedbackModal) {
+            setOpenFeedbackModal(true);
+        };
     };
     const onReceiveMessage = (msgObj) => {
         if (msgObj?.senderId === connectionId) {
@@ -123,6 +137,11 @@ function ChatWindow(props) {
         };
     };
 
+    const resetFeedbackModal = () => {
+        setOpenFeedbackModal(false);
+        setMsgCount(0);
+    };
+
     return (
         <div className='custom-chat-container'>
             <ToastContainer />
@@ -173,6 +192,13 @@ function ChatWindow(props) {
                     </div>
                 ) : null
             }
+
+            <FeedBackPop
+              chatId={chatId}
+              username={connectionName}
+              isOpen={openFeedbackModal}
+              closeModal={resetFeedbackModal}
+            />
         </div>
     )
 };
@@ -183,6 +209,7 @@ ChatWindow.defaultProps = {
     allowMessaging: false,
     allowArchiving: false,
     connectionId: '',
+    connectionName: '',
 };
 
 ChatWindow.propTypes = {
@@ -191,6 +218,7 @@ ChatWindow.propTypes = {
     allowMessaging: PropTypes.bool,
     allowArchiving: PropTypes.bool,
     connectionId: PropTypes.string,
+    connectionName: PropTypes.string,
 };
 
 export default ChatWindow;

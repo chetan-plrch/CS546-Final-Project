@@ -14,7 +14,8 @@ import {getUserId} from "../../helper/index"
 
 //In props I need a chatId ,username
 const FeedBackPop = (props) => {
-  const [open, setOpen] = useState(false);
+  const { isOpen, closeModal } = props;
+  // const [open, setOpen] = useState(false);
   const [feedbackExists, setFeedbackExists] = useState(false);
   const [userId, setUserID] = useState();
   const navigate = useNavigate();
@@ -44,12 +45,13 @@ const FeedBackPop = (props) => {
     checkFeedback();
   }, [userId]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = () => {
-    setOpen(false);
+    // setOpen(false);
+    closeModal();
   };
 
   const handleAgree = () => {
@@ -62,16 +64,17 @@ const FeedBackPop = (props) => {
         state: { chatId: props.chatId , username: props.username },
       });
     }
-    setOpen(false);
+    // setOpen(false);
+    closeModal();
   };
   
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Open Feedback Dialog
-      </Button>
+      </Button> */}
       <Dialog
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         aria-labelledby="feedback-dialog-title"
         aria-describedby="feedback-dialog-description"
