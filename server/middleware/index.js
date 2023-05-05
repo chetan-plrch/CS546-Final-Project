@@ -52,10 +52,10 @@ export const destroyToken = async (req, res, next) => {
             expires: new Date(0)
           });
 
-        res.status(200).json({ message: 'Logged out successfully' });
+        return res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
         console.error('Error in destroyToken middleware:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 }
 

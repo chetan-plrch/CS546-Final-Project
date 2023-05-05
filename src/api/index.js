@@ -73,15 +73,14 @@ const getLoggedInUser = async () => {
 
 const getUserById = async() => {
   try{
-    const userId = getUserId()
-    console.log(`inside the useeffect api call ${userId}`);
-    const response  = await axiosApi.get(`/user/user`)
-    if (response.status === 200){
-      return response
+    const response = await axiosApi.get(`/user/user`)
+    if (response.status === 200) {
+      return response.data
     }
+    return {}
   }catch (e){
     console.log(e)
-    return e
+    return {}
   }
 }
 
@@ -98,57 +97,53 @@ const getFeeds = async() => {
   }
 }
 
-  const editProfile = async() => {
-  const userId = getUserId()
+const editProfile = async (user) => {
   try{
-    const response = await axiosApi.put(`/user/${userId}`)
+    const response = await axiosApi.put('/user/update', user)
 
-    if (response.status === 200){
-      return response.data
-    }
-  } catch(e){
-    return e
+    return constructResponse(response.status, response.data)
+  } catch (e) {
+    return constructResponse(e.response.status, e.response.data)
   }
 }
 
-const deleteProfile = async() => {
-  const userId = getUserId()
-  try{
-    const response = await axiosApi.put(`/user/delete/${userId}`)
+const deleteProfile = async ({ permanent, isActive }) => {
+  try {
+    const response = await axiosApi.put(`/user/delete`, { permanent, isActive })
 
     if (response.status === 200){
-      return response.data
+      return true
     }
+    return false
   } catch(e){
-    return e
+    return false
   }
 }
 
 const getBlockedUsers = async() =>{
-  try{
-    const userId = getUserId()
-    console.log(`blocked user api ${userId}`);
-    const response  = await axiosApi.get(`user/user/blocked/${userId}`)
-    if (response.status === 200){
-      return response
+  try {
+    const response  = await axiosApi.get('/user/blocked/users')
+    if (response.status === 200) {
+      return response.data
     }
-  }catch (e){
-    console.log(e)
-    return e
+  } catch (e) {
+    return []
   }
 }
 
-const UnblockProfile = async() =>{
-  try{
-      const userId = getUserId()
-      console.log(`unblocked user api ${userId}`);
-      const response = await axiosApi.put('chat/unblock')
-      if(response.status === 200){
-        return response
+const unblockProfile = async (unblockConnectionId) => {
+  try {
+      const response = await axiosApi.put('/chat/unblock', { unblockConnectionId })
+      if (response.status === 200){
+        return true
       }
-  }catch(e){
-    console.log(e)
-    return e
+      return false
+  } catch(e){
+    if (e.data.status === 400 || e.data.status === 404) {
+      return true
+    } else {
+      return false
+    }
   }
 }
-export { checkLoggedInOnBackend, loginUser, createUserAccountAxios ,getUserById, getFeeds, editProfile, deleteProfile, getBlockedUsers, UnblockProfile,getLoggedInUser};
+export { checkLoggedInOnBackend, loginUser, createUserAccountAxios ,getUserById, getFeeds, editProfile, deleteProfile, getBlockedUsers, unblockProfile,getLoggedInUser};
