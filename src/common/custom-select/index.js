@@ -31,6 +31,7 @@ export default function CustomSelect(props) {
                   fontSize: 18,
                 },
               }}
+              key={value}
               value={value}
               control={<Radio />}
               label={label}

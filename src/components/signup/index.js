@@ -34,7 +34,7 @@ const defaultUser = {
   isAnonymous: false,
 };
 
-const SignUp = (props) => {
+const SignUp = () => {
   const [user, setUser] = React.useState(defaultUser);
   const [errors, setErrors] = React.useState(defaultUser);
   const [apiStatus, setApiStatus] = React.useState({});
@@ -140,7 +140,7 @@ const SignUp = (props) => {
             onChange={onChangeOfValue}
           />
           <div className="input-dialog">
-            <div className="header-dialog">Sign up here!</div>
+            <div className="header-dialog">Sign up</div>
             <CustomTextField
             className="my-custom-textfield"
               onBlur={onBlur}
@@ -149,8 +149,6 @@ const SignUp = (props) => {
               name="username"
               value={user.username}
               onChange={onChangeOfValue}
-             
-            
             />
             <CustomTextField
               onBlur={onBlur}
@@ -160,7 +158,6 @@ const SignUp = (props) => {
               label="first name"
               value={user.firstName}
               onChange={onChangeOfValue}
-              
             />
             <CustomTextField
               onBlur={onBlur}
