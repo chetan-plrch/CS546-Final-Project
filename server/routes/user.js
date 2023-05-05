@@ -2,9 +2,8 @@ import { Router } from "express";
 import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
-import validators from '../validations.js'
 import { unblockConnection} from '../data/chat.js'
-import { errorType, errorObject, checkEmailExists, checkUsernameExists } from "../util.js";
+import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
 
 
@@ -280,38 +279,38 @@ router.get('/:id', async (req,res) =>{
 
 router.put("/update", authenticate, async (req, res) => {
   try {
-    let userId = req.user._id.toString();
-    userId = validation.checkId(userId);
-    const { 
-      username, 
-      firstName, 
-      lastName, 
-      email, 
-      password,
-      city,
-      state, 
-      age, 
-      isAnonymous, 
-      profilePic
-    } = req.body;
-    
-    validation.validate(req.body);
+    const userId = validation.checkId(req.user._id.toString());
+
+    const userInfo = req.body
+    userInfo.username = validation.checkUsername(userInfo.username);
+    userInfo.firstName = validation.checkString(userInfo.firstName);
+    userInfo.lastName = validation.checkString(userInfo.lastName);
+    userInfo.email = validaiton.checkMailID(userInfo.email)
+    userInfo.age = validation.checkAge(userInfo.age);
+    validation.checkPublic(isAnonymous);
+
+    if (password) {
+      userInfo.password = validation.checkPassword(password);
+    }
+    if (city) {
+      userInfo.city = validation.checkString(userInfo.city);
+    }
+    if (state) {
+      userInfo.state = validation.checkString(userInfo.state);
+    }
+
     await checkEmailExists(userId, email)
     await checkUsernameExists(userId, username)
-    const updateUser = await userData.update({
-      id: userId, username, firstName, lastName, email, password, city, state, age, isAnonymous, profilePic
-    });
-    return res.status(200).json({});
+    const updateUser = await userData.update({ id: userId, ...userInfo });
+    return res.status(200).json(updateUser);
   } catch (e) {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json({ error: e.message });
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
   }
-}) 
+})
 
-
-// Update user with specified ID and random username/password
 router.put('/delete', authenticate, async (req, res, next) => {
   const userId = req.user._id.toString();
   try {
@@ -343,7 +342,7 @@ router.route('user/unblock/:id').put( async (req, res) => {
     try {
         // const { unblockConnectionId } = req.body
         const id = req.params.id;
-        const unblockConIdTrimmed = validators.checkId(id, 'unblockUserId')
+        const unblockConIdTrimmed = validator.checkId(id, 'unblockUserId')
         await unblockConnection(req.user._id.toString(), unblockConIdTrimmed)
         return res.status(200).send({ message: ' unblocked successfully' })
     } catch(e) {
