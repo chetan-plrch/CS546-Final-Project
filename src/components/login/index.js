@@ -34,23 +34,24 @@ const Login = () => {
       const validatedUsername = validations.checkUsername(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
     } catch (error) {
-      if (error.includes("username")) {
-        setErrors((prevErrors) => ({ ...prevErrors, username: error }));
+      if (error.message.includes("username")) {
+        setErrors((prevErrors) => ({ ...prevErrors, username: error.message }));
       }
     }
   };
-
+  
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     try {
       const validatedPassword = validations.checkPassword(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
     } catch (error) {
-      if (error.includes("password")) {
-        setErrors((prevErrors) => ({ ...prevErrors, password: error }));
+      if (error.message.includes("password")) {
+        setErrors((prevErrors) => ({ ...prevErrors, password: error.message }));
       }
     }
   };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
