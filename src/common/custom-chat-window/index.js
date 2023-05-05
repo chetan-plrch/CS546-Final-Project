@@ -33,6 +33,7 @@ function ChatWindow(props) {
     const [archivedBy, setArchivedBy] = useState([]);
     const [chatId, setChatId] = useState('');
     const filter = new Filter();
+    const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
 
     useEffect(() => {
         const senderId = getUserId();
@@ -79,6 +80,9 @@ function ChatWindow(props) {
         };
         setCurrentMessage('');
         setMsgCount(msgCount + 1);
+        if (msgCount + 1 === feedbackTriggerCount && !openFeedbackModal) {
+            setOpenFeedbackModal(true);
+        };
     };
     const onReceiveMessage = (msgObj) => {
         if (msgObj?.senderId === connectionId) {
@@ -88,7 +92,6 @@ function ChatWindow(props) {
                 senderId: msgObj?.senderId
             };
             setConversation(conversation => conversation.concat([receivedMsg]));
-            setMsgCount(msgCount + 1);
         };
         onConnectionUpdate(msgObj?.senderId, msgObj?.message, msgObj?.senderId !== connectionId);
 
@@ -132,6 +135,11 @@ function ChatWindow(props) {
             const errorMsg = response?.data?.error || 'Could not update archive status';
             toast.error(errorMsg);
         };
+    };
+
+    const resetFeedbackModal = () => {
+        setOpenFeedbackModal(false);
+        setMsgCount(0);
     };
 
     return (
@@ -184,16 +192,13 @@ function ChatWindow(props) {
                     </div>
                 ) : null
             }
-            {
-                msgCount === feedbackTriggerCount ? (
-                  <FeedBackPop
-                    chatId={chatId}
-                    username={connectionName}
-                  />
-                ) : (
-                    null
-                )
-            }
+
+            <FeedBackPop
+              chatId={chatId}
+              username={connectionName}
+              isOpen={openFeedbackModal}
+              closeModal={resetFeedbackModal}
+            />
         </div>
     )
 };
