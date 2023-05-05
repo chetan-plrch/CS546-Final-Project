@@ -36,7 +36,7 @@ const FeedBackEditForm = (props) => {
       try {
         const response = await getFeedback(props.feedbackId);
         const result = await response.data;
-        console.log(result);
+        // console.log(result);
         setData({
           rate1: result.rating.reconnect_probability,
           rate2: result.rating.satisfied_with_chat,
@@ -89,7 +89,7 @@ const FeedBackEditForm = (props) => {
         );
       } catch (error) {
         if (error?.message?.includes?.("Willing to reconnect")) {
-          newErrors = { ...newErrors, rate1: error };
+          newErrors = { ...newErrors, rate1: error?.message };
         }
       }
 
@@ -100,7 +100,7 @@ const FeedBackEditForm = (props) => {
         );
       } catch (error) {
         if (error?.message?.includes?.("Will you recommend the listener")) {
-          newErrors = { ...newErrors, rate2: error };
+          newErrors = { ...newErrors, rate2: error?.message };
         }
       }
 
@@ -111,7 +111,7 @@ const FeedBackEditForm = (props) => {
         );
       } catch (error) {
         if (error?.message?.includes?.("Overall rating for the listener")) {
-          newErrors = { ...newErrors, rate3: error };
+          newErrors = { ...newErrors, rate3: error?.message };
         }
       }
 
@@ -124,7 +124,7 @@ const FeedBackEditForm = (props) => {
         }
       } catch (error) {
         if (error?.message?.includes?.("Description")) {
-          newErrors = { ...newErrors, description: error };
+          newErrors = { ...newErrors, description: error?.message };
         }
       }
 
@@ -155,7 +155,7 @@ const FeedBackEditForm = (props) => {
       setErrors(newErrors);
     }
   };
-  console.log(props);
+  // console.log(props);
   return (
     <>
       <Container maxWidth="sm">
