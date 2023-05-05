@@ -101,8 +101,8 @@ const create = async (
   }
 
   const userCollection = await users();
-  const userNameExits = await userCollection.findOne({ username });
-  const emailExits = await userCollection.findOne({email});
+  const userNameExits = await userCollection.findOne({ username }, { password: 0 });
+  const emailExits = await userCollection.findOne({email}, { password: 0 });
   if (userNameExits) {
     throw [404, "Error: username already used"];
   }
@@ -178,7 +178,7 @@ const checkLogged = async (username, password) => {
   }
   const userCollection = await users();
 
-  const user = await userCollection.findOne({ username });
+  const user = await userCollection.findOne({ username }, { password: 0 });
   if (!user) {
     throw [400, "username/password one of them is incorrect"];
   }
@@ -200,7 +200,7 @@ const getAllUsers = async (queryParams) => {
   // TODO - 1. Send all if not role provided 2. Check if active 3. Send only relevant fields
   const userCollection = await users();
   queryParams.isActive = queryParams.isActive === 'true';
-  const usersResponse = await userCollection.find(queryParams).toArray();
+  const usersResponse = await userCollection.find(queryParams, { password: 0 }).toArray();
   if (!usersResponse?.length) {
     throw [404, "Users not found"];
   };
@@ -233,7 +233,7 @@ const get = async (id) => {
 
 const allUsers = async()=>{
   const collection = await users();
-   const getID = await collection.find({}, { projection: { _id: 1, role: 1 } }).toArray();
+   const getID = await collection.find({}, { projection: { _id: 1, role: 1, password: 0 } }).toArray();
    const result = getID.map(obj => {
     obj._id = obj._id.toString();
     return obj;
@@ -253,7 +253,7 @@ const allUsers = async()=>{
 
   const db = await users();
 
-  const user = await db.findOne({ _id: new ObjectId(id) });
+  const user = await db.findOne({ _id: new ObjectId(id) }, { password: 0 });
   if (!user) {
     throw new Error("user not found");
   }
@@ -268,7 +268,7 @@ const allUsers = async()=>{
 const updateUserRandom = async (id, { permanent, isActive }) => {
   const db = await users();
 
-  const user = await db.findOne({ _id: new ObjectId(id) });
+  const user = await db.findOne({ _id: new ObjectId(id) }, { password: 0 });
   if (!user) {
     throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
   }
@@ -318,7 +318,7 @@ const update = async({
     $set: updateObj
   }, { returnOriginal: false });
 
-  const updatedDoc = await usersCol.findOne({ _id: new ObjectId(id) });
+  const updatedDoc = await usersCol.findOne({ _id: new ObjectId(id) }, { password: 0 });
 
   return {
     ...updatedDoc,
@@ -330,7 +330,7 @@ const getAllBlockedUsers = async (id) => {
   const userId = validation.checkId(id)
 
   const db = await users();
-  const user = await db.findOne({ _id: new ObjectId(userId) });
+  const user = await db.findOne({ _id: new ObjectId(userId) }, { password: 0 });
   if (!user) {
     throw errorObject(errorType.BAD_INPUT, 'Error: User is not loggedin')
   }
@@ -338,7 +338,7 @@ const getAllBlockedUsers = async (id) => {
   const blockedUserIds = user.connections?.blocked;
 
   const blockedUser = await Promise.all(blockedUserIds.map((blockedUserId) => {
-    return db.findOne({ _id: new ObjectId(blockedUserId) });
+    return db.findOne({ _id: new ObjectId(blockedUserId) }, { password: 0 });
   }))
   
   const userDetails = blockedUser.map((user) => {

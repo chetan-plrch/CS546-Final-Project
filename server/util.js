@@ -32,15 +32,16 @@ export const getChatUserIds = (chats) => {
 export const formatUser = (user) => {
     if (user.isAnonymous) {
         return {
+            ...user,
             _id: user._id.toString(),
             firstName: 'Anonymous',
             lastName: 'User',
             profilePic: null,
             username: user._id.toString(),
-            role: user.role
         }
     } else {
         return {
+            ...user,
             _id: user._id.toString(),
             firstName: user.firstName,
             lastName: user.lastName,
@@ -76,15 +77,15 @@ export const errorObject = (type, msg) => {
 
 export async function checkEmailExists(userId, email) {
     const userCollection = await users()
-    const emailExists = await userCollection.findOne({ email, _id: { $ne: new ObjectId(userId) } })
+    const emailExists = await userCollection.findOne({ email, _id: { $ne: new ObjectId(userId) } }, { password: 0 })
     if (emailExists) {
         throw errorObject(errorType.BAD_INPUT, 'Error: Email already in use')
     }
-  }
-  
+}
+
 export async function checkUsernameExists(userId, username) {
     const userCollection = await users()
-    const usernameExists = await userCollection.findOne({ username, _id: { $ne: new ObjectId(userId) }})
+    const usernameExists = await userCollection.findOne({ username, _id: { $ne: new ObjectId(userId) }}, { password: 0 })
     if (usernameExists) {
         throw errorObject(errorType.BAD_INPUT, 'Error: Username already in use')
     }
