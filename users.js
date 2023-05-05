@@ -140,6 +140,7 @@ const userInfo = {
         "email": "aang@air.com",
         "password": "#Aang1234",
         "gender": "m",
+        "age": 98,
         "age": 21,
         "city": "Air Temple Island",
         "state": "New York",
