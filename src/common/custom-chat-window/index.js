@@ -7,6 +7,7 @@ import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
 import { blockUser, archiveChat, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
+import Filter from 'bad-words';
 
 function ChatWindow(props) {
     const {
@@ -26,6 +27,7 @@ function ChatWindow(props) {
     const [senderId, setSenderId] = useState('');
     const [archivedBy, setArchivedBy] = useState([]);
     const [chatId, setChatId] = useState('');
+    const filter = new Filter();
 
     useEffect(() => {
         const senderId = getUserId();
@@ -60,10 +62,10 @@ function ChatWindow(props) {
         setCurrentMessage(value);
     };
     const sendText = () => {
-        sendMessage(senderId, connectionId, currentMessage);
+        sendMessage(senderId, connectionId, filter.clean(currentMessage));
         const msgObj = {
             sentAt: new Date().toString(),
-            message: currentMessage,
+            message: filter.clean(currentMessage),
             senderId
         };
         setConversation(conversation => conversation.concat([msgObj]));
