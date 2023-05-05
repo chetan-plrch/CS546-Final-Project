@@ -59,7 +59,7 @@ const CreateJournal = async(userId ,message , dateString) => {
     
   try{
       const userdb = await users();
-      const user = await userdb.findOne({ _id: new ObjectId(userId) })
+      const user = await userdb.findOne({ _id: new ObjectId(userId) }, { password: 0 })
 
       if(!user) {
           throw new Error('User not found with this userId ')

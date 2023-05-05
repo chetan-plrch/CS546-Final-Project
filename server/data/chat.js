@@ -9,8 +9,8 @@ const addConnection = async (userId, connectionUserId) => {
     }
     const userCtn = await users()
     const [user, connectingUser] = await Promise.all([
-        userCtn.findOne({ _id: new ObjectId(userId) }),
-        userCtn.findOne({ _id: new ObjectId(connectionUserId) })
+        userCtn.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
+        userCtn.findOne({ _id: new ObjectId(connectionUserId) }, { password: 0 })
     ]);
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
@@ -55,8 +55,8 @@ const blockConnection = async (userId, blockUserId) => {
 
     const userCtn = await users()
     const [user, blockedUser] = await Promise.all([
-        userCtn.findOne({ _id: new ObjectId(userId) }),
-        userCtn.findOne({ _id: new ObjectId(blockUserId) })
+        userCtn.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
+        userCtn.findOne({ _id: new ObjectId(blockUserId) }, { password: 0 })
     ]);
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
@@ -75,7 +75,7 @@ const blockConnection = async (userId, blockUserId) => {
             activeConnections.splice(blockIdx, 1);
             blockedConnections.push(blockUserId)
         } else {
-            throw errorObject(errorType.BAD_INPUT, 'Blocking user is not in the active list of the user')
+            blockedConnections.push(blockUserId)
         }
         const updatedDoc = await userCtn.findOneAndUpdate(
             { _id: new ObjectId(userId) }, 
@@ -100,8 +100,8 @@ const unblockConnection = async (userId, unblockUserId) => {
     }
     const userCtn = await users()
     const [user, unblockedUser] = await Promise.all([
-        userCtn.findOne({ _id: new ObjectId(userId) }),
-        userCtn.findOne({ _id: new ObjectId(unblockUserId) })
+        userCtn.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
+        userCtn.findOne({ _id: new ObjectId(unblockUserId) }, { password: 0 })
     ]);
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
@@ -118,7 +118,7 @@ const unblockConnection = async (userId, unblockUserId) => {
             blockedConnections.splice(blockIdx, 1);
             activeConnections.push(unblockUserId)
         } else {
-            throw errorObject(errorType.BAD_INPUT, 'User is not in the block list of the user to unblock')
+            activeConnections.push(unblockUserId)
         }
         const updatedDoc = await userCtn.findOneAndUpdate(
             { _id: new ObjectId(userId) }, 
@@ -149,8 +149,8 @@ const addMessagesToChat = async (sId, rId, message) => {
         throw errorObject(errorType.BAD_INPUT, 'User Id of both sender and receiver cannot be same')
     }
     const [sender, receiver] = await Promise.all([
-        usersCtx.findOne({ _id: new ObjectId(senderId) }),
-        usersCtx.findOne({ _id: new ObjectId(receiverId) }),
+        usersCtx.findOne({ _id: new ObjectId(senderId) }, { password: 0 }),
+        usersCtx.findOne({ _id: new ObjectId(receiverId) }, { password: 0 }),
     ])
     if ((!sender) || (!receiver)) {
         throw errorObject(errorType.NOT_FOUND, 'User doesnt exist in the system with the given Id')
@@ -208,8 +208,8 @@ const activeChat = async (uId, anUserId, onlyUsers) => {
         throw errorObject(errorType.BAD_INPUT, 'User Id of both the users cannot be same')
     }
     const [user1, user2] = await Promise.all([
-        usersCtx.findOne({ _id: new ObjectId(userId) }),
-        usersCtx.findOne({ _id: new ObjectId(anotherUserId) }),
+        usersCtx.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
+        usersCtx.findOne({ _id: new ObjectId(anotherUserId) }, { password: 0 }),
     ])
     if ((!user1) || (!user2)) {
         throw errorObject(errorType.NOT_FOUND, 'User doesnt exist in the system with the given Id')
@@ -261,7 +261,7 @@ const allActiveChats = async (userId, onlyUsers) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
 
-    const user = await usersCtx.findOne({ _id: new ObjectId(userId) })
+    const user = await usersCtx.findOne({ _id: new ObjectId(userId) }, { password: 0 })
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found')
     }
@@ -295,7 +295,7 @@ const getfilteredChatAndUsers = async (chatsObj, blocked) => {
 
 const getUsersByIds = async (ids) => {
     const usersCtx = await users()
-    const usersArr = await usersCtx.find({ _id: {$in: ids} }).toArray();
+    const usersArr = await usersCtx.find({ _id: {$in: ids} }, { password: 0 }).toArray();
     return usersArr.map((user) => formatUser(user));
 }
 
