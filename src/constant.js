@@ -14,3 +14,5 @@ export const expertFilterOptions = [
         label: 'Not Connected'
     },
 ];
+
+export const viewFooterOnPages = ['home', 'feedbackslist', 'experts', 'profile'];
