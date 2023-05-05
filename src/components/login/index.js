@@ -34,23 +34,25 @@ const Login = () => {
       const validatedUsername = validations.checkUsername(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
     } catch (error) {
-      if (error.includes("username")) {
-        setErrors((prevErrors) => ({ ...prevErrors, username: error }));
+      if (error?.message?.includes?.("username")) {
+        setErrors((prevErrors) => ({ ...prevErrors, username: error.message }));
       }
     }
   };
-
+  
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     try {
       const validatedPassword = validations.checkPassword(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
     } catch (error) {
-      if (error.includes("password")) {
-        setErrors((prevErrors) => ({ ...prevErrors, password: error }));
+      //console.log(error.message);
+      if (error?.message?.includes?.("password")) {
+        setErrors((prevErrors) => ({ ...prevErrors, password: error.message }));
       }
     }
   };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,17 +61,17 @@ const Login = () => {
     try {
       const validatedUsername = validations.checkUsername(username);
     } catch (error) {
-      if (error.includes("username")) {
-        newErrors = { ...newErrors, username: error };
+      if (error?.message?.includes?.("username")) {
+        newErrors = { ...newErrors, username: error.message };
       }
     }
 
     try {
       const validatedPassword = validations.checkPassword(password);
     } catch (error) {
-      console.log(error);
-      if (error.includes("password")) {
-        newErrors = { ...newErrors, password: error };
+      //console.log(error);
+      if (error?.message?.includes?.("password")) {
+        newErrors = { ...newErrors, password: error.message };
       }
     }
 
@@ -138,7 +140,6 @@ const Login = () => {
             onChange={handleUsernameChange}
             error={!!errors.username}
             helperText={errors.username}
-  
           />
           <TextField
             variant="outlined"

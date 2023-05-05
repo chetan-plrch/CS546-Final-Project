@@ -33,6 +33,9 @@ const exportedMethods = {
     if (age < 13) {
       throw errorObject(errorType.BAD_INPUT, "Error: under age")
     }
+    if(age > 100){
+      throw errorObject(errorType.BAD_INPUT, "Error: above age")
+    }
     return age;
   },
   checkPassword(password) {

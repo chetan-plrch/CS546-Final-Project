@@ -10,8 +10,8 @@ const routeConstructor = (app) => {
     app.use('/feedbacks', authenticate, feedback)
     app.use('/chat', authenticate, chat)
     app.use('/logout',destroyToken)
-    app.use('/journal', journal)
-    app.use('/feeds',feeds)
+    app.use('/journal',authenticate, journal)
+    app.use('/feeds',authenticate,feeds)
     app.use("*", (req, res) => {
         res.status(404).json({  error: 'Not Found'  })
     })
