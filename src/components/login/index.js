@@ -34,7 +34,7 @@ const Login = () => {
       const validatedUsername = validations.checkUsername(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
     } catch (error) {
-      if (error.message.includes("username")) {
+      if (error?.message?.includes?.("username")) {
         setErrors((prevErrors) => ({ ...prevErrors, username: error.message }));
       }
     }
@@ -47,7 +47,7 @@ const Login = () => {
       setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
     } catch (error) {
       console.log(error.message);
-      if (error.message.includes("password")) {
+      if (error?.message?.includes?.("password")) {
         setErrors((prevErrors) => ({ ...prevErrors, password: error.message }));
       }
     }

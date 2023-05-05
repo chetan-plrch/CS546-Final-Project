@@ -10,7 +10,7 @@ router.route('/feed/:id').get(async (req, res) => {
 
     res.status(200).json(feed);
   } catch (error) {
-    if (error.message.includes('not found')) {
+    if (error?.message?.includes?.('not found')) {
       res.status(404).json({ error: error.message });
     } else {
       console.log(error);
