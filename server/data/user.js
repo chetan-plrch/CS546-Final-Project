@@ -287,6 +287,8 @@ const updateUserRandom = async (id, { permanent, isActive }) => {
       lastName: 'User',
       city: null,
       state: null,
+      age: null,
+      gender: null,
       isActive: false
     };
   } else {
