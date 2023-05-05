@@ -88,7 +88,7 @@ const FeedBackEditForm = (props) => {
           "Willing to reconnect"
         );
       } catch (error) {
-        if (error.includes("Willing to reconnect")) {
+        if (error?.message?.includes?.("Willing to reconnect")) {
           newErrors = { ...newErrors, rate1: error };
         }
       }
@@ -99,7 +99,7 @@ const FeedBackEditForm = (props) => {
           "Will you recommend the listener"
         );
       } catch (error) {
-        if (error.includes("Will you recommend the listener")) {
+        if (error?.message?.includes?.("Will you recommend the listener")) {
           newErrors = { ...newErrors, rate2: error };
         }
       }
@@ -110,7 +110,7 @@ const FeedBackEditForm = (props) => {
           "Overall rating for the listener"
         );
       } catch (error) {
-        if (error.includes("Overall rating for the listener")) {
+        if (error?.message?.includes?.("Overall rating for the listener")) {
           newErrors = { ...newErrors, rate3: error };
         }
       }
@@ -123,7 +123,7 @@ const FeedBackEditForm = (props) => {
           );
         }
       } catch (error) {
-        if (error.includes("Description")) {
+        if (error?.message?.includes?.("Description")) {
           newErrors = { ...newErrors, description: error };
         }
       }
