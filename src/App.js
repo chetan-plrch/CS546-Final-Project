@@ -35,7 +35,7 @@ const App = () => {
         <Routes>
           <Route
             exact
-            path="/"
+            path="/home"
             element={
               <Protected isLoggedIn={isLoggedIn}>
                 <HomePage />

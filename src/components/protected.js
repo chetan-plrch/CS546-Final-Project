@@ -13,7 +13,7 @@ const Protected = (props) => {
         async function navigateToRoute() {
             if (props.isLoggedIn && initialPage()) {
                 // Login and signup page flow
-                navigate("/")
+                navigate("/home")
                 await delay(1000)
                 setUnprotect(true)
             } else if (!props.isLoggedIn && !initialPage()){

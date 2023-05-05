@@ -68,7 +68,7 @@ function ResponsiveAppBar() {
 
   const navigateToPage = (page) => {
     if (page === "HOME") {
-      navigate("/");
+      navigate("/home");
     } else if (page === "LISTENERS") {
       navigate("/experts");
     } else if (page === "CONNECTIONS") {
@@ -96,7 +96,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },

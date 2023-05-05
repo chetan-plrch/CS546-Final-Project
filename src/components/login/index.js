@@ -92,7 +92,7 @@ const Login = () => {
         console.log("Login successful");
         toast.success(result.data.message);
         setTimeout(() => {
-          navigate("/");
+          navigate("/home");
         }, 2000);
       } else {
         console.log(result[1]);

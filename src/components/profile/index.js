@@ -244,7 +244,7 @@ const Profile = () => {
     if (response.status === 200) {
       toast.success("Profile Updated Successfully");
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 2000);
     } else {
       toast.error("Error in updateing profile, try again");
@@ -257,7 +257,7 @@ const Profile = () => {
     if (response.status === 200) {
       toast.success("Profile Deleted Successfully");
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 2000);
     } else {
       toast.error("Error in deleting profile, try again");
@@ -270,7 +270,7 @@ const Profile = () => {
     if (response.status === 200) {
       toast.success("Unblocked Successfully");
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 2000);
     } else {
       toast.error("Error in Unblocking, try again");
