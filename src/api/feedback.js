@@ -1,5 +1,5 @@
 import axios from "axios";
-import { axiosApi } from "./api-interceptor";
+import { axiosApi } from "./api-interceptor.js";
 
 const createFeedBack = async (feedbackData) => {
   try {

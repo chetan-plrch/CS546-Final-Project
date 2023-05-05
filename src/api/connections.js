@@ -1,4 +1,4 @@
-import { axiosApi } from './api-interceptor';
+import { axiosApi } from './api-interceptor.js';
 
 // Gets history of chat between two users
 const getChatHistory = async (connectionId) => {

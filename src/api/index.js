@@ -1,6 +1,5 @@
-import { getUserId } from "../helper";
-import { axiosApi } from "./api-interceptor";
-import Cookies from 'js-cookie';
+import { getUserId } from "../helper/index.js";
+import { axiosApi } from "./api-interceptor.js";
 
 const constructResponse = (status, responseJson) => {
   if (status === 200) {

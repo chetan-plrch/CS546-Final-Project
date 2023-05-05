@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import FeedBackEditForm from "./feedBackEditForm";
+import FeedBackEditForm from "./feedBackEditForm.js";
 import { useLocation } from "react-router-dom";
 import styles from "./feedback.css";
-import { getFeedbackByChatId } from "../../api/feedback";
+import { getFeedbackByChatId } from "../../api/feedback.js";
 import Cookies from 'js-cookie';
-import { getUserId } from "../../helper/index";
+import { getUserId } from "../../helper/index.js";
 
 const Middle = () => {
   const location = useLocation();

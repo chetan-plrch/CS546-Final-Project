@@ -9,10 +9,10 @@ import {
   Checkbox,
   Button,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
-import "react-toastify/dist/ReactToastify.css";
-import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
-import validations from "../../validation";
+// import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+// import "react-toastify/dist/ReactToastify.css";
+import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback.js";
+import validations from "../../validation.js";
 
 const FeedBackEditForm = (props) => {
   const navigate = useNavigate();

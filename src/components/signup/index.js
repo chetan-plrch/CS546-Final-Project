@@ -1,21 +1,21 @@
 import * as React from "react";
-import { createUserAccountAxios } from "../../api/index";
+import { createUserAccountAxios } from "../../api/index.js";
 import "./signup.css";
-import CustomTextField from "../../common/custom-textfield";
-import h from "../../helper/index";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import CustomSelect from "../../common/custom-select";
-import CustomCheckbox from "../../common/custom-checkbox";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import ProfileImage from "../../common/custom-profile-picture";
-import CommonMessage from "../../common/custom-message";
+import CustomTextField from "../../common/custom-textfield/index.js";
+import h from "../../helper/index.js";
+import {IconButton} from "@mui/material";
+import {InputAdornment} from "@mui/material";
+import {Visibility} from "@mui/icons-material";
+import {VisibilityOff} from "@mui/icons-material";
+import CustomSelect from "../../common/custom-select/index.js";
+import CustomCheckbox from "../../common/custom-checkbox/index.js";
+import {Button} from "@mui/material";
+import { CircularProgress } from "@mui/material";
+import ProfileImage from "../../common/custom-profile-picture/index.js";
+import CommonMessage from "../../common/custom-message/index.js";
 import { useNavigate, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
-import {roles} from "../../constant"
+import {roles} from "../../constant.js"
 
 const defaultUser = {
   username: "",

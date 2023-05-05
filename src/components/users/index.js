@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import CustomTextField from '../../common/custom-textfield';
+import CustomTextField from '../../common/custom-textfield/index.js';
 import './index.css';
-import { roles } from '../../constant';
-import { getAllUsers } from '../../api/users';
-import CustomList from '../../common/custom-list';
-import CustomFilter from '../../common/custom-filter';
+import { roles } from '../../constant.js';
+import { getAllUsers } from '../../api/users.js';
+import CustomList from '../../common/custom-list/index.js';
+import CustomFilter from '../../common/custom-filter/index.js';
 import { useNavigate } from 'react-router-dom';
-import { expertFilterOptions } from '../../constant';
-import { getUserId } from '../../helper';
+import { expertFilterOptions } from '../../constant.js';
+import { getUserId } from '../../helper/index.js';
 
 const Users = () => {
   const navigate = useNavigate();

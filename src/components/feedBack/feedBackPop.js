@@ -8,9 +8,9 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getFeedbackByChatId } from "../../api/feedback";
+import { getFeedbackByChatId } from "../../api/feedback.js";
 import Cookies from 'js-cookie';
-import {getUserId} from "../../helper/index"
+import {getUserId} from "../../helper/index.js"
 
 //In props I need a chatId ,username
 const FeedBackPop = (props) => {

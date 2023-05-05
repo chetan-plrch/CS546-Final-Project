@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Link from '@mui/joy/Link';
+import {Link} from '@mui/joy';
 
 import './index.css'
-import CustomList from '../../common/custom-list';
-import ChatWindow from '../../common/custom-chat-window';
-import { getAllConnections } from '../../api/connections';
-import { getUserId, getUserRole } from '../../helper'
-import { roles } from '../../constant';
+import CustomList from '../../common/custom-list/index.js';
+import ChatWindow from '../../common/custom-chat-window/index.js';
+import { getAllConnections } from '../../api/connections.js';
+import { getUserId, getUserRole } from '../../helper/index.js'
+import { roles } from '../../constant.js';
 
 const Connections = () => {
   const location = useLocation();

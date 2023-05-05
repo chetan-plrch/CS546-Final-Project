@@ -5,21 +5,20 @@ import {
   unblockProfile,
   getBlockedUsers,
   deleteProfile,
-} from "../../api/index";
-import "../signup/index";
-import CustomTextField from "../../common/custom-textfield";
-import h, { delay } from "../../helper/index";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import CustomCheckbox from "../../common/custom-checkbox";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import ProfileImage from "../../common/custom-profile-picture";
-import CommonMessage from "../../common/custom-message";
-import { roles } from "../../constant";
-import { toast, ToastContainer } from "react-toastify/dist/react-toastify.js";
+} from "../../api/index.js";
+import CustomTextField from "../../common/custom-textfield/index.js";
+import h, { delay } from "../../helper/index.js";
+import {IconButton} from "@mui/material";
+import {InputAdornment} from "@mui/material";
+import {Visibility} from "@mui/icons-material";
+import {VisibilityOff} from "@mui/icons-material";
+import CustomCheckbox from "../../common/custom-checkbox/index.js";
+import {Button} from "@mui/material";
+import {CircularProgress} from "@mui/material";
+import ProfileImage from "../../common/custom-profile-picture/index.js";
+import CommonMessage from "../../common/custom-message/index.js";
+import { roles } from "../../constant.js";
+// import { toast, ToastContainer } from "react-toastify/dist/react-toastify.js";
 import { useNavigate } from "react-router-dom";
 
 const defaultUser = {
@@ -109,7 +108,7 @@ const Profile = () => {
         setApiStatus({ error: true, success: false, message: data });
         setSaving(false);
       } else {
-        toast.success("Update successful!");
+        // toast.success("Update successful!");
       }
       setSaving(false);
     }
@@ -119,19 +118,19 @@ const Profile = () => {
     const deleted = await deleteProfile({ permanent, isActive });
     if (deleted) {
       if (permanent) {
-        toast.success("Profile Deleted Successfully");
+        // toast.success("Profile Deleted Successfully");
         await delay(1500);
         navigate('/login')
       } else {
-        toast.success(`Profile ${isActive ? 'Activated' : 'Deactivated'} Successfully`);
+        // toast.success(`Profile ${isActive ? 'Activated' : 'Deactivated'} Successfully`);
         await delay(1500);
         navigate('/login')
       }
     } else {
       if (permanent) {
-        toast.error("Error in deleting profile, try again later");
+        // toast.error("Error in deleting profile, try again later");
       } else {
-        toast.error("Error in deactivating profile, try again later");
+        // toast.error("Error in deactivating profile, try again later");
       }
     }
   }
@@ -157,16 +156,16 @@ const Profile = () => {
         return [...acc, user];
       }, []);
       setBlockedUsers(updatedList);
-      toast.success("Unblocked Successfully");
+      // toast.success("Unblocked Successfully");
     } else {
-      toast.error("Failed to unblock the user");
+      // toast.error("Failed to unblock the user");
     }
   };
 
   return (
     <>
       <div className="update-container-dialog">
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <div className="dialog">
           <ProfileImage
             name="profilePic"

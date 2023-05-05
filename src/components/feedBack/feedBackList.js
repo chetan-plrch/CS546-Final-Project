@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { feedBackList } from '../../api/feedback';
+import { feedBackList } from '../../api/feedback.js';
 import Cookies from "js-cookie";
-import {getUserId} from  "../../helper/index"
+import {getUserId} from  "../../helper/index.js"
 
 const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);

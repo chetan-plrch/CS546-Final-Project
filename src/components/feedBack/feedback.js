@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import FeedBackForm from './feedBackForm';
-import FeedBackList from './feedBackList';
+import FeedBackForm from './feedBackForm.js';
+import FeedBackList from './feedBackList.js';
 import styles from './feedback.css';
 import Cookies from 'js-cookie';
 import { useLocation } from "react-router-dom";
-import { getUserId } from '../../helper/index';
+import { getUserId } from '../../helper/index.js';
 
 const Feedback = () => {
   

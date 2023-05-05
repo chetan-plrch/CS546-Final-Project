@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import PageLoader from './loading'
+import PageLoader from './loading.js'
 import AppBar from '../common/custom-navbar/index.js'
 import AppFooter from '../common/custom-footer/index.js'
 import { useNavigate } from 'react-router-dom'
-import { initialPage, delay } from '../helper'
+import { initialPage, delay } from '../helper/index.js'
 
 const Protected = (props) => {
     const [unprotect, setUnprotect] = useState(props.isLoggedIn)

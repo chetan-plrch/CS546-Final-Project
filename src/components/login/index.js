@@ -7,16 +7,16 @@ import {
   Box,
   Alert
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+// import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link } from "react-router-dom";
-import { loginUser } from "../../api";
-import validations from "../../validation";
+import { loginUser } from "../../api/index.js";
+import validations from "../../validation.js";
 import "./index.css";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {IconButton} from "@mui/material";
+import {InputAdornment} from "@mui/material";
+import {Visibility} from "@mui/icons-material";
+import {VisibilityOff} from "@mui/icons-material";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -90,14 +90,14 @@ const Login = () => {
       //console.log(result);
       if (result.status === 200) {
         console.log("Login successful");
-        toast.success(result.data.message);
+        // toast.success(result.data.message);
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
         console.log(result[1]);
         setErrors({ ...errors, global: [result[1]] });
-        toast.error("Error in Logging in");
+        // toast.error("Error in Logging in");
       }
     } catch (error) {
       console.error(error);
@@ -106,7 +106,7 @@ const Login = () => {
 
   return (
     <Container maxWidth="xs">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <Box
         display="flex"
         flexDirection="column"

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@mui/joy/Avatar';
-import Box from '@mui/joy/Box';
-import List from '@mui/joy/List';
-import Link from '@mui/joy/Link';
-import ListItem from '@mui/joy/ListItem';
-import ListItemContent from '@mui/joy/ListItemContent';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import Typography from '@mui/joy/Typography';
+import {Avatar} from '@mui/joy';
+import {Box} from '@mui/joy';
+import {List} from '@mui/joy';
+import {Link} from '@mui/joy';
+import {ListItem} from '@mui/joy';
+import {ListItemContent} from '@mui/joy';
+import {ListItemDecorator} from '@mui/joy';
+import {Typography} from '@mui/joy';
 
-import CustomButton from '../custom-button';
+import CustomButton from '../custom-button/index.js';
 import './index.css';
 
 function CustomList(props) {

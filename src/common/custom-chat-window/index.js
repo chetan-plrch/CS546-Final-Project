@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import './index.css'
-import CustomButton from '../custom-button';
-import CustomTextField from '../custom-textfield';
-import { initConnection, sendMessage, receiveMessage } from '../custom-socket'
-import { blockUser, archiveChat, getChatHistory } from '../../api/connections';
-import { getUserId } from '../../helper';
-import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
+import CustomButton from '../custom-button/index.js';
+import CustomTextField from '../custom-textfield/index.js';
+import { initConnection, sendMessage, receiveMessage } from '../custom-socket/index.js'
+import { blockUser, archiveChat, getChatHistory } from '../../api/connections.js';
+import { getUserId } from '../../helper/index.js';
+// import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 
 function ChatWindow(props) {
     const {
@@ -85,11 +85,11 @@ function ChatWindow(props) {
         const { response } = await blockUser(connectionId);
         if (response?.status === 200) {
             const successMsg = response?.data?.message || 'User blocked successfully';
-            toast.success(successMsg);
+            // toast.success(successMsg);
             removeConnection();
         } else {
             const errorMsg = response?.data?.error || 'Error in blocking user';
-            toast.error(errorMsg);
+            // toast.error(errorMsg);
         };
     };
 
@@ -108,7 +108,7 @@ function ChatWindow(props) {
         const response = await archiveChat(chatId);
         if (response?.status === 200) {
             const successMsg = response?.data?.message || 'Updated archive status successfully';
-            toast.success(successMsg);
+            // toast.success(successMsg);
             if (archivedBy?.includes(senderId)) {
                 archivedBy.splice(archivedBy.indexOf(senderId), 1);
                 updateArchiveStatus(false);
@@ -118,13 +118,13 @@ function ChatWindow(props) {
             };
         } else {
             const errorMsg = response?.data?.error || 'Could not update archive status';
-            toast.error(errorMsg);
+            // toast.error(errorMsg);
         };
     };
 
     return (
         <div className='custom-chat-container'>
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <div className='header-container'>
                 {
                     allowSearch ? (

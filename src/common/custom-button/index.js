@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import Button from '@mui/material/Button';
+import {Button} from '@mui/material';
 
 function CustomButton(props) {
     const { isPrimary, styles, title, disabled, onClick } = props;

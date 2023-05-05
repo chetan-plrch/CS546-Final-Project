@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import HomePage from "./layouts/HomePage";
-import Profile from "./components/profile";
-import Connections from "./components/connections";
-import Login from "./components/login";
-import Users from "./components/users";
+import HomePage from "./layouts/HomePage.js";
+import Profile from "./components/profile/index.js";
+import Connections from "./components/connections/index.js";
+import Login from "./components/login/index.js";
+import Users from "./components/users/index.js";
 import "./App.css";
-import SignUp from "./components/signup";
-import Middle from "./components/feedBack/middle";
-import Feedback from "./components/feedBack/feedback";
-import FeedBackList from "./components/feedBack/feedBackList";
-import NotFound from "./components/notfound";
+import SignUp from "./components/signup/index.js";
+import Middle from "./components/feedBack/middle.js";
+import Feedback from "./components/feedBack/feedback.js";
+import FeedBackList from "./components/feedBack/feedBackList.js";
+import NotFound from "./components/notfound.js";
 import { checkLoggedInOnBackend } from "./api/index.js";
 import AppBar from "./common/custom-navbar/index.js";
 import AppFooter from "./common/custom-footer/index.js";
-import Protected from "./components/protected";
+import Protected from "./components/protected.js";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);

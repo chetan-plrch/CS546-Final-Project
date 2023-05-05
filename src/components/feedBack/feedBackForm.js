@@ -9,11 +9,11 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+// import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { createFeedBack } from "../../api/feedback";
-import validations from "../../validation";
+import { createFeedBack } from "../../api/feedback.js";
+import validations from "../../validation.js";
 
 
 const FeedBackForm = (props) => {
@@ -103,14 +103,14 @@ const FeedBackForm = (props) => {
       const result = await createFeedBack(feedback);
 
       if (result.status === 200) {
-        toast.success("Feedback submitted successfully");
+        // toast.success("Feedback submitted successfully");
         resetForm();
         setTimeout(() => {
           navigate("/connections");
         }, 2000);
         props.onSubmit();
       } else {
-        toast.error("Failed to submit feedback");
+        // toast.error("Failed to submit feedback");
         setErrors({ ...errors, global: [result.response.data] });
       }
     } catch (error) {
@@ -218,7 +218,7 @@ const FeedBackForm = (props) => {
           </Box>
         </Container>
       </Box>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };

@@ -1,25 +1,25 @@
 import * as React from "react";
 import { useEffect } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import LeafIcon from "@mui/icons-material/Spa";
-import { teal } from "@mui/material/colors";
+import {AppBar} from "@mui/material";
+import {Box} from "@mui/material";
+import {Toolbar} from "@mui/material";
+import {IconButton} from "@mui/material";
+import {Typography} from "@mui/material";
+import {Menu} from "@mui/material";
+import {Menu as MenuIcon} from "@mui/icons-material";
+import {Container} from "@mui/material";
+import {Avatar} from "@mui/material";
+import {Button} from "@mui/material";
+import {Tooltip} from "@mui/material";
+import {MenuItem} from "@mui/material";
+import {Spa as LeafIcon} from "@mui/icons-material";
+import { colors } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { checkLogInTrace, delay } from "../../helper";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
-import "react-toastify/dist/ReactToastify.css";
-import { axiosApi } from "../../api/api-interceptor";
-import { getLoggedInUser } from "../../api";
+import { checkLogInTrace, delay } from "../../helper/index.js";
+// import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+// import "react-toastify/dist/ReactToastify.css";
+import { axiosApi } from "../../api/api-interceptor.js";
+import { getLoggedInUser } from "../../api/index.js";
 
 const pages = ["Home", "Listeners", "Connections", "Feedbacks"];
 const settings = ["Profile", "Logout"];
@@ -56,13 +56,13 @@ function ResponsiveAppBar() {
     try {
       const response = await axiosApi.post("/logout");
       if (response.status === 200) {
-        toast.success("logged out successfully");
+        // toast.success("logged out successfully");
         await delay(500)
         navigate("/login");
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error logging out:", error);
+      // toast.error("Error logging out:", error);
     }
   };
 
@@ -88,7 +88,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: teal[700] }}>
+    <AppBar position="fixed" sx={{ backgroundColor: colors.teal[700] }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <LeafIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
-import FilterList from '@mui/icons-material/FilterList';
-import CustomCheckbox from '../custom-checkbox';
-import CustomButton from '../custom-button';
+import {Dialog} from '@mui/material';
+import {IconButton} from '@mui/material';
+import {FilterList} from '@mui/icons-material';
+import CustomCheckbox from '../custom-checkbox/index.js';
+import CustomButton from '../custom-button/index.js';
 
 function CustomFilter(props) {
   const {options, selectedIds, updateUserFilter } = props;

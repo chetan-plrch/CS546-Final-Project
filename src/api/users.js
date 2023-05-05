@@ -1,4 +1,4 @@
-import { axiosApi } from "./api-interceptor";
+import { axiosApi } from "./api-interceptor.js";
 
 // Gets all active connections for logged in user
 const getAllUsers = async (params) => {
