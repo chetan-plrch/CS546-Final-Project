@@ -4,13 +4,18 @@ import './index.css';
 import { roles } from '../../constant';
 import { getAllUsers } from '../../api/users';
 import CustomList from '../../common/custom-list';
+import CustomFilter from '../../common/custom-filter';
 import { useNavigate } from 'react-router-dom';
+import { expertFilterOptions } from '../../constant';
+import { getUserId } from '../../helper';
 
 const Users = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterOptions, setFilterOptions] = useState([]);
+  const loggedInUserId = getUserId();
 
   useEffect(() => {
     async function getUsers() {
@@ -24,10 +29,29 @@ const Users = () => {
     getUsers();
   }, []);
 
+  const updateExpertList = (optionIds) => {
+    // Based on options (connected and disconnected), filter users list on frontend
+    setFilterOptions(optionIds);
+    if (optionIds?.length) {
+      let filteredUsers = JSON.parse(JSON.stringify(users));
+      // options: 1 == connected, 2 == disconnected
+      if (optionIds.length === 1) {
+        if (optionIds.includes(1)) {
+          filteredUsers = filteredUsers?.filter((user) => user?.connections?.active?.includes(loggedInUserId));
+        } else {
+          filteredUsers = filteredUsers?.filter((user) => !user?.connections?.active?.includes(loggedInUserId));
+        };
+      };
+      setFilteredUsers(filteredUsers);
+    } else {
+      setFilteredUsers([]);
+    }
+  };
+
   const onUpdateSearchTerm = (_key, value) => {
     setSearchTerm(value);
     if (!value) {
-        setFilteredUsers(users);
+        setFilteredUsers([]);
     } else {
         let searchResults = JSON.parse(JSON.stringify(users));
         searchResults = searchResults?.filter((user) => user?.fullName?.toLowerCase()?.includes(value?.toLowerCase()));
@@ -48,11 +72,15 @@ const Users = () => {
           value={searchTerm}
           onChange={onUpdateSearchTerm}
         />
-        <span style={{marginLeft: '10px'}}>Filters TBD</span>
+        <CustomFilter
+          options={expertFilterOptions}
+          selectedIds={filterOptions}
+          updateUserFilter={updateExpertList}
+        />
       </div>
       <div className='user-list-container'>
       <CustomList
-          list={searchTerm ? filteredUsers : users}
+          list={searchTerm || filterOptions?.length ? filteredUsers : users}
           selectionKey='_id'
           titleKey='fullName'
           imageKey='profilePic'

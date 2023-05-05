@@ -22,6 +22,18 @@ const blockUser = async (blockConnectionId) => {
     };
 };
 
+// Archive or unarchive a chat
+const archiveChat = async (chatId) => {
+    try {
+        const archiveChatResponse = await axiosApi.put('/chat/archive', {
+            chatId
+        });
+        return archiveChatResponse;
+    } catch (error) {
+        return error;
+    };
+};
+
 // Gets all active connections for logged in user
 const getAllConnections = async () => {
     try {
@@ -32,4 +44,4 @@ const getAllConnections = async () => {
     };
 };
 
-export { blockUser, getChatHistory, getAllConnections };
+export { blockUser, archiveChat, getChatHistory, getAllConnections };

@@ -17,22 +17,34 @@ const addConnection = async (userId, connectionUserId) => {
     } else if (!connectingUser) {
         throw errorObject(errorType.NOT_FOUND, 'Connecting user not found in the system')
     }
-    const activeConnections = new Set(user.connections.active)
-    if(activeConnections.has(connectionUserId)) {
+    const user1ActiveCon = new Set(user.connections.active)
+    const user2ActiveCon = new Set(connectingUser.connections.active)
+    let active = user.connections.active
+    let active2 = connectingUser.connections.active
+    if(!user1ActiveCon.has(connectionUserId)) {
+        active = [...active, connectionUserId]
+    }
+    
+    if(!user2ActiveCon.has(userId)) {
+        active2 = [...active2, userId]
+    }
+
+    const updatedDoc = await userCtn.findOneAndUpdate(
+        { _id: new ObjectId(userId) }, 
+        { $set: { 'connections.active': active } },
+        { returnDocument: 'after', returnNewDocument: true }
+    )
+
+    const updatedDoc2 = await userCtn.findOneAndUpdate(
+        { _id: new ObjectId(connectionUserId) }, 
+        { $set: { 'connections.active': active2 } },
+        { returnDocument: 'after', returnNewDocument: true }
+    )
+
+    if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
         return true
     } else {
-        const active = [...user.connections.active, connectionUserId]
-        const updatedDoc = await userCtn.findOneAndUpdate(
-            { _id: new ObjectId(userId) }, 
-            { $set: { 'connections.active': active } },
-            { returnDocument: 'after', returnNewDocument: true }
-        )
-
-        if (updatedDoc && updatedDoc.lastErrorObject && updatedDoc.lastErrorObject.updatedExisting) {
-            return true
-        } else {
-            throw new Error('Unable to update the users active connections')
-        }
+        throw new Error('Unable to update the users active connections')
     }
 }
 
@@ -165,6 +177,7 @@ const addMessagesToChat = async (sId, rId, message) => {
             throw new Error('Unable to udpate the conversation of the users')
         }
     } else {
+        
         const { insertedId } = await chatsCtx.insertOne({
             users: [senderId, receiverId],
             conversation: [{
@@ -172,13 +185,15 @@ const addMessagesToChat = async (sId, rId, message) => {
                 sentAt: new Date().toISOString(),
                 message
             }],
-            isArchived: false
+            archivedBy: []
         })
 
         if((!insertedId) || !insertedId.toString()) {
             throw new Error('Unable to insert band object into mongodb')
         }
         
+        await addConnection(senderId, receiverId)
+
         return insertedId
     }
 }
@@ -211,6 +226,36 @@ const activeChat = async (uId, anUserId, onlyUsers) => {
         return { users, chats }
     }
 }
+
+// Archive a chat
+const archiveChat = async (uId, chatId) => {
+    const chatsCtx = await chats();
+    const userId = validators.checkId(uId, 'userId');
+    const validatedChatId = validators.checkId(chatId, 'chatId');
+    const existingChat = await chatsCtx.findOne({"_id": new ObjectId(chatId)});
+    const archivedBy = existingChat?.archivedBy || [];
+    if (archivedBy.includes(userId)) {
+        // Unarchive chat
+        archivedBy.splice(archivedBy.indexOf(userId), 1);
+    } else {
+        // Archive chat
+        archivedBy.push(userId);
+    };
+    const res = await chatsCtx.findOneAndUpdate(
+        { _id: new ObjectId(validatedChatId) },
+        {
+            $set: { archivedBy },
+        },
+        { upsert: true, returnDocument: 'after', returnNewDocument: true }
+    );
+    if (res?.lastErrorObject?.updatedExisting) {
+        return true;
+    } else {
+        throw new Error('Unable to update the archived status of the chat');
+    };
+};
+
+
 
 const allActiveChats = async (userId, onlyUsers) => {
     const chatsCtx = await chats()
@@ -262,9 +307,9 @@ const getUserWithLastMessage = (users, chats) => {
         if (chatFound && chatFound.conversation && chatFound.conversation.length > 0)  {
             const lastChat = chatFound.conversation[chatFound.conversation.length - 1]
             const lastMessage = lastChat.message
-            return { ...user, lastMessage }
+            return { ...user, lastMessage, archivedBy: chatFound?.archivedBy || [] }
         } else {
-            return { ...user, lastMessage: 'No last message' }
+            return { ...user, lastMessage: 'No last message', archivedBy: [] }
         }
     })
 }
@@ -299,4 +344,4 @@ const getAllChatId = async()=>{
     return result;
 }
 
-export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser, getAllChatId };
+export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser,archiveChat, getAllChatId };

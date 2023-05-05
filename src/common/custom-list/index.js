@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import List from '@mui/joy/List';
+import Link from '@mui/joy/Link';
 import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
@@ -17,17 +18,21 @@ function CustomList(props) {
       list,
       imageKey,
       titleKey,
+      viewImage,
       listTitle,
       contentKey,
       selectedId,
       buttonTitle,
       selectionKey,
+      alternateList,
       onButtonClick,
-      onSelectionChange,
+      onSelectionChange
     } = props
     
     // TODO - add default image
     const defaultImage = '';
+
+    const [showArchivedChats, setShowArchivedChats] = useState(false);
 
     const onListItemClick = (selection) => {
       if (!buttonTitle) {
@@ -35,21 +40,47 @@ function CustomList(props) {
       };
     };
 
+    const toggleArchiveChat = (selection) => {
+      setShowArchivedChats(!showArchivedChats)
+      if (showArchivedChats) {
+        onSelectionChange(list[0]?.[selectionKey]);
+      } else {
+        onSelectionChange(selection)
+      }
+    }
+
     return (
       <Box>
         <span className='list-title'>{listTitle}</span>
+        {
+            alternateList?.length ? (
+              <Link onClick={() => toggleArchiveChat(alternateList[0]?.[selectionKey])} sx={{padding: '5px', cursor: 'pointer'}}>
+                {
+                  showArchivedChats ? (
+                    <span>Hide Archived Chats</span>
+                  ) : (
+                    <span>Show Archived Chats</span>
+                   )
+                }
+              </Link>
+            ) : null
+        }
         <List
           sx={{ '--ListItemDecorator-size': '56px' }}
         >
-          {list?.map(function(item, index) {
+          {(showArchivedChats ? alternateList : list)?.map(function(item, index) {
               return  (
                 <ListItem
                   key={index}
                   className={buttonTitle ? '' : (selectedId && item[selectionKey] === selectedId ? 'selected-item clickable-list-item': 'clickable-list-item')}
                   onClick={() => onListItemClick(item[selectionKey])}>
-                    <ListItemDecorator>
-                      <Avatar src={item[imageKey] || defaultImage} />
-                    </ListItemDecorator>
+                    {
+                      viewImage ? (
+                        <ListItemDecorator>
+                          <Avatar alt='Profile Picture' src={item[imageKey] || defaultImage} />
+                        </ListItemDecorator>
+                      ) : null
+                    }
                     <ListItemContent>
                       <Typography>{item[titleKey]}</Typography>
                       {
@@ -82,6 +113,7 @@ CustomList.defaultProps = {
     listTitle: '', // Title to be displayed for list
     buttonTitle: '', // Title to be used for button. If passed, entire list item will not be clickable
     imageSource: null, // Holds image used for list item
+    viewImage: true, // Flag to indicate if image should be displayed
     titleKey: 'title', // Key to be used for title
     imageKey: 'image', // Key to be used for image
     selectionKey: 'id', // Key to be used for selection
@@ -91,6 +123,7 @@ CustomList.defaultProps = {
 };
 
 CustomList.propTypes = {
+    viewImage: PropTypes.bool,
     imageSource: PropTypes.any,
     listTitle: PropTypes.string,
     contentKey: PropTypes.string,

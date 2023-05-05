@@ -39,12 +39,14 @@ const createFeedBack = async (
   } catch (e) {
     errors.push(e);
   }
-
-  try {
-    description = validation.checkString(description, " feedback description");
-  } catch (e) {
-    errors.push(e);
+  if(description){
+    try {
+      description = validation.checkString(description, " feedback description");
+    } catch (e) {
+      errors.push(e);
+    }
   }
+
   if (errors.length > 0) {
     throw [400, errors];
   }
@@ -213,11 +215,14 @@ const update = async (id, isPublic, rate1, rate2, rate3, description) => {
   } catch (e) {
     errors.push(e);
   }
-  try {
-    description = validation.checkString(description, " feed back description");
-  } catch (e) {
-    errors.push(e);
+  if(description){
+    try {
+      description = validation.checkString(description, " feed back description");
+    } catch (e) {
+      errors.push(e);
+    }
   }
+  
   if (errors.length > 0) {
     throw [400, errors];
   }

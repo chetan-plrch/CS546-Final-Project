@@ -77,7 +77,10 @@ const FeedBackEditForm = (props) => {
     let newErrors = {};
 
     try {
-      const validatedIsPublic = validations.checkPublic(data.isPublic);
+      const validatedIsPublic = validations.checkBoolean(
+        data.isPublic,
+        "isPublic"
+      );
 
       try {
         const validatedRate1 = validations.checkRating(
@@ -113,10 +116,12 @@ const FeedBackEditForm = (props) => {
       }
 
       try {
-        const validatedDescription = validations.checkString(
-          data.description,
-          "Description"
-        );
+        if (data.description) {
+          const validatedDescription = validations.checkString(
+            data.description,
+            "Description"
+          );
+        }
       } catch (error) {
         if (error.includes("Description")) {
           newErrors = { ...newErrors, description: error };
@@ -158,6 +163,9 @@ const FeedBackEditForm = (props) => {
           component="form"
           onSubmit={handleUpdate}
           mt={4}
+          mb={4} 
+          pt={4} 
+          pb={4}
           bgcolor="#f5f5f5"
           p={3}
           borderRadius={4}
@@ -169,7 +177,7 @@ const FeedBackEditForm = (props) => {
         >
           <Box>
             <Typography variant="h1" mb={2} color="#222222">
-              Edit Feedback for {props.username}
+              Edit Feedback
             </Typography>
             <TextField
               fullWidth

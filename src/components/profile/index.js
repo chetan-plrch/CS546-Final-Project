@@ -1,426 +1,353 @@
-// import React, { useState, useEffect } from 'react';
-// import './profile.css';
-// import CustomCheckbox from "../../common/custom-checkbox";
-// import Cookies from 'js-cookie';
-// import TextField from '@mui/material/TextField';
-// import Card from '@mui/material/Card';
-// import CardContent from '@mui/material/CardContent';
-// import { useNavigate } from "react-router-dom"
-// import Typography from '@mui/material/Typography';
-// import axios from 'axios';
-// import { getUserById } from '../../api';
-// import ProfileImage from "../../common/custom-profile-picture"
-
-// const Profile = () => {
-//   const [profile, setProfile] = useState({
-//     firstName: '',
-//     lastName: '',
-//     username: '',
-//     isAnonymous: '',
-//     email: '',
-//     gender: '',
-//     age: '',
-//     city: '',
-//     state: '',
-//     role: ''
-//   });
-
-//   const navigate = useNavigate();
-//   const [blockedUsers, setBlockedUsers] = useState([]);
-
-//   useEffect(() => {
-//  const FetchProfile = async() =>{
-
-//   const response  =await getUserById()
-//   const result = response.data
-//   setProfile({
-//     firstName: result.firstName,
-//     lastName: result.lastName,
-//     username: result.username,
-//     isAnonymous: result.isAnonymous,
-//     email: result.email,
-//     password: '',
-//     gender: result.gender,
-//     age: result.age,
-//     city: result.city,
-//     state: result.state,
-//     role: result.role
-//   })
-
-//  };
-//  FetchProfile()
-//  }, []);
-
-//   const handleInputChange = (event) => {
-//     const { name, value } = event.target;
-//     setProfile({ ...profile, [name]: value });
-//   };
-
-//   const handleCheckboxChange = () => {
-//     setProfile({ ...profile, isAnonymous: !profile.isAnonymous });
-//   };
-
-//   const handleAgeChange = (event, value) => {
-//     setProfile({ ...profile, age: value });
-//   };
-
-//   const handleFormSubmit = (event) => {
-//     event.preventDefault();
-//   };
-
-//   const handleUnblockUser = (username) => {
-//     const updatedBlockedUsers = blockedUsers.filter(user => user !== username);
-//     setBlockedUsers(updatedBlockedUsers);
-//   };
-
-//   const handleDeleteProfile = () => {
-// };
-
-//   return (
-//     <div>
-//   <div className="profile- card">
-//   <Card className="profile-container">
-//   <CardContent>
-//   <Typography variant="h4" component="h2">
-//      My Profile
-//   </Typography>
-//   <ProfileImage  image={profile.profilePic} style={{marginRight: '20px', width: '150px', height: '150px'}} />
-//   <form onSubmit={handleFormSubmit}>
-//   <div className="form-group">
-//   <TextField label="First Name" name="firstName" value={profile.firstName} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="Last Name" name="lastName" value={profile.lastName} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="Username" name="username" value={profile.username} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="Email" name="email" value={profile.email} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="Password" name="password" value={profile.password} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="Gender" name="gender" value={profile.gender} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="Age" type="number" name="age" value={profile.age} onChange={handleAgeChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="City" name="city" value={profile.city} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   <div className="form-group">
-//   <TextField label="State" name="state" value={profile.state} onChange={handleInputChange} style={{marginBottom: '10px'}} />
-//   </div>
-//   {/* <div className="form-group">
-//   <div style={{ display: 'flex', alignItems: 'center' }}>
-//     <CustomCheckbox checked={profile.isAnonymous} onChange={handleCheckboxChange} style={{marginBottom: '10px'}} />
-//     <label style={{ marginLeft: 10 }}>isAnonymous</label>
-//   </div>
-// </div> */}
-
-//   <button type="submit" className="btn btn-primary">Update Profile</button>
-//   <button type="button" className="btn btn-danger" onClick={handleDeleteProfile}>Delete Account</button>
-//   </form>
-//   </CardContent>
-//   </Card>
-//   </div>
-//   <div>
-//   <Card className= "blocked-users">
-//     <CardContent>
-//     <Typography variant = "h4" component = "h2">
-//     Blocked Users
-//     </Typography>
-//     </CardContent>
-//     </Card>
-//   <ul>
-//   {blockedUsers.map((blockedUser, index) => (
-//   <li key={index}>{blockedUser} <button type="button" onClick={() => handleUnblockUser(blockedUser)}>Unblock</button></li>
-//   ))}
-//   </ul>
-//   </div>
-//   </div>
-//   );
-//   };
-
-//   export default Profile;
-
-import React, { useState, useEffect } from "react";
-import "./profile.css";
+import * as React from "react";
+import {
+  editProfile,
+  getUserById,
+  unblockProfile,
+  getBlockedUsers,
+  deleteProfile,
+} from "../../api/index";
+import "../signup/index";
+import CustomTextField from "../../common/custom-textfield";
+import h, { delay } from "../../helper/index";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CustomCheckbox from "../../common/custom-checkbox";
-import TextField from "@mui/material/TextField";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { useNavigate } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
-import { getUserById ,getBlockedUsers} from "../../api";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import ProfileImage from "../../common/custom-profile-picture";
-import { editProfile, deleteProfile , UnblockProfile} from "../../api/index.js";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
-import "react-toastify/dist/ReactToastify.css";
+import CommonMessage from "../../common/custom-message";
+import { roles } from "../../constant";
+import { toast, ToastContainer } from "react-toastify/dist/react-toastify.js";
+import { useNavigate } from "react-router-dom";
+
+const defaultUser = {
+  username: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  age: "",
+  profilePic: "",
+  city: "",
+  state: "",
+  isAnonymous: false,
+};
 
 const Profile = () => {
-  const [profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    isAnonymous: "",
-    email: "",
-    gender: "",
-    age: "",
-    city: "",
-    state: "",
-    role: "",
-  });
+  const [user, setUser] = React.useState(defaultUser);
+  const [blockedUsers, setBlockedUsers] = React.useState([]);
+  const [errors, setErrors] = React.useState(defaultUser);
+  const [apiStatus, setApiStatus] = React.useState({});
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [anonymousDisabled, setAnonymousDisabled] = React.useState(false);
+  const [saving, setSaving] = React.useState(null);
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
-  const [blockedUsers, setBlockedUsers] = useState([]);
-
-  useEffect(() => {
-    const FetchProfile = async () => {
-      try {
-        const response = await getUserById();
-        const result = response.data;
-        setProfile({
-          firstName: result.firstName,
-          lastName: result.lastName,
-          username: result.username,
-          isAnonymous: result.isAnonymous,
-          email: result.email,
-          password: "",
-          gender: result.gender,
-          age: result.age,
-          city: result.city,
-          state: result.state,
-          role: result.role,
-        });
-      } catch (error) {
+  React.useEffect(() => {
+    async function getProfileDetails() {
+      const user = await getUserById();
+      if (user) {
+        setAnonymousDisabled(user.role === roles.LISTENER);
       }
-    };
-
-    const fetchBlockedUsers = async() =>{
-      try{
-          const response = await getBlockedUsers();
-          const result = response.data;
-          console.log("I am result",result);
-          setBlockedUsers(result);
-      } catch(error){
-        console.log(error);
-      }
+      setUser(user);
     }
-    
-    FetchProfile();
-    fetchBlockedUsers();
+
+    async function getBlocked() {
+      const blockedUsersData = await getBlockedUsers();
+      setBlockedUsers(blockedUsersData);
+    }
+
+    getProfileDetails();
+    getBlocked();
   }, []);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setProfile({
-      ...profile,
-      [name]: value,
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (e) => e.preventDefault();
+
+  const onChangeOfValue = (key, value) => {
+    setUser({ ...user, [key]: value });
+  };
+
+  const submissionValidation = () => {
+    let valid = true;
+    let allFields = new Set(Object.keys(defaultUser));
+    allFields.delete("password");
+    allFields.delete("profilePic");
+    allFields.delete("isAnonymous");
+    allFields.delete("city");
+    allFields.delete("state");
+    let requiredFields = Array.from(allFields);
+
+    let errorsObj = {};
+    requiredFields.forEach((key) => {
+      if (user[key] === "" || user[key].trim() === "") {
+        errorsObj[key] = { ...(errors[key] || {}) };
+        if (!errorsObj[key].helperText) {
+          errorsObj[key].helperText = "*Field required";
+        }
+      }
     });
+
+    if (Object.keys(errorsObj).length > 0) {
+      setErrors(errorsObj);
+      valid = false;
+    }
+    return valid;
   };
 
-  const handleUpdate = async (event) => {
-    event.preventDefault();
+  const updateUser = async () => {
+    const valid = submissionValidation();
 
-    const updatedProfile = {
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      username: profile.username,
-      isAnonymous: profile.isAnonymous,
-      email: profile.email,
-      password: profile.password,
-      gender: profile.gender,
-      age: profile.age,
-      city: profile.city,
-      state: profile.state,
-      role: profile.role,
-    };
-    const response = await editProfile(updatedProfile);
-
-    if (response.status === 200) {
-      toast.success("Profile Updated Successfully");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    } else {
-      toast.error("Error in updateing profile, try again");
+    if (valid) {
+      setSaving(true);
+      const response = await editProfile(user);
+      const [error, data] = response;
+      if (error) {
+        setApiStatus({ error: true, success: false, message: data });
+        setSaving(false);
+      } else {
+        toast.success("Update successful!");
+      }
+      setSaving(false);
     }
   };
 
-  const handleDeleteProfile = async () => {
-    const response = await deleteProfile();
-
-    if (response.status === 200) {
-      toast.success("Profile Deleted Successfully");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+  const deleteAccount = async ({ permanent, isActive }) => {
+    const deleted = await deleteProfile({ permanent, isActive });
+    if (deleted) {
+      if (permanent) {
+        toast.success("Profile Deleted Successfully");
+        await delay(1500);
+        navigate('/login')
+      } else {
+        toast.success(`Profile ${isActive ? 'Activated' : 'Deactivated'} Successfully`);
+        await delay(1500);
+        navigate('/login')
+      }
     } else {
-      toast.error("Error in deleting profile, try again");
-    }
-  };
-
-  const handleUnblockProfile = async () =>{
-    const response = await UnblockProfile();
-
-    if (response.status === 200) {
-      toast.success("Unblocked Successfully");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    } else {
-      toast.error("Error in Unblocking, try again");
+      if (permanent) {
+        toast.error("Error in deleting profile, try again later");
+      } else {
+        toast.error("Error in deactivating profile, try again later");
+      }
     }
   }
 
-  return (
-    <div>
-      <div className="profile- card">
-        <Card className="profile-container">
-          <CardContent>
-            <Typography variant="h4" component="h2">
-              My Profile
-            </Typography>
-            <ProfileImage
-              image={profile.profilePic}
-              style={{ marginRight: "20px", width: "150px", height: "150px" }}
-            />
-            <form onSubmit={handleUpdate}>
-              <div className="form-group">
-                <TextField
-                  label="First Name"
-                  name="firstName"
-                  value={profile.firstName}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="Last Name"
-                  name="lastName"
-                  value={profile.lastName}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="Username"
-                  name="username"
-                  value={profile.username}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="Email"
-                  name="email"
-                  value={profile.email}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="Password"
-                  name="password"
-                  value={profile.password}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="Gender"
-                  name="gender"
-                  value={profile.gender}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="Age"
-                  type="number"
-                  name="age"
-                  value={profile.age}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="City"
-                  name="city"
-                  value={profile.city}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              <div className="form-group">
-                <TextField
-                  label="State"
-                  name="state"
-                  value={profile.state}
-                  onChange={handleChange}
-                  style={{ marginBottom: "10px" }}
-                />
-              </div>
-              {/* <div className="form-group">
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-    <CustomCheckbox checked={profile.isAnonymous} onChange={handleCheckboxChange} style={{marginBottom: '10px'}} />
-    <label style={{ marginLeft: 10 }}>isAnonymous</label>
-  </div>
-</div> */}
+  const onBlur = (name) => {
+    const err = h.validator(user, name, errors);
+    setErrors({ ...err });
+  };
 
-              <button type="submit" className="btn btn-primary"
-              onClick={handleUpdate}>
-                Update Profile
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={handleDeleteProfile}
-              >
-                Delete Account
-              </button>
-            </form>
-          </CardContent>
-        </Card>
+  const getHelperText = (key) => {
+    if (errors[key]) {
+      return errors[key].helperText;
+    }
+    return "";
+  };
+
+  const unblockUserProfile = async (userId) => {
+    const unblocked = await unblockProfile(userId);
+
+    if (unblocked) {
+      const updatedList = blockedUsers.reduce((acc, user) => {
+        if (user._id === userId) return acc;
+        return [...acc, user];
+      }, []);
+      setBlockedUsers(updatedList);
+      toast.success("Unblocked Successfully");
+    } else {
+      toast.error("Failed to unblock the user");
+    }
+  };
+
+  return (
+    <>
+      <div className="update-container-dialog">
+        <ToastContainer />
+        <div className="dialog">
+          <ProfileImage
+            name="profilePic"
+            image={user.profilePic}
+            onChange={onChangeOfValue}
+          />
+          <div className="input-dialog">
+            <div className="header-dialog">Update profile</div>
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("username")}
+              helperText={getHelperText("username")}
+              name="username"
+              value={user.username}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("firstName")}
+              helperText={getHelperText("firstName")}
+              name="firstName"
+              label="first name"
+              value={user.firstName}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("lastName")}
+              helperText={getHelperText("lastName")}
+              name="lastName"
+              label="last name"
+              value={user.lastName}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("email")}
+              helperText={getHelperText("email")}
+              name="email"
+              value={user.email}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("password")}
+              helperText={getHelperText("password")}
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={user.password}
+              onChange={onChangeOfValue}
+              inputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("age")}
+              helperText={getHelperText("age")}
+              name="age"
+              value={user.age}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("city")}
+              helperText={getHelperText("city")}
+              name="city"
+              label="city (optional)"
+              value={user.city}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            <CustomTextField
+              styles={{ width: 15 }}
+              onBlur={onBlur}
+              error={getHelperText("state")}
+              helperText={getHelperText("state")}
+              name="state"
+              label="state (optional)"
+              value={user.state}
+              onChange={onChangeOfValue}
+              required={true}
+            />
+            {anonymousDisabled ? null : (
+              <CustomCheckbox
+                disabled={anonymousDisabled}
+                className="anonymous-input"
+                name="isAnonymous"
+                checked={user.isAnonymous}
+                onChange={onChangeOfValue}
+                text={"Stay anonymous"}
+              />
+            )}
+          </div>
+        </div>
+        <div>
+          <CommonMessage
+            success={apiStatus.success}
+            error={apiStatus.error}
+            message={apiStatus.message}
+          />
+          <Button
+            onClick={updateUser}
+            variant={saving ? "outlined" : "contained"}
+            styles={{ backgroundColor: "#00796b" }}
+            className="signup-button"
+          >
+            {saving ? (
+              <CircularProgress size={25} color="success" />
+            ) : (
+              "Update profile"
+            )}
+          </Button>
+          <Button
+            onClick={() => deleteAccount({ isActive: !user.isActive })}
+            variant={saving ? "outlined" : "contained"}
+            styles={{ backgroundColor: "#000000" }}
+            color={user.isActive ? "error" : "success"}
+            className="signup-button"
+          >
+            {user.isActive ? 'Deativate account' : 'Activate account'}
+          </Button>
+          <Button
+            onClick={() => deleteAccount({ permanent: true })}
+            variant={saving ? "outlined" : "contained"}
+            styles={{ backgroundColor: "#000000" }}
+            color="error"
+            className="signup-button"
+          >
+            Permanently delete Account
+          </Button>
+        </div>
+        <div className="blocked-list">
+          <div className="blocked-title">Blocked users</div>
+          {blockedUsers.length <= 0 ? (
+            <div className="empty-blocked-list">No blocked users</div>
+          ) : (
+            blockedUsers.map((user) => {
+              return (
+                <div className="blocked-item">
+                  <div className="blocked-username">{user.firstName}</div>
+                  <Button
+                    onClick={() => unblockUserProfile(user._id)}
+                    variant={"outlined"}
+                    styles={{ backgroundColor: "#000000" }}
+                    className="signup-button"
+                    color="error"
+                  >
+                    Unblock
+                  </Button>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
-      <div>
-        <Card className="blocked-users">
-          <CardContent>
-            <Typography variant="h4" component="h2">
-              Blocked Users
-            </Typography>
-          </CardContent>
-        </Card>
-        {/* <ul>
-          {blockedUsers.map((blockedUser, index) => (
-            <li key={index}>
-              {blockedUser}{" "}
-              <button
-                type="button"
-                onClick={() => handleUnblockUser(blockedUser)}
-              >
-                Unblock
-              </button>
-            </li>
-          ))}
-        </ul> */}
-        <button type="submit" className="btn btn-primary"
-              onClick={handleUnblockProfile}>
-                Unblock
-              </button>
-      </div>
-    </div>
+    </>
   );
 };
 

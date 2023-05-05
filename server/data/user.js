@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 import crypto from 'crypto'
+import { formatUser, errorObject, errorType } from "../util.js";
 
 const create = async (
   firstName,
@@ -191,7 +192,6 @@ const checkLogged = async (username, password) => {
     { _id: user._id, username: user.username,firstName: user.firstName },
     jwtConfig.secret
   );
-  //console.log(token);
 
   return {user,token};
 };
@@ -210,7 +210,7 @@ const getAllUsers = async (queryParams) => {
   return usersResponse;
 };
 
- const get = async (id) => {
+const get = async (id) => {
 
   if (!id || typeof id !== "string" || id.trim().length === 0) {
     throw new Error("Invalid id");
@@ -265,79 +265,58 @@ const allUsers = async()=>{
 };
 
 
-const updateUserRandom = async (id) => {
-  if (!id || typeof id !== "string" || id.trim().length === 0) {
-    throw new Error("Invalid ID provided");
-  }
-  id = id.trim();
-
-  if (!ObjectId.isValid(id)) {
-    throw new Error("Invalid object ID");
-  }
-
+const updateUserRandom = async (id, { permanent, isActive }) => {
   const db = await users();
 
   const user = await db.findOne({ _id: new ObjectId(id) });
   if (!user) {
-    throw new Error("User not found");
+    throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
   }
 
-  const newUsername = crypto.randomBytes(8).toString('hex');
-  const newPassword = crypto.randomBytes(12).toString('hex');
+  let updatedUser = {};
+  if (permanent) {
+    const newUsername = crypto.randomBytes(8).toString('hex');
+    const newPassword = crypto.randomBytes(12).toString('hex');
 
-  const updatedUser = {
-    username: newUsername,
-    password: newPassword,
-    profilePic: null,
-    firstName: deleted,
-    lastName: user,
-  };
+    updatedUser = {
+      username: newUsername,
+      password: newPassword,
+      email: null,
+      profilePic: null,
+      firstName: 'Deleted',
+      lastName: 'User',
+      city: null,
+      state: null,
+      isActive: false
+    };
+  } else {
+    updatedUser = { isActive }
+  }
 
   await db.updateOne({ _id: new ObjectId(id) }, { $set: updatedUser });
 
-  const message = "User " + id + " has been updated with new username " + newUsername + " and password " + newPassword;
+  const message = "Successfully processed the request";
   return message;
 };
 
 
-const update = async(id, username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, isActive, connections) => {
-  console.log(connections);
-  if (!id || typeof id !== "string" || id.trim().length === 0) {
-    throw new Error("Invalid id");
+const update = async({
+  id, username, firstName, lastName, email, password, city, state, age, isAnonymous, profilePic 
+}) => {
+  let updateObj = { username, firstName, lastName, email, city, state, age, isAnonymous, profilePic }
+  const userId = validation.checkId(id)
+
+  const usersCol = await users();
+  if (password) {
+    const newPassword = await bcrypt.hash(password, 10);
+    updateObj = { ...updateObj, password: newPassword }
   }
-  id = id.trim();
+  
+  const result = await usersCol.findOneAndUpdate({ _id: new ObjectId(userId) }, {
+    $set: updateObj
+  }, { returnOriginal: false });
 
-// validation.validate(username, firstName, lastName, email, password, gender, city, state, age, isAnonymous, profilePic, connections, isActive);
-
-  const db = await users();
-  const filter = { _id: new ObjectId(id) };
-
-  const update = {
-    $set: {
-      username, 
-      firstName, 
-      lastName, 
-      email, 
-      password, 
-      gender, 
-      city, 
-      state,
-      age,
-      isAnonymous, 
-      profilePic,
-      isActive,
-      connections,
-    
-    },
-  };
-  const options = { returnOriginal: false };
-  const result = await db.findOneAndUpdate(filter, update, options);
-
-  const updatedDoc = await db.findOne({ _id: new ObjectId(id) });
-
-  // if (validation.compareAndUpdate(updatedDoc, result.value)) {
-  //   throw new Error('No changes made to the document');
-  // }
+  const updatedDoc = await usersCol.findOne({ _id: new ObjectId(id) });
 
   return {
     ...updatedDoc,
@@ -345,28 +324,26 @@ const update = async(id, username, firstName, lastName, email, password, gender,
   };
 };
 
-const getAllBlockedUsers = async (Id) => {
-  if (!Id || typeof Id !== "string" || Id.trim().length === 0) {
-    throw new Error("Invalid user ID provided");
-  }
+const getAllBlockedUsers = async (id) => {
+  const userId = validation.checkId(id)
 
   const db = await users();
-  const user = await db.findOne({ _id: new ObjectId(Id) });
+  const user = await db.findOne({ _id: new ObjectId(userId) });
   if (!user) {
-    throw new Error("User not found");
+    throw errorObject(errorType.BAD_INPUT, 'Error: User is not loggedin')
   }
 
-  const blockedUserIds = user.connections.blocked;
-  const blockedUsers = [];
+  const blockedUserIds = user.connections?.blocked;
 
-  for (const blockedUserId of blockedUserIds) {
-    const blockedUser = await db.findOne({ _id: new ObjectId(blockedUserId) });
-    if (blockedUser) {
-      blockedUsers.push(blockedUser.username);
-    }
-  }
+  const blockedUser = await Promise.all(blockedUserIds.map((blockedUserId) => {
+    return db.findOne({ _id: new ObjectId(blockedUserId) });
+  }))
+  
+  const userDetails = blockedUser.map((user) => {
+    return formatUser(user)
+  });
 
-  return blockedUsers;
+  return userDetails;
 };
 
 export default { create, checkLogged, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers,allUsers };

@@ -196,7 +196,6 @@ export function checkLoggedIn() {
 
 export function checkLogInTrace() {
   const userId = Cookies.get('userId');
-  console.log('trace', userId)
   return !!userId
 }
 
