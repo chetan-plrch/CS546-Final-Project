@@ -69,7 +69,9 @@ function ChatWindow(props) {
             senderId
         };
         setConversation(conversation => conversation.concat([msgObj]));
-        onConnectionUpdate(connectionId, msgObj?.message);
+        if (onConnectionUpdate) {
+            onConnectionUpdate(connectionId, msgObj?.message);
+        };
         setCurrentMessage('');
     };
     const onReceiveMessage = (msgObj) => {
