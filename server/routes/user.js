@@ -173,7 +173,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     } catch (e) {
       errors.push(e);
     }
-
+  
     if (errors.length > 0) {
       res.status(400).send({ errors });
       return;
@@ -201,7 +201,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: false
       });
-
+    
       if(user.isAnonymous){
         const message = "AnonymousFruit, Welcome Back"
         return res.status(200).send({ message });

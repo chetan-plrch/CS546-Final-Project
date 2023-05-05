@@ -333,4 +333,15 @@ const mapSocketIdToUser = async ({ socketId, userId }) => {
     }
 }
 
-export { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser, archiveChat };
+const getAllChatId = async()=>{
+    const chatCollection = await chats()
+    let ans = []
+    ans = await chatCollection.find({}, {projection: {_id:1, users:1}}).toArray();
+    const result = ans.map(obj => {
+        obj._id = obj._id.toString();
+        return obj;
+      });
+    return result;
+}
+
+export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser,archiveChat, getAllChatId };

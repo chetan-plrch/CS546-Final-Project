@@ -4,42 +4,82 @@ import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import { journal } from "../config/mongoCollections.js";
 
-const CreateJournal = async(userId ,message , date) => {
+// const CreateJournal = async(userId ,message , date) => {
     
-    if (!userId || typeof userId !== 'string'){
-        throw new Error ('Invalid user ID')
-    } 
+//     if (!userId || typeof userId !== 'string'){
+//         throw new Error ('Invalid user ID')
+//     } 
 
-    if (!message || typeof message !== 'string'){
-        throw new Error ('Invalid Message')
-    }
+//     if (!message || typeof message !== 'string'){
+//         throw new Error ('Invalid Message')
+//     }
 
-    if (typeof date !== 'object' || isNaN(date.getTime())) {
-        throw new Error('Invalid Date');
-      }
+//     if (typeof date !== 'object' || isNaN(date.getTime())) {
+//         throw new Error('Invalid Date');
+//       }
       
-      try{
-        const userdb = await users();
-        const user = await userdb.findOne({ _id: new ObjectId(userId) })
+//       try{
+//         const userdb = await users();
+//         const user = await userdb.findOne({ _id: new ObjectId(userId) })
 
-        if(!user) {
-            throw new Error('User not found with this userId ')
-        }
+//         if(!user) {
+//             throw new Error('User not found with this userId ')
+//         }
 
-        const journaldb = await journal();
-        const insert = await journaldb.insertOne({
-            userId: userId,
-            message: message,
-            date: date
-        });
+//         const journaldb = await journal();
+//         const insert = await journaldb.insertOne({
+//             userId: userId,
+//             message: message,
+//             date: date
+//         });
 
-        const insertedId = insert.insertedId.toString();
+//         const insertedId = insert.insertedId.toString();
         
-        return { journalId: insertedId };
-             } catch (err) {
-            throw new Error('Failed to create journal entry');
-    }
+//         return { journalId: insertedId };
+//              } catch (err) {
+//             throw new Error('Failed to create journal entry');
+//     }
+// };
+
+const CreateJournal = async(userId ,message , dateString) => {
+    
+  if (!userId || typeof userId !== 'string'){
+      throw new Error ('Invalid user ID')
+  } 
+
+  if (!message || typeof message !== 'string'){
+      throw new Error ('Invalid Message')
+  }
+
+  if (typeof dateString !== 'string' || isNaN(Date.parse(dateString))) {
+      throw new Error('Invalid Date');
+  }
+
+  const date = new Date(dateString);
+    
+  try{
+      const userdb = await users();
+      const user = await userdb.findOne({ _id: new ObjectId(userId) })
+
+      if(!user) {
+          throw new Error('User not found with this userId ')
+      }
+
+      const journaldb = await journal();
+      const insert = await journaldb.insertOne({
+          userId: userId,
+          message: message,
+          date: date
+      });
+
+      const insertedId = insert.insertedId.toString();
+      
+      return { journalId: insertedId };
+  } catch (err) {
+      throw new Error('Failed to create journal entry');
+  }
 };
+
 
 const getJournal = async (id) => {
 
