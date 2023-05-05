@@ -34,7 +34,7 @@ const defaultUser = {
   isAnonymous: false,
 };
 
-const SignUp = (props) => {
+const SignUp = () => {
   const [user, setUser] = React.useState(defaultUser);
   const [errors, setErrors] = React.useState(defaultUser);
   const [apiStatus, setApiStatus] = React.useState({});
@@ -140,31 +140,28 @@ const SignUp = (props) => {
             onChange={onChangeOfValue}
           />
           <div className="input-dialog">
-            <div className="header-dialog">Sign up here!</div>
+            <div className="header-dialog">Sign up</div>
             <CustomTextField
             className="my-custom-textfield"
               onBlur={onBlur}
-              error={getHelperText("username")}
+              error={!!getHelperText("username")}
               helperText={getHelperText("username")}
               name="username"
               value={user.username}
               onChange={onChangeOfValue}
-             
-            
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("firstName")}
+              error={!!getHelperText("firstName")}
               helperText={getHelperText("firstName")}
               name="firstName"
               label="first name"
               value={user.firstName}
               onChange={onChangeOfValue}
-              
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("lastName")}
+              error={!!getHelperText("lastName")}
               helperText={getHelperText("lastName")}
               name="lastName"
               label="last name"
@@ -174,7 +171,7 @@ const SignUp = (props) => {
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("email")}
+              error={!!getHelperText("email")}
               helperText={getHelperText("email")}
               name="email"
               value={user.email}
@@ -183,7 +180,7 @@ const SignUp = (props) => {
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("password")}
+              error={!!getHelperText("password")}
               helperText={getHelperText("password")}
               name="password"
               type={showPassword ? "text" : "password"}
@@ -207,7 +204,7 @@ const SignUp = (props) => {
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("confirmPassword")}
+              error={!!getHelperText("confirmPassword")}
               helperText={getHelperText("confirmPassword")}
               name="confirmPassword"
               label="Confirm Password"
@@ -242,7 +239,7 @@ const SignUp = (props) => {
           <div className="input-dialog-2">
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("age")}
+              error={!!getHelperText("age")}
               helperText={getHelperText("age")}
               name="age"
               value={user.age}
@@ -251,7 +248,7 @@ const SignUp = (props) => {
             />
             <CustomSelect
               onBlur={onBlur}
-              error={getHelperText("gender")}
+              error={!!getHelperText("gender")}
               helperText={getHelperText("gender")}
               name="gender"
               value={user.gender}
@@ -275,7 +272,7 @@ const SignUp = (props) => {
             />
             <CustomSelect
               onBlur={onBlur}
-              error={getHelperText("role")}
+              error={!!getHelperText("role")}
               helperText={getHelperText("role")}
               name="role"
               value={user.role}
@@ -293,7 +290,7 @@ const SignUp = (props) => {
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("city")}
+              error={!!getHelperText("city")}
               helperText={getHelperText("city")}
               name="city"
               label="city (optional)"
@@ -303,7 +300,7 @@ const SignUp = (props) => {
             />
             <CustomTextField
               onBlur={onBlur}
-              error={getHelperText("state")}
+              error={!!getHelperText("state")}
               helperText={getHelperText("state")}
               name="state"
               label="state (optional)"

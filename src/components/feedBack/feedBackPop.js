@@ -9,12 +9,10 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getFeedbackByChatId } from "../../api/feedback";
-import Cookies from 'js-cookie';
 import {getUserId} from "../../helper/index"
 
-//In props I need a chatId ,username
 const FeedBackPop = (props) => {
-  const { isOpen, closeModal } = props;
+  const { isOpen, chatId, username, closeModal } = props;
   // const [open, setOpen] = useState(false);
   const [feedbackExists, setFeedbackExists] = useState(false);
   const [userId, setUserID] = useState();
@@ -26,11 +24,11 @@ const FeedBackPop = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!isOpen) return;
 
     const checkFeedback = async () => {
       try {
-        const response = await getFeedbackByChatId(props.chatId, userId);
+        const response = await getFeedbackByChatId(chatId, userId);
         console.log(response);
         if (response) {
           setFeedbackExists(true);
@@ -43,7 +41,7 @@ const FeedBackPop = (props) => {
       }
     };
     checkFeedback();
-  }, [userId]);
+  }, [isOpen]);
 
   // const handleClickOpen = () => {
   //   setOpen(true);
@@ -57,11 +55,11 @@ const FeedBackPop = (props) => {
   const handleAgree = () => {
     if (feedbackExists) {
       navigate("/feedbacks/feedback", {
-        state: { chatId: props.chatId , username: props.username},
+        state: { chatId, username},
       });
     } else {
       navigate("/feedbacks", {
-        state: { chatId: props.chatId , username: props.username },
+        state: { chatId, username },
       });
     }
     // setOpen(false);

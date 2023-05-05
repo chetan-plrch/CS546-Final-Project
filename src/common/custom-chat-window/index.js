@@ -188,7 +188,7 @@ function ChatWindow(props) {
                             value={currentMessage}
                             onChange={onChangeOfValue}
                         />
-                        <CustomButton title={'Send'} onClick={sendText} />
+                        <CustomButton title={'Send'} onClick={sendText} disabled={!currentMessage} />
                     </div>
                 ) : null
             }

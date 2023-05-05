@@ -12,48 +12,38 @@ import { roles } from '../../constant';
 const Connections = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState();
   const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
   const [selectedConnectionName, setSelectedConnectionName] = useState();
   const [archivedConnections, setArchivedConnections] = useState([]);
+  const userRole = getUserRole();
 
   useEffect(() => {
     async function fetchConnections() {
       const response = await getAllConnections();
       const loggedInUserId = getUserId();
       const { connection: newConnection } = location?.state || {};
-      if (response?.data?.users) {
+      if (response?.data?.users?.length) {
         let { users } = response.data;
-        if (users?.length) {
-          users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
-          const archivedUsers = users.filter((user) => user?.archivedBy?.includes(loggedInUserId));
-          if (archivedUsers?.length) {
-            setArchivedConnections(archivedUsers);
-            users = users.filter((user) => !user?.archivedBy?.includes(loggedInUserId));
-          };
-          if (newConnection?._id && users.findIndex((user) => user?._id === newConnection?._id) < 0) {
-            users = [newConnection, ...users];
-          };
-          setSelectedConnectionId(newConnection?._id || users[0]?._id);
-          setSelectedConnectionName(newConnection?.fullName || users[0]?.fullName);
-          setConnections(users);
-        } else {
-          const role = getUserRole();
-          setUserRole(role);
-          if (newConnection?._id) {
-            setSelectedConnectionId(newConnection?._id);
-            setSelectedConnectionName(newConnection?.fullName);
-            setConnections([newConnection]);
-          };
+        users = users?.map((user) => ({...user, fullName: `${user.firstName} ${user.lastName}`}));
+        const archivedUsers = users.filter((user) => user?.archivedBy?.includes(loggedInUserId));
+        if (archivedUsers?.length) {
+          setArchivedConnections(archivedUsers);
+          users = users.filter((user) => !user?.archivedBy?.includes(loggedInUserId));
         };
+        if (newConnection?._id && users.findIndex((user) => user?._id === newConnection?._id) < 0) {
+          users = [newConnection, ...users];
+        };
+        setSelectedConnectionId(newConnection?._id || users[0]?._id);
+        setSelectedConnectionName(newConnection?.fullName || users[0]?.fullName);
+        setConnections(users);
       } else {
-        const role = getUserRole();
-        setUserRole(role);
         if (newConnection?._id) {
           setSelectedConnectionId(newConnection?._id);
           setSelectedConnectionName(newConnection?.fullName);
           setConnections([newConnection]);
+        } else {
+          setConnections([]);
         };
       };
       window.history.replaceState({}, document.title)
@@ -126,7 +116,7 @@ const Connections = () => {
   return (
     <div className='connections-container'>
     {
-    connections?.length ? (
+    connections?.length || archivedConnections?.length ? (
       <div className='conversation-container'>
         <CustomList
           selectionKey='_id'
@@ -138,17 +128,23 @@ const Connections = () => {
           selectedId={selectedConnectionId}
           onSelectionChange={(connectionId) => changeChatWindow(connectionId)}
         />
-        <ChatWindow
-          allowSearch={true}
-          allowBlocking={true}
-          allowMessaging={true}
-          allowArchiving={true}
-          connectionId={selectedConnectionId}
-          connectionName={selectedConnectionName}
-          onConnectionUpdate={updateConnections}
-          removeConnection={removeUserFromList}
-          updateArchiveStatus={archiveChat}
-          />
+        {
+          selectedConnectionId ? (
+            <ChatWindow
+            allowSearch={true}
+            allowBlocking={true}
+            allowMessaging={true}
+            allowArchiving={true}
+            connectionId={selectedConnectionId}
+            connectionName={selectedConnectionName}
+            onConnectionUpdate={updateConnections}
+            removeConnection={removeUserFromList}
+            updateArchiveStatus={archiveChat}
+            />
+          ) : (
+            null
+          )
+        }
       </div>
     ) : (
         userRole === roles.SEEKER ? (

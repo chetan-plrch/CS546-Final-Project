@@ -178,7 +178,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("username")}
+              error={!!getHelperText("username")}
               helperText={getHelperText("username")}
               name="username"
               value={user.username}
@@ -188,7 +188,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("firstName")}
+              error={!!getHelperText("firstName")}
               helperText={getHelperText("firstName")}
               name="firstName"
               label="first name"
@@ -199,7 +199,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("lastName")}
+              error={!!getHelperText("lastName")}
               helperText={getHelperText("lastName")}
               name="lastName"
               label="last name"
@@ -210,7 +210,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("email")}
+              error={!!getHelperText("email")}
               helperText={getHelperText("email")}
               name="email"
               value={user.email}
@@ -220,7 +220,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("password")}
+              error={!!getHelperText("password")}
               helperText={getHelperText("password")}
               name="password"
               type={showPassword ? "text" : "password"}
@@ -245,7 +245,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("age")}
+              error={!!getHelperText("age")}
               helperText={getHelperText("age")}
               name="age"
               value={user.age}
@@ -255,7 +255,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("city")}
+              error={!!getHelperText("city")}
               helperText={getHelperText("city")}
               name="city"
               label="city (optional)"
@@ -266,7 +266,7 @@ const Profile = () => {
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
-              error={getHelperText("state")}
+              error={!!getHelperText("state")}
               helperText={getHelperText("state")}
               name="state"
               label="state (optional)"

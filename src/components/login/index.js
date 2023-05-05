@@ -119,7 +119,7 @@ const Login = () => {
         p={3}
         borderRadius={4}
       >
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" color="#2d842d">
           Login
         </Typography>
         <Box
