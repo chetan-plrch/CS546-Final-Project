@@ -35,6 +35,32 @@ const createFeed = async (title, description, type, images) => {
       throw new Error(`Cannot create feed: ${error.message}`);
     }
   };
+
+  const getFeedById = async (id) => {
+    if (!id || typeof id !== 'string') {
+      throw new Error('ID is required and must be a string');
+    }
+  
+    try {
+      const feedsCollection = await feeds();
+      const feed = await feedsCollection.findOne({ _id: ObjectId(id) });
+  
+      if (!feed) {
+        throw new Error(`Feed with ID ${id} not found`);
+      }
+  
+      return {
+        _id: feed._id.toString(),
+        title: feed.title,
+        description: feed.description,
+        type: feed.type,
+        images: feed.images,
+      };
+    } catch (error) {
+      throw new Error(`Cannot get feed: ${error.message}`);
+    }
+  };
+  
   
   const getAll = async() =>{
     const allFeeds = await feeds();
@@ -51,4 +77,4 @@ const createFeed = async (title, description, type, images) => {
 
   };
 
-  export default {createFeed, getAll}
+  export default {createFeed, getFeedById,getAll}

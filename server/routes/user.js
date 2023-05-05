@@ -2,13 +2,11 @@ import { Router } from "express";
 import { authenticate,notAuthenticate } from "../middleware/index.js";
 import { userData } from "../data/index.js";
 import validation from "../validations.js";
-import jwt from "jsonwebtoken";
-import validators from '../validations.js'
-import { unblockConnection} from '../data/chat.js'
 const router = Router();
 
 
 router.get("/user", authenticate, async (req, res) => {
+  delete req.user.password;
   return res.send(req.user);
 });
 

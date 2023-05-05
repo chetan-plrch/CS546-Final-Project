@@ -99,7 +99,6 @@ const getFeeds = async() => {
 }
 
   const editProfile = async() => {
-  const userId = getUserId()
   try{
     const userId = getUserId()
     console.log(`inside the useeffect api call ${userId}`);

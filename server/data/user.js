@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 import crypto from 'crypto'
 
-
 const create = async (
   firstName,
   lastName,
@@ -222,15 +221,24 @@ const getAllUsers = async (queryParams) => {
     throw new Error ('invalid object ID');
    } 
 
-   const collection = await users();
    const getID = await collection.findOne({_id: new ObjectId(id)});
+  
+   
    if(getID === null){
     throw new Error("No user with that id");
    }
 
    getID._id = getID._id.toString();
-   return getID;
+}
 
+const allUsers = async()=>{
+  const collection = await users();
+   const getID = await collection.find({}, { projection: { _id: 1, role: 1 } }).toArray();
+   const result = getID.map(obj => {
+    obj._id = obj._id.toString();
+    return obj;
+  });
+  return result;
 }
 
  const remove = async (id) => {
@@ -361,4 +369,4 @@ const getAllBlockedUsers = async (Id) => {
   return blockedUsers;
 };
 
-export default { create, checkLogged, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers };
+export default { create, checkLogged, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers,allUsers };
