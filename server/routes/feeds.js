@@ -33,7 +33,7 @@ router.route('/feed').get(async (req, res) => {
       console.log(e);
       res.status(500).json({ error: "Internal server error" });
     }
-  })
+})
 
 router
 .route("/feed/like")
@@ -70,7 +70,7 @@ router
     }catch(e){
       return res.json(feed)
     }
-  });
+});
 
 router
 .route("/feed/unlike")
