@@ -13,7 +13,7 @@ const getChatHistory = async (connectionId) => {
 // Blocks a user from sending messages to logged in user
 const blockUser = async (blockConnectionId) => {
     try {
-        const blockUserResponse = await axiosApi.post('/chat/block', {
+        const blockUserResponse = await axiosApi.put('/chat/block', {
             blockConnectionId
         });
         return blockUserResponse;
