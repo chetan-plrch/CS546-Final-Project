@@ -34,7 +34,6 @@ const Footer = () => {
   }, []);
 
   const openChat = (connection) => {
-    console.log('open chat with', connection);
     setSelectedConnection(connection);
     setViewChatPopup(true);
   };

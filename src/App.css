@@ -78,5 +78,8 @@
   -webkit-text-decoration: none;
   text-decoration: none;
   padding-top: 0.6rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
