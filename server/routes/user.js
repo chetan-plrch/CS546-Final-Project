@@ -107,6 +107,14 @@ if(userInfo.state){
     errors.push(e);
   }
 
+  if (userInfo.profilePic) {
+    try {
+      userInfo.profilePic = validation.checkImage(userInfo.profilePic);
+    } catch (e) {
+      errors.push(e);
+    }
+  }
+
   if (errors.length > 0) {
     res.status(400).send({ errors });
     return;
@@ -297,6 +305,9 @@ router.put("/update", authenticate, async (req, res) => {
     }
     if (userInfo.state) {
       userInfo.state = validation.checkString(userInfo.state);
+    }
+    if (userInfo.profilePic) {
+      validation.checkImage(userInfo.profilePic);
     }
 
     await checkEmailExists(userId, userInfo.email)
