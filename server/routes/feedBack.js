@@ -249,7 +249,6 @@ router
       let deleteFeedBack = await feedBackData.remove(feedBackInfo.feedBackId);
       return res.json(deleteFeedBack);
     } catch (e) {
-      console.log(e);
       let status = e[0] ? e[0] : 500;
       let message = e[1] ? e[1] : "Internal Server Error";
       return res.status(status).send({ error: message });

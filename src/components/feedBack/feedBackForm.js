@@ -16,6 +16,8 @@ import { createFeedBack } from "../../api/feedback";
 import validations from "../../validation";
 
 
+
+
 const FeedBackForm = (props) => {
   const [rate1, setRate1] = useState("");
   const [rate2, setRate2] = useState("");
@@ -143,44 +145,48 @@ const FeedBackForm = (props) => {
               <TextField
                 fullWidth
                 margin="normal"
-                label="Willing to reconnect(rate:0 to 5)"
+                label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Willing to reconnect(rate:0 to 5)</span>}
                 type="number"
                 value={rate1}
                 onChange={(e) => setRate1(e.target.value)}
                 error={!!errors.rate1}
                 helperText={errors.rate1}
+          
               />
           
               <TextField
                 fullWidth
                 margin="normal"
-                label="Will you recommend the listener(rate:0 to 5)"
+                label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Will you recommend the listener(rate:0 to 5)</span>}
                 type="number"
                 value={rate2}
                 onChange={(e) => setRate2(e.target.value)}
                 error={!!errors.rate2}
                 helperText={errors.rate2}
+                
               />
               <TextField
                 fullWidth
                 margin="normal"
-                label="Overall rating for the listener(rate:0 to 5)"
+                label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Overall rating for the listener(rate:0 to 5)</span>}
                 type="number"
                 value={rate3}
                 onChange={(e) => setRate3(e.target.value)}
                 error={!!errors.rate3}
                 helperText={errors.rate3}
+                
               />
               <TextField
                 fullWidth
                 margin="normal"
-                label="Description(Optional)"
+                label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Description(Optional)</span>}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 multiline
                 rows={4}
                 error={!!errors.description}
                 helperText={errors.description}
+                
               />
 
               <FormControlLabel

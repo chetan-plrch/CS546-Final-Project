@@ -129,25 +129,23 @@ const Login = () => {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             id="userName"
-            label="Username"
-            name="username"
+            label={<span style={{ fontWeight: 'bold', color: 'black' }}>Username</span>}
             autoComplete="username"
             autoFocus
             value={username}
             onChange={handleUsernameChange}
             error={!!errors.username}
             helperText={errors.username}
+  
           />
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
-            label="Password"
+            label={<span style={{ fontWeight: 'bold', color: 'black' }}>Password</span>}
             type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"

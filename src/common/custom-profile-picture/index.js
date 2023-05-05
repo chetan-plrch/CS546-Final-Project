@@ -4,10 +4,6 @@ import Avatar from "@mui/material/Avatar";
 const ProfileImage = (props) => {
   const [profileImage, setImage] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
-  
-  useEffect(() => {
-    console.log('profileImage', profileImage)
-  }, [props.image])
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -28,7 +24,7 @@ const ProfileImage = (props) => {
 
     setErrorMessage('')
     const reader = new FileReader();
-    if (render) {
+    if (reader) {
       reader.onload = () => {
         setImage(reader?.result);
         props.onChange(props.name, reader?.result)
@@ -40,8 +36,8 @@ const ProfileImage = (props) => {
   return (
     <div>
       <label htmlFor="profile-image">
-        {profileImage ? (
-          <img className="profile-image" src={profileImage} alt="Profile" />
+        {props.image ? (
+          <img className="profile-image" src={props.image} alt="Profile" />
         ) : (
             <Avatar
                 sx={{
