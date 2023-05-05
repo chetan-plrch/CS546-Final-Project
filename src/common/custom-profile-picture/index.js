@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 
 const ProfileImage = (props) => {
+  const [profileImage, setImage] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -23,7 +24,7 @@ const ProfileImage = (props) => {
 
     setErrorMessage('')
     const reader = new FileReader();
-    if (render) {
+    if (reader) {
       reader.onload = () => {
         setImage(reader?.result);
         props.onChange(props.name, reader?.result)

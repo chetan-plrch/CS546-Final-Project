@@ -57,7 +57,6 @@ const Profile = () => {
     async function getBlocked() {
       const blockedUsersData = await getBlockedUsers();
       setBlockedUsers(blockedUsersData);
-      console.log("this worked");
     }
 
     getProfileDetails();

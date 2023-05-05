@@ -285,22 +285,22 @@ router.put("/update", authenticate, async (req, res) => {
     userInfo.username = validation.checkUsername(userInfo.username);
     userInfo.firstName = validation.checkString(userInfo.firstName);
     userInfo.lastName = validation.checkString(userInfo.lastName);
-    userInfo.email = validaiton.checkMailID(userInfo.email)
+    userInfo.email = validation.checkMailID(userInfo.email)
     userInfo.age = validation.checkAge(userInfo.age);
-    validation.checkPublic(isAnonymous);
+    validation.checkPublic(userInfo.isAnonymous);
 
-    if (password) {
-      userInfo.password = validation.checkPassword(password);
+    if (userInfo.password) {
+      userInfo.password = validation.checkPassword(userInfo.password);
     }
-    if (city) {
+    if (userInfo.city) {
       userInfo.city = validation.checkString(userInfo.city);
     }
-    if (state) {
+    if (userInfo.state) {
       userInfo.state = validation.checkString(userInfo.state);
     }
 
-    await checkEmailExists(userId, email)
-    await checkUsernameExists(userId, username)
+    await checkEmailExists(userId, userInfo.email)
+    await checkUsernameExists(userId, userInfo.username)
     const updateUser = await userData.update({ id: userId, ...userInfo });
     return res.status(200).json(updateUser);
   } catch (e) {
