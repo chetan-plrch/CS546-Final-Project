@@ -307,7 +307,7 @@ router.put("/update", authenticate, async (req, res) => {
       userInfo.state = validation.checkString(userInfo.state);
     }
     if (userInfo.profilePic) {
-      userInfo.profilePic = validation.checkImage(userInfo.profilePic);
+      validation.checkImage(userInfo.profilePic);
     }
 
     await checkEmailExists(userId, userInfo.email)
