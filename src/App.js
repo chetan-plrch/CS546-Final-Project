@@ -23,7 +23,7 @@ const App = () => {
     }
 
     checkAuthorized();
-  }, []);
+  }, [window.location.pathname]);
 
   
   return (
