@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
-import validations from './validations'
+import validations, {errorObject} from './validations'
+import { errorType } from './constants';
 
 const validateUsername = (username) => {
   try {
@@ -12,6 +13,10 @@ const validateUsername = (username) => {
 const validateFirstname = (firstName) => {
   try {
     validations.checkString(firstName, 'firstName');
+    const nameRegex = /^[A-Za-z\s]*$/;
+    if (!nameRegex.test(firstName)) {
+      throw errorObject(errorType.BAD_INPUT, `Error: firstName can only contain letters and spaces`);
+    };
   } catch(e) {
     return formatErrorMessage(e.toString());
   };
@@ -20,6 +25,10 @@ const validateFirstname = (firstName) => {
 const validateLastname = (lastName) => {
   try {
     validations.checkString(lastName, 'lastName');
+    const nameRegex = /^[A-Za-z\s]*$/;
+    if (!nameRegex.test(lastName)) {
+      throw errorObject(errorType.BAD_INPUT, `Error: lastName can only contain letters and spaces`);
+    };
   } catch(e) {
     return formatErrorMessage(e.toString());
   }

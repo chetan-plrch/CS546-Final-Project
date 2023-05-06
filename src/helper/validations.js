@@ -52,9 +52,17 @@ const exportedMethods = {
   },
   checkUsername(username) {
     username = this.checkString(username, "username");
-    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/; // Regex to validate username
+    if (username.length < 3 || username.length > 20) {
+      throw errorObject(
+        errorType.BAD_INPUT,
+        'Error: username should be between min 3 and max 20 characters long'
+      );
+    };
+    const usernameRegex = /^(?=[a-z_\d]*[a-z])[a-z_\d]{3,20}$/; // Regex to validate username
     if (!usernameRegex.test(username)) {
-      throw errorObject(errorType.BAD_INPUT, "Error: username can only contain alphanumeric characters and underscores and a length between 3 and 20 characters")
+      throw errorObject(
+        errorType.BAD_INPUT,
+        "Error: username should contain atleast 1 letter and can only contain alphanumeric chars and underscores")
     }
     return username.trim().toLowerCase();
   },
