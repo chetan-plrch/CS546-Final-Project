@@ -31,7 +31,7 @@ const Footer = () => {
       }
     };
     fetchConnections();
-  }, []);
+  }, [navigate()]);
 
   const openChat = (connection) => {
     setSelectedConnection(connection);

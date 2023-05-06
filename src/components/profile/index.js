@@ -220,6 +220,7 @@ const Profile = () => {
               onChange={onChangeOfValue}
               
             />
+            {console.log('user',user)}
             <CustomTextField
               styles={{ width: 15 }}
               onBlur={onBlur}
