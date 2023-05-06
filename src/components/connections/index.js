@@ -7,7 +7,7 @@ import CustomList from '../../common/custom-list';
 import ChatWindow from '../../common/custom-chat-window';
 import { getAllConnections } from '../../api/connections';
 import { getUserId, getUserRole } from '../../helper'
-import { roles } from '../../constant';
+import { roles } from '../../helper/constants';
 
 const Connections = () => {
   const location = useLocation();

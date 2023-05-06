@@ -15,7 +15,7 @@ import ProfileImage from "../../common/custom-profile-picture";
 import CommonMessage from "../../common/custom-message";
 import { useNavigate, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
-import {roles} from "../../constant"
+import {roles} from "../../helper/constants"
 
 
 const defaultUser = {

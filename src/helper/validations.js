@@ -1,4 +1,4 @@
-import { errorType } from "./constant";
+import { errorType } from "./constants.js";
 
 const errorObject = (type, msg) => {
     const e = new Error(msg)

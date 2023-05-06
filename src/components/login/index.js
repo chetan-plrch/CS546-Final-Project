@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
-import validations from "../../validation";
+import validations from "../../helper/validations";
 import "./index.css";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";

@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogContent
 } from "@mui/material";
-import { viewFooterOnPages } from '../../constant';
+import { viewFooterOnPages } from '../../helper/constants';
 import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
