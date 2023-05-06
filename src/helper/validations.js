@@ -1,6 +1,6 @@
 import { errorType } from "./constants.js";
 
-const errorObject = (type, msg) => {
+export const errorObject = (type, msg) => {
     const e = new Error(msg)
     e.type = type
     return e
