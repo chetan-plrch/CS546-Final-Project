@@ -58,7 +58,7 @@ const exportedMethods = {
         'Error: username should be between min 3 and max 20 characters long'
       );
     };
-    const usernameRegex = /^(?=[a-z_\d]*[a-z])[a-z_\d]{3,20}$/; // Regex to validate username
+    const usernameRegex = /^(?=[a-zA-Z_\d]*[a-zA-Z])[a-zA-Z_\d]{3,20}$/; // Regex to validate username
     if (!usernameRegex.test(username)) {
       throw errorObject(
         errorType.BAD_INPUT,
