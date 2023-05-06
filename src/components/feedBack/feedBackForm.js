@@ -107,9 +107,6 @@ const FeedBackForm = (props) => {
       if (result.status === 200) {
         toast.success("Feedback submitted successfully");
         resetForm();
-        setTimeout(() => {
-          navigate("/connections");
-        }, 2000);
         props.onSubmit();
       } else {
         toast.error("Failed to submit feedback");
@@ -138,9 +135,9 @@ const FeedBackForm = (props) => {
             boxShadow={4}
           >
             <Box>
-              <Typography variant="h1" mb={2}>
+              {/* <Typography variant="h1" mb={2}>
                 Submit Feedback for {props.username.toUpperCase()}
-              </Typography>
+              </Typography> */}
               
               <TextField
                 fullWidth
@@ -201,16 +198,6 @@ const FeedBackForm = (props) => {
               />
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%">
-              <Button
-                variant="contained"
-                color="primary"
-                endIcon={<SendIcon />}
-                type="submit"
-                sx={{ mt: 2 }}
-                onClick={() => navigate("/home")}
-              >
-                GO Back
-              </Button>
               <Button
                 variant="contained"
                 color="primary"

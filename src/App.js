@@ -76,7 +76,7 @@ const App = () => {
               </Protected>
             }
           />
-          <Route
+          {/* <Route
             exact
             path="/feedbacks"
             element={
@@ -84,8 +84,8 @@ const App = () => {
                 <Feedback />
               </Protected>
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             exact
             path="/feedbacks/feedback"
             element={
@@ -93,7 +93,7 @@ const App = () => {
                 <Middle />
               </Protected>
             }
-          />
+          /> */}
           <Route
             exact
             path="/feedbackslist"

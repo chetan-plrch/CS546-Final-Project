@@ -64,9 +64,6 @@ const FeedBackEditForm = (props) => {
 
     if (response.status === 200) {
       toast.success("Feedback Deleted Successfully");
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
     } else {
       toast.error("Error in deleting feedback, try again");
     }
@@ -145,9 +142,6 @@ const FeedBackEditForm = (props) => {
 
       if (response.status === 200) {
         toast.success("Feedback Updated Successfully");
-        setTimeout(() => {
-          navigate("/home");
-        }, 2000);
       } else {
         toast.error("Error in updating feedback, try again");
       }
@@ -176,9 +170,9 @@ const FeedBackEditForm = (props) => {
           boxShadow={4}
         >
           <Box>
-            <Typography variant="h1" mb={2} color="#222222">
+            {/* <Typography variant="h1" mb={2} color="#222222">
               Edit Feedback
-            </Typography>
+            </Typography> */}
             <TextField
               fullWidth
               margin="normal"
@@ -262,15 +256,6 @@ const FeedBackEditForm = (props) => {
               onClick={handleDelete}
             >
               Delete
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              type="button"
-              sx={{ mt: 2, bgcolor: "#1976D2" }}
-              onClick={() => navigate("/feedbackslist")}
-            >
-              Go Back
             </Button>
             <Button
               variant="contained"
