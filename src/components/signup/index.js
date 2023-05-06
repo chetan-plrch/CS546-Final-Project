@@ -60,9 +60,10 @@ const SignUp = () => {
         setAnonymousDisabled(false);
       }
     } else {
-      const err = helper.validator(user, key, errors);
-      setErrors({ ...err });
-      setUser({ ...user, [key]: value });
+      const updatedUser = { ...user, [key]: value };
+      const error = helper.validator(updatedUser, key, errors);
+      setErrors({ ...error });
+      setUser(updatedUser);
     }
   };
 
@@ -120,11 +121,6 @@ const SignUp = () => {
     }
   };
 
-  const onBlur = (name) => {
-    const err = helper.validator(user, name, errors);
-    setErrors({ ...err });
-  };
-
   const getHelperText = (key) => {
     if (errors[key]) {
       return errors[key].helperText;
@@ -146,7 +142,6 @@ const SignUp = () => {
             <CustomTextField
              style={{color: "blue", fontStyle: "italic"}}
               className="my-custom-textfield"
-              onBlur={onBlur}
               error={!!getHelperText("username")}
               helperText={getHelperText("username")}
               name="username"
@@ -154,7 +149,6 @@ const SignUp = () => {
               onChange={onChangeOfValue}
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("firstName")}
               helperText={getHelperText("firstName")}
               name="firstName"
@@ -163,7 +157,6 @@ const SignUp = () => {
               onChange={onChangeOfValue}
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("lastName")}
               helperText={getHelperText("lastName")}
               name="lastName"
@@ -173,7 +166,6 @@ const SignUp = () => {
               
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("email")}
               helperText={getHelperText("email")}
               name="email"
@@ -182,7 +174,6 @@ const SignUp = () => {
               
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("password")}
               helperText={getHelperText("password")}
               name="password"
@@ -206,7 +197,6 @@ const SignUp = () => {
               
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("confirmPassword")}
               helperText={getHelperText("confirmPassword")}
               name="confirmPassword"
@@ -241,7 +231,6 @@ const SignUp = () => {
           </div>
           <div className="input-dialog-2">
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("age")}
               helperText={getHelperText("age")}
               name="age"
@@ -250,7 +239,6 @@ const SignUp = () => {
               
             />
             <CustomSelect
-              onBlur={onBlur}
               error={!!getHelperText("gender")}
               helperText={getHelperText("gender")}
               name="gender"
@@ -274,7 +262,6 @@ const SignUp = () => {
               
             />
             <CustomSelect
-              onBlur={onBlur}
               error={!!getHelperText("role")}
               helperText={getHelperText("role")}
               name="role"
@@ -292,7 +279,6 @@ const SignUp = () => {
               ]}
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("city")}
               helperText={getHelperText("city")}
               name="city"
@@ -302,7 +288,6 @@ const SignUp = () => {
               
             />
             <CustomTextField
-              onBlur={onBlur}
               error={!!getHelperText("state")}
               helperText={getHelperText("state")}
               name="state"
