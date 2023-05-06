@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { createFeedBack } from "../../api/feedback";
-import validations from "../../validation";
+import validations from "../../helper/validations";
 
 
 

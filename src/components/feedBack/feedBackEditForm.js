@@ -12,7 +12,7 @@ import {
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
-import validations from "../../validation";
+import validations from "../../helper/validations";
 
 const FeedBackEditForm = (props) => {
   const navigate = useNavigate();

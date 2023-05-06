@@ -1,4 +1,4 @@
-import validations from "../src/validation.js";
+import validations from "../src/helper/validations.js";
 import { ObjectId } from "mongodb";
 
 const checkId = (id, varName) => {

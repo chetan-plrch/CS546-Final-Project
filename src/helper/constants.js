@@ -18,3 +18,9 @@ export const expertFilterOptions = [
 export const viewFooterOnPages = ['home', 'feedbackslist', 'experts', 'profile'];
 
 export const feedbackTriggerCount = 5;
+
+export const errorType = {
+    BAD_INPUT: 'BAD_INPUT',
+    UNAUTHORIZED: 'UNAUTHORIZED',
+    NOT_FOUND: 'NOT_FOUND'
+};
