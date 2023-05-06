@@ -60,9 +60,10 @@ const SignUp = () => {
         setAnonymousDisabled(false);
       }
     } else {
-      const err = helper.validator(user, key, errors);
-      setErrors({ ...err });
-      setUser({ ...user, [key]: value });
+      const updatedUser = { ...user, [key]: value };
+      const error = helper.validator(updatedUser, key, errors);
+      setErrors({ ...error });
+      setUser(updatedUser);
     }
   };
 
