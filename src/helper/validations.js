@@ -8,24 +8,26 @@ const errorObject = (type, msg) => {
 
 const exportedMethods = {
   checkString(strVal, varName) {
-    if (!strVal) 
-      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} field needs to have valid values`)
-    if (typeof strVal !== "string") 
-      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} must be a string!`)
+    if (!strVal || typeof strVal !== 'string') {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} should be a non-empty string value`);
+    };
     strVal = strVal.trim();
-    if (strVal.length === 0)
-      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot be an empty string or string with just spaces`)
-    if (!isNaN(strVal))
-      throw errorObject(errorType.BAD_INPUT, `Error: ${strVal} is not a valid value for ${varName} as it only contains digits`)
-    return strVal.trim();
+    if (!strVal) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot contain just empty spaces`);
+    };
+    return strVal;
   },
   checkAge(age) {
     if (!age) {
       throw errorObject(errorType.BAD_INPUT, `Error: age fields need to have valid values`)
-    }
-    if (typeof parseInt(age) !== "number") {
+    };
+    if (isNaN(age)) {
       throw errorObject(errorType.BAD_INPUT, "Error: age should be number")
-    }
+    };
+    age = Number(age);
+    if (!Number.isSafeInteger(age)) {
+      throw errorObject(errorType.BAD_INPUT, "Error: age should be whole number");
+    };
     if (age < 13) {
       throw errorObject(errorType.BAD_INPUT, "Error: under age")
     }
