@@ -1,8 +1,4 @@
-const errorType = {
-    BAD_INPUT: 'BAD_INPUT',
-    UNAUTHORIZED: 'UNAUTHORIZED',
-    NOT_FOUND: 'NOT_FOUND'
-}
+import { errorType } from "./constant";
 
 const errorObject = (type, msg) => {
     const e = new Error(msg)
