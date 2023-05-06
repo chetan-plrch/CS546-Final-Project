@@ -1,185 +1,110 @@
 import Cookies from 'js-cookie';
-import validations from '../validation.js'
+import validations from './validations'
 
-const validUsername = (username) => {
+const validateUsername = (username) => {
   try {
-    if (username) {
-      validations.checkUsername(username)
-    }
-    return [true, '']
+    validations.checkUsername(username);
   } catch(e) {
-    return [false, formatErrorMessage(e.toString())]
+    return formatErrorMessage(e.toString());
   }
 };
 
-const validFirstname = (firstName) => {
+const validateFirstname = (firstName) => {
   try {
-      if (firstName) {
-        validations.checkString(firstName, 'firstName')
-      }
-      return [true, '']
+    validations.checkString(firstName, 'firstName');
   } catch(e) {
-    return [false, formatErrorMessage(e.toString())]
+    return formatErrorMessage(e.toString());
+  };
+};
+
+const validateLastname = (lastName) => {
+  try {
+    validations.checkString(lastName, 'lastName');
+  } catch(e) {
+    return formatErrorMessage(e.toString());
   }
 };
 
-const validLastname = (lastName) => {
+const validateEmail = (email) => {
   try {
-      if (lastName) {
-        validations.checkString(lastName, 'lastName')
-      }
-      return [true, '']
-  } catch(e) {
-    return [false, formatErrorMessage(e.toString())]
-  }
-};
-
-const validEmail = (email) => {
-  try {
-    if (email) {
-      validations.checkMailID(email)
-    }
-    return [true, '']
+    validations.checkMailID(email);
   } catch (e) {
-    return [false, formatErrorMessage(e.toString())]
+    return formatErrorMessage(e.toString());
   }
 };
 
-const validPassword = (password) => {
+const validatePassword = (password) => {
   try {
-    if (password) {
-      validations.checkPassword(password)
-    }
-    return [true, '']
+    validations.checkPassword(password);
   } catch(e) {
-    return [false, formatErrorMessage(e.toString())]
+    return formatErrorMessage(e.toString());
   }
 };
 
-const validAge = (age) => {
+const validateAge = (age) => {
   try {
-    if (age) {
-      validations.checkAge(age)
-    }
-    return [true, '']
+    validations.checkAge(age);
   } catch(e) {
-    return [false, formatErrorMessage(e.toString())]
-  }
+    return formatErrorMessage(e.toString());
+  };
 };
 
-const validCity = (city) => {
+const validateCity = (city) => {
   try {
-    if (city) {
-      validations.checkString(city, 'city')
-    }
-    return [true, '']
+    validations.checkString(city, 'city');
   } catch(e) {
-    return [false, formatErrorMessage(e.toString())]
+    return formatErrorMessage(e.toString());
   }
 };
 
 const capitalizeFirst = (str) => {
-  if (!str) return "";
-  return str[0].toUpperCase() + str.slice(1, str.length);
+  return str ? str[0].toUpperCase() + str.slice(1, str.length) : '';
 };
 
-const validator = (user, key, err) => {
+const validator = (user, field, err) => {
   const errorObj = {};
-  Object.keys(user).forEach((key) => {
-    errorObj[key] = { ...(err[key] || {}) };
+
+  Object.keys(user).forEach((attribute) => {
+    errorObj[attribute] = { ...(err[attribute] || {}) };
   });
 
-  if ((key && key === "username") || !key) {
-    const [isValid, errTxt] = validUsername(user.username)
-    if (!isValid) {
-      errorObj.username.helperText = errTxt;
-    } else if (user.username) {
-      errorObj.username.helperText = "";
-    }
-  }
-
-  if ((key && key === "firstName") || !key) {
-    const [isValid, errTxt] = validFirstname(user.firstName)
-    if (!isValid) {
-      errorObj.firstName.helperText = errTxt;
-    } else if (user.firstName) {
-      errorObj.firstName.helperText = "";
-    }
-  }
-
-  if ((key && key === "lastName") || !key) {
-    const [isValid, errTxt] = validLastname(user.lastName)
-    if (!isValid) {
-      errorObj.lastName.helperText = errTxt;
-    } else if (user.lastName) {
-      errorObj.lastName.helperText = "";
-    }
-  }
-
-  if ((key && key === "email") || !key) {
-    const [isValid, errTxt] = validEmail(user.email)
-    if (!isValid) {
-      errorObj.email.helperText = errTxt;
-    } else if (user.email) {
-      errorObj.email.helperText = "";
-    }
-  }
-
-  if ((key && key === "password") || !key) {
-    const [isValid, errTxt] = validPassword(user.password)
-    if (!isValid) {
-      errorObj.password.helperText = errTxt;
-    } else if (user.password) {
-      errorObj.password.helperText = "";
-    }
-  }
-
-  if ((key && key === "confirmPassword") || !key) {
-    if (user.password !== user.confirmPassword) {
-      errorObj.confirmPassword.helperText = "Password's do not match";
-    } else if (user.password) {
-      errorObj.confirmPassword.helperText = "";
-    }
-  }
-
-  if ((key && key === "age") || !key) {
-    const [isValid, errTxt] = validAge(user.age)
-    if (!isValid) {
-      errorObj.age.helperText = errTxt;
-    } else if (user.age) {
-      errorObj.age.helperText = "";
-    }
-  }
-
-  if ((key && key === "gender") || !key) {
-    if (user.gender) {
-      errorObj.gender.helperText = "";
-    }
-  }
-
-  if ((key && key === "role") || !key) {
-    if (user.role) {
-      errorObj.role.helperText = "";
-    }
-  }
-
-  if ((key && key === "city") || !key) {
-    const [isValid, errTxt] = validCity(user.city)
-    if (!isValid) {
-      errorObj.city.helperText = errTxt;
-    } else if (user.city) {
-      errorObj.city.helperText = "";
-    }
-  }
-
-  if ((key && key === "state") || !key) {
-    const [isValid, errTxt] = validCity(user.state)
-    if (!isValid) {
-      errorObj.state.helperText = errTxt;
-    } else if (user.state) {
-      errorObj.state.helperText = "";
-    }
-  }
+  switch (true) {
+    case field === 'username':
+      errorObj.username.helperText = validateUsername(user.username);
+      break;
+    case field === 'firstName':
+      errorObj.firstName.helperText = validateFirstname(user.firstName);
+      break;
+    case field === 'lastName':
+      errorObj.lastName.helperText = validateLastname(user.lastName);
+      break;
+    case field === 'email':
+      errorObj.email.helperText = validateEmail(user.email);
+      break;
+    case field === 'password':
+      errorObj.password.helperText = validatePassword(user.password);
+      break;
+    case field === 'confirmPassword':
+      if (user.password !== user.confirmPassword) {
+        errorObj.confirmPassword.helperText = "Passwords do not match";
+      } else if (user.password) {
+        errorObj.confirmPassword.helperText = "";
+      };
+      break;
+    case field === 'age':
+      errorObj.age.helperText = validateAge(user.age);
+      break;
+    case field === 'city':
+      errorObj.city.helperText = validateCity(user.city);
+      break;
+    case field === 'state':
+      errorObj.state.helperText = validateCity(user.state)
+      break;
+    case field === 'role' && user?.role:
+    case field === 'gender' && user?.gender:
+      errorObj.gender.helperText = '';
+      break;
+  };
 
   return errorObj;
 };
@@ -215,8 +140,7 @@ export function delay(ms) {
 }
 
 const formatErrorMessage = (msg) => {
-  if (msg) return capitalizeFirst(msg.replace('Error: ', ''))
-  return ''
+  return msg ? capitalizeFirst(msg.replace('Error: ', '')) : '';
 }
 
 const helper = {
