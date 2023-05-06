@@ -18,7 +18,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import ProfileImage from "../../common/custom-profile-picture";
 import CommonMessage from "../../common/custom-message";
-import { roles } from "../../constant";
+import { roles } from "../../helper/constants";
 import { toast, ToastContainer } from "react-toastify/dist/react-toastify.js";
 import { useNavigate } from "react-router-dom";
 

@@ -10,7 +10,7 @@ import { blockUser, archiveChat, getChatHistory } from '../../api/connections';
 import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 import FeedBackPop from '../../components/feedBack/feedBackPop';
-import {feedbackTriggerCount} from '../../constant';
+import { feedbackTriggerCount } from '../../helper/constants';
 
 function ChatWindow(props) {
     const {

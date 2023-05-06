@@ -7,7 +7,7 @@ import {
     blockConnection,
     unblockConnection
 } from '../data/chat.js'
-import validators from '../validations.js'
+import validators from '../../src/helper/validations.js'
 import { getError } from "../util.js";
 
 const router = Router();

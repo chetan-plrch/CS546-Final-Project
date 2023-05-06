@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import CustomTextField from '../../common/custom-textfield';
 import './index.css';
-import { roles } from '../../constant';
 import { getAllUsers } from '../../api/users';
 import CustomList from '../../common/custom-list';
 import CustomFilter from '../../common/custom-filter';
 import { useNavigate } from 'react-router-dom';
-import { expertFilterOptions } from '../../constant';
+import { roles, expertFilterOptions } from '../../helper/constants';
 import { getUserId } from '../../helper';
 
 const Users = () => {

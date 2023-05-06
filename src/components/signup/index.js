@@ -2,7 +2,7 @@ import * as React from "react";
 import { createUserAccountAxios } from "../../api/index";
 import "./signup.css";
 import CustomTextField from "../../common/custom-textfield";
-import h from "../../helper/index";
+import helper from "../../helper/index";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -15,7 +15,7 @@ import ProfileImage from "../../common/custom-profile-picture";
 import CommonMessage from "../../common/custom-message";
 import { useNavigate, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
-import {roles} from "../../constant"
+import {roles} from "../../helper/constants"
 
 
 const defaultUser = {
@@ -60,6 +60,8 @@ const SignUp = () => {
         setAnonymousDisabled(false);
       }
     } else {
+      const err = helper.validator(user, key, errors);
+      setErrors({ ...err });
       setUser({ ...user, [key]: value });
     }
   };
@@ -119,7 +121,7 @@ const SignUp = () => {
   };
 
   const onBlur = (name) => {
-    const err = h.validator(user, name, errors);
+    const err = helper.validator(user, name, errors);
     setErrors({ ...err });
   };
 

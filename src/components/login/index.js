@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api";
-import validations from "../../validation";
+import validations from "../../helper/validations";
 import "./index.css";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -31,7 +31,7 @@ const Login = () => {
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
     try {
-      const validatedUsername = validations.checkUsername(e.target.value);
+      validations.checkUsername(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
     } catch (error) {
       if (error?.message?.includes?.("username")) {
@@ -43,10 +43,9 @@ const Login = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     try {
-      const validatedPassword = validations.checkPassword(e.target.value);
+      validations.checkPassword(e.target.value);
       setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
     } catch (error) {
-      //console.log(error.message);
       if (error?.message?.includes?.("password")) {
         setErrors((prevErrors) => ({ ...prevErrors, password: error.message }));
       }
@@ -59,7 +58,7 @@ const Login = () => {
     let newErrors = {};
 
     try {
-      const validatedUsername = validations.checkUsername(username);
+      validations.checkUsername(username);
     } catch (error) {
       if (error?.message?.includes?.("username")) {
         newErrors = { ...newErrors, username: error.message };
@@ -67,9 +66,8 @@ const Login = () => {
     }
 
     try {
-      const validatedPassword = validations.checkPassword(password);
+      validations.checkPassword(password);
     } catch (error) {
-      //console.log(error);
       if (error?.message?.includes?.("password")) {
         newErrors = { ...newErrors, password: error.message };
       }
@@ -89,7 +87,7 @@ const Login = () => {
 
     try {
       const result = await loginUser(loginData);
-      //console.log(result);
+
       if (result.status === 200) {
         console.log("Login successful");
         toast.success(result.data.message);
@@ -97,7 +95,6 @@ const Login = () => {
           navigate("/home");
         }, 2000);
       } else {
-        console.log(result[1]);
         setErrors({ ...errors, global: [result[1]] });
         toast.error("Error in Logging in");
       }
