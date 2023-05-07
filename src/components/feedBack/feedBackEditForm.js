@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
-  Typography,
   TextField,
   FormControlLabel,
   Checkbox,
   Button,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+import { toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
 import validations from "../../helper/validations";
 
 const FeedBackEditForm = (props) => {
-  const navigate = useNavigate();
   const feedId = props.feedbackId;
 
   const [data, setData] = useState({
@@ -36,7 +33,6 @@ const FeedBackEditForm = (props) => {
       try {
         const response = await getFeedback(props.feedbackId);
         const result = await response.data;
-        // console.log(result);
         setData({
           rate1: result.rating.reconnect_probability,
           rate2: result.rating.satisfied_with_chat,
@@ -64,9 +60,7 @@ const FeedBackEditForm = (props) => {
 
     if (response.status === 200) {
       toast.success("Feedback Deleted Successfully");
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
+      props.onSuccess();
     } else {
       toast.error("Error in deleting feedback, try again");
     }
@@ -145,9 +139,7 @@ const FeedBackEditForm = (props) => {
 
       if (response.status === 200) {
         toast.success("Feedback Updated Successfully");
-        setTimeout(() => {
-          navigate("/home");
-        }, 2000);
+        props.onSuccess();
       } else {
         toast.error("Error in updating feedback, try again");
       }
@@ -176,9 +168,6 @@ const FeedBackEditForm = (props) => {
           boxShadow={4}
         >
           <Box>
-            <Typography variant="h1" mb={2} color="#222222">
-              Edit Feedback
-            </Typography>
             <TextField
               fullWidth
               margin="normal"
@@ -266,15 +255,6 @@ const FeedBackEditForm = (props) => {
             <Button
               variant="contained"
               color="primary"
-              type="button"
-              sx={{ mt: 2, bgcolor: "#1976D2" }}
-              onClick={() => navigate("/feedbackslist")}
-            >
-              Go Back
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
               type="submit"
               sx={{ mt: 2, bgcolor: "#1976D2" }}
             >
@@ -283,7 +263,6 @@ const FeedBackEditForm = (props) => {
           </Box>
         </Box>
       </Container>
-      <ToastContainer />
     </>
   );
 };

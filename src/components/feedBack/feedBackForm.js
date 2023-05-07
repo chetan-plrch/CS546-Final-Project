@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
   Container,
-  Typography,
+  
   Box,
   Checkbox,
   FormControlLabel,
@@ -11,7 +11,6 @@ import {
 import { Send as SendIcon } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
 import { createFeedBack } from "../../api/feedback";
 import validations from "../../helper/validations";
 
@@ -25,7 +24,6 @@ const FeedBackForm = (props) => {
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState("");
-  const navigate = useNavigate();
 
   const resetForm = () => {
     setRate1("");
@@ -107,10 +105,8 @@ const FeedBackForm = (props) => {
       if (result.status === 200) {
         toast.success("Feedback submitted successfully");
         resetForm();
-        setTimeout(() => {
-          navigate("/connections");
-        }, 2000);
         props.onSubmit();
+        onSubmit();
       } else {
         toast.error("Failed to submit feedback");
         setErrors({ ...errors, global: [result.response.data] });
@@ -138,10 +134,6 @@ const FeedBackForm = (props) => {
             boxShadow={4}
           >
             <Box>
-              <Typography variant="h1" mb={2}>
-                Submit Feedback for {props.username.toUpperCase()}
-              </Typography>
-              
               <TextField
                 fullWidth
                 margin="normal"
@@ -201,16 +193,6 @@ const FeedBackForm = (props) => {
               />
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%">
-              <Button
-                variant="contained"
-                color="primary"
-                endIcon={<SendIcon />}
-                type="submit"
-                sx={{ mt: 2 }}
-                onClick={() => navigate("/home")}
-              >
-                GO Back
-              </Button>
               <Button
                 variant="contained"
                 color="primary"

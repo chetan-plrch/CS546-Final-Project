@@ -1,88 +1,26 @@
-
-// import React, { useEffect, useState } from 'react';
-// import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '@mui/material';
-// import { useNavigate } from "react-router-dom";
-// import { feedBackList } from '../../api/feedback';
-// import Cookies from "js-cookie";
-// import {getUserId} from  "../../helper/index"
-
-// const FeedBackList = () => {
-//   const [feedbacks, setFeedbacks] = useState([]);
-//   const navigate = useNavigate();
-
-//   const userId = getUserId()
-
-//   useEffect(() => {
-//     const fetchFeedbacks = async () => {
-//       try {
-//         const response = await feedBackList(userId)
-//         if (response.status === 200) {
-//           setFeedbacks(response.data.map((feedback, index) => ({ ...feedback, id: index })));
-//         }
-//       } catch (error) {
-//         console.error('Error fetching feedbacks:', error);
-//       }
-//     };
-
-//     fetchFeedbacks();
-//   }, [userId]);
-
-//   const formattedFeedbacks = feedbacks.map((feedback) => ({
-//     ...feedback,
-//     reconnect_probability: feedback.rating.reconnect_probability,
-//     satisfied_with_chat: feedback.rating.satisfied_with_chat,
-//     listener_rating: feedback.rating.listener_rating,
-//   }));
-
-//   const handleEditClick = (feedbackId) => {
-//     navigate('/feedbacks/feedback',{state: {feedbackId}});
-//   };
-
-//   return (
-//     <Box>
-//       <Typography variant="h5" mb={2}>
-//         Feedbacks
-//       </Typography>
-//       {feedbacks.length > 0 ? (
-//         <Box sx={{ width: '100%', maxWidth: '1200px', bgcolor: 'rgba(245, 245, 245, 0.8)', borderRadius: '4px', padding: '16px' }} >
-//           <List>
-//             {formattedFeedbacks.map((feedback, index) => (
-//               <React.Fragment key={index}>
-//                 <ListItem>
-//                   <ListItemText
-//                     primary={`Description: ${feedback.description}`}
-//                     secondary={`Reconnect Probability: ${feedback.reconnect_probability}, Satisfied with Chat: ${feedback.satisfied_with_chat}, Listener Rating: ${feedback.listener_rating}`}
-//                   />
-//                   <Button variant="contained" onClick={()=>handleEditClick(feedback._id)}>
-//                     Edit
-//                   </Button>
-//                 </ListItem>
-//                 {index !== formattedFeedbacks.length - 1 && <Divider />}
-//               </React.Fragment>
-//             ))}
-//           </List>
-//         </Box>
-//       ) : (
-//         <Typography variant="subtitle1" color="textSecondary">
-//           No feedbacks found.
-//         </Typography>
-//       )}
-//     </Box>
-//   );
-// };
-
-// export default FeedBackList;
-
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, List, ListItem, ListItemText, Divider, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { feedBackList } from '../../api/feedback';
-import Cookies from 'js-cookie';
-import { getUserId } from '../../helper/index';
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Card,
+  CardContent,
+  CardActions,
+} from "@mui/material";
+import { feedBackList } from "../../api/feedback";
+import { getUserId } from "../../helper/index";
+import Middle from "./middle";
+import { ToastContainer } from "react-toastify/dist/react-toastify.js";
+import "react-toastify/dist/ReactToastify.css";
 
 const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
-  const navigate = useNavigate();
+  const [showMiddle, setShowMiddle] = useState(false);
+  const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const userId = getUserId();
 
@@ -91,25 +29,45 @@ const FeedBackList = () => {
       try {
         const response = await feedBackList(userId);
         if (response.status === 200) {
-          setFeedbacks(response.data.map((feedback, index) => ({ ...feedback, id: index })));
+          setFeedbacks(
+            response.data.map((feedback, index) => ({ ...feedback, id: index }))
+          );
         }
       } catch (error) {
-        console.error('Error fetching feedbacks:', error);
+        console.error("Error fetching feedbacks:", error);
       }
     };
 
     fetchFeedbacks();
   }, [userId]);
 
-  const formattedFeedbacks = feedbacks.map((feedback) => ({
-    ...feedback,
-    reconnect_probability: feedback.reconnectProbability,
-    satisfied_with_chat: feedback.satisfiedWithChat,
-    listener_rating: feedback.listenerRating,
-  }));
 
-  const handleEditClick = (feedbackId) => {
-    navigate('/feedbacks/feedback', { state: { feedbackId } });
+  const refreshFeedbacks = async () => {
+    try {
+      const response = await feedBackList(userId);
+      if (response.status === 200) {
+        setFeedbacks(
+          response.data.map((feedback, index) => ({ ...feedback, id: index }))
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+    }
+  };
+
+  const handleSuccess = () => {
+    refreshFeedbacks();
+    handleCloseMiddle();
+  };
+  
+
+  const handleEditClick = (feedback) => {
+    setSelectedFeedback(feedback);
+    setShowMiddle(true);
+  };
+
+  const handleCloseMiddle = () => {
+    setShowMiddle(false);
   };
 
   return (
@@ -118,31 +76,69 @@ const FeedBackList = () => {
         Feedbacks
       </Typography>
       {feedbacks.length > 0 ? (
-        <Box sx={{ width: '100%', maxWidth: '1200px', bgcolor: 'rgba(245, 245, 245, 0.8)', borderRadius: '4px', padding: '16px' }}>
-          <List>
-            {formattedFeedbacks.map((feedback, index) => (
-              <React.Fragment key={index}>
-                <ListItem>
-                  <ListItemText
-                    primary={`Description: ${feedback.description}`}
-                    secondary={`Reconnect Probability: ${feedback.reconnect_probability}, Satisfied with Chat: ${feedback.satisfied_with_chat}, Listener Rating: ${feedback.listener_rating}`}
-                  />
-                  <Button variant="contained" onClick={() => handleEditClick(feedback._id)}>
-                    Edit
-                  </Button>
-                </ListItem>
-                {index !== formattedFeedbacks.length - 1 && <ListItem>
-                  <Divider />
-                </ListItem>}
-              </React.Fragment>
-            ))}
-          </List>
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "1200px",
+            bgcolor: "rgba(245, 245, 245, 0.8)",
+            borderRadius: "4px",
+            padding: "16px",
+          }}
+        >
+          {feedbacks.map((feedback, index) => (
+            <Card key={index} sx={{ marginBottom: "16px" }}>
+              <CardContent>
+                <Typography variant="h6">
+                  Description: {feedback.description || "N/A"}
+                </Typography>
+                <Typography>
+                  Reconnect Probability: {feedback.rating.reconnect_probability}
+                </Typography>
+                <Typography>
+                  Satisfied with Chat: {feedback.rating.satisfied_with_chat}
+                </Typography>
+                <Typography>
+                  Listener Rating: {feedback.rating.listener_rating}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  variant="contained"
+                  onClick={() => handleEditClick(feedback)}
+                >
+                  Edit
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
         </Box>
       ) : (
         <Typography variant="subtitle1" color="textSecondary">
           No feedbacks found.
         </Typography>
       )}
+      <Dialog
+        open={showMiddle}
+        onClose={handleCloseMiddle}
+        aria-labelledby="middle-dialog-title"
+      >
+        <DialogTitle id="middle-dialog-title">Update Feedback</DialogTitle>
+        <DialogContent>
+          {selectedFeedback && (
+            <Middle
+              chatId={selectedFeedback.chatId}
+              userId={selectedFeedback.userId}
+              onSuccess={handleSuccess}
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseMiddle} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <ToastContainer />
     </Box>
   );
 };
