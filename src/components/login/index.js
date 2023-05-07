@@ -94,7 +94,7 @@ const Login = () => {
       toast.success(resp?.data?.message || 'Succesfully logged in!');
       setTimeout(() => {
         navigate("/home");
-      }, 500);
+      }, 1000);
     } catch (error) {
       const msg = error?.message || 'Could not login. Please try again!';
       setError(msg);

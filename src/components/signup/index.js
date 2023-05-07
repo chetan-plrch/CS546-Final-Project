@@ -40,7 +40,6 @@ const SignUp = () => {
   const [apiStatus, setApiStatus] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  const [anonymousDisabled, setAnonymousDisabled] = React.useState(false);
   const [saving, setSaving] = React.useState(null);
   const navigate = useNavigate();
 
@@ -51,20 +50,10 @@ const SignUp = () => {
   const handleMouseDownPassword = (e) => e.preventDefault();
 
   const onChangeOfValue = (key, value) => {
-    if (key === "role") {
-      if (value === roles.LISTENER) {
-        setUser({ ...user, [key]: value, isAnonymous: false });
-        setAnonymousDisabled(true);
-      } else {
-        setUser({ ...user, [key]: value });
-        setAnonymousDisabled(false);
-      }
-    } else {
-      const updatedUser = { ...user, [key]: value };
-      const error = helper.validator(updatedUser, key, errors);
-      setErrors({ ...error });
-      setUser(updatedUser);
-    }
+    const updatedUser = { ...user, [key]: value };
+    const error = helper.validator(updatedUser, key, errors);
+    setErrors({ ...error });
+    setUser(updatedUser);
   };
 
   const submissionValidation = () => {
@@ -220,14 +209,19 @@ const SignUp = () => {
               }}
               
             />
-            <CustomCheckbox
-              disabled={anonymousDisabled}
-              className="anonymous-input"
-              name="isAnonymous"
-              checked={user.isAnonymous}
-              onChange={onChangeOfValue}
-              text={"Stay anonymous"}
-            />
+            {
+              user?.role !== roles.LISTENER ? (
+                <CustomCheckbox
+                className="anonymous-input"
+                name="isAnonymous"
+                checked={user.isAnonymous}
+                onChange={onChangeOfValue}
+                text={"Stay anonymous"}
+              />
+              ) : (
+                null
+              )
+            }
           </div>
           <div className="input-dialog-2">
             <CustomTextField
@@ -270,11 +264,11 @@ const SignUp = () => {
               options={[
                 {
                   label: "LISTENER",
-                  value: "LISTENER",
+                  value: roles.LISTENER,
                 },
                 {
                   label: "SEEKER",
-                  value: "SEEKER",
+                  value: roles.SEEKER,
                 },
               ]}
             />

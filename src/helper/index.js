@@ -111,7 +111,7 @@ const validator = (user, field, err) => {
       break;
     case field === 'role' && user?.role:
     case field === 'gender' && user?.gender:
-      errorObj.gender.helperText = '';
+      errorObj[field].helperText = '';
       break;
   };
 
