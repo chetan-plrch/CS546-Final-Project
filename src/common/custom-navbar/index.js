@@ -27,7 +27,8 @@ const settings = ["Profile", "Logout"];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [profilePic, setProfilePic] = React.useState(null)
+  const [profilePic, setProfilePic] = React.useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getProfilePic() {
@@ -36,9 +37,7 @@ function ResponsiveAppBar() {
     }
 
     getProfilePic()
-  }, [])
-
-  const navigate = useNavigate();
+  }, [navigate])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);

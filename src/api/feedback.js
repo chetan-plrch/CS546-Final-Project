@@ -3,11 +3,7 @@ import { axiosApi } from "./api-interceptor";
 
 const createFeedBack = async (feedbackData) => {
   try {
-    const response = await axiosApi.post("/feedbacks/", feedbackData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axiosApi.post("/feedbacks/", feedbackData);
     return response;
   } catch (e) {
     return e;
@@ -29,12 +25,7 @@ const feedbackEdit = async (updatedFeedback) => {
   try {
     const response = await axiosApi.put(
       "/feedbacks/feedback",
-      updatedFeedback,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      updatedFeedback
     );
     return response;
   } catch (e) {
