@@ -97,7 +97,7 @@ function ChatWindow(props) {
 
     };
     const blockConnection = async () => {
-        const { response } = await blockUser(connectionId);
+        const response = await blockUser(connectionId);
         if (response?.status === 200) {
             const successMsg = response?.data?.message || 'User blocked successfully';
             toast.success(successMsg);

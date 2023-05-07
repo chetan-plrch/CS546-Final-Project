@@ -12,6 +12,7 @@ import { roles } from '../../helper/constants';
 const Connections = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [blockedUserIds, setBlockedUserIds] = useState([]);
   const [connections, setConnections] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState();
   const [selectedConnectionName, setSelectedConnectionName] = useState();
@@ -62,6 +63,7 @@ const Connections = () => {
   };
 
   const removeUserFromList = () => {
+    setBlockedUserIds([...blockedUserIds, selectedConnectionId]);
     const updatedConnections = connections.filter((connection) => connection._id !== selectedConnectionId);
     setConnections(updatedConnections);
     if (updatedConnections?.length) {
@@ -71,18 +73,21 @@ const Connections = () => {
   };
 
   const updateConnections = (connectionId, lastMessage, showUnreadLabel) => {
-    let existingConnection = false;
-    const updatedConnections = connections.map((connection) => {
-      if (connection._id === connectionId) {
-        existingConnection = true;
-        return {...connection, lastMessage, showUnreadLabel};
-      };
-      return connection;
-    });
-    if (!existingConnection) {
-      updatedConnections.unshift({_id: connectionId, lastMessage, showUnreadLabel: true});
+    if (!blockedUserIds?.includes(connectionId)) {
+      let updatedConnections = [];
+      let existingConnection = false;
+      updatedConnections = connections?.map((connection) => {
+        if (connection._id === connectionId) {
+          existingConnection = true;
+          return {...connection, lastMessage, showUnreadLabel};
+        };
+        return connection;
+      });
+      if (!existingConnection) {
+        updatedConnections?.unshift({_id: connectionId, lastMessage, showUnreadLabel: true});
+      }
+      setConnections(updatedConnections);
     };
-    setConnections(updatedConnections);
   };
 
   const findExperts = () => {
