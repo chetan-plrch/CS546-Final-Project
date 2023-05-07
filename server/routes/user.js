@@ -72,7 +72,7 @@ router.post("/signup", notAuthenticate, async (req, res) => {
 
   if (userInfo.city) {
   try {
-    userInfo.city = validation.checkString(userInfo.city, "city");
+    userInfo.city = validateName(userInfo.city, "city");
   } catch (e) {
     errors.push(e);
   }
@@ -84,7 +84,7 @@ if(userInfo.role === "listener"){
 
 if(userInfo.state){
   try {
-    userInfo.state = validation.checkString(userInfo.state, "state");
+    userInfo.state = validateName(userInfo.state, "state");
   } catch (e) {
     errors.push(e);
   }

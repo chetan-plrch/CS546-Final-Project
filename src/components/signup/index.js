@@ -67,7 +67,7 @@ const SignUp = () => {
 
     let errorsObj = {};
     requiredFields.forEach((key) => {
-      if (user[key] === "" || user[key].trim() === "") {
+      if (!user[key]?.trim()) {
         errorsObj[key] = { ...(errors[key] || {}) };
         if (!errorsObj[key].helperText) {
           errorsObj[key].helperText = "*Field required";

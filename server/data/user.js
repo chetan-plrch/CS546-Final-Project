@@ -61,7 +61,7 @@ const create = async (
 
   if(city){
   try {
-    city = validation.checkString(city, "city");
+    city = validateName(city, "city");
   } catch (e) {
     errors.push(e);
   }
@@ -69,7 +69,7 @@ const create = async (
 
   if(state){
   try {
-    state = validation.checkString(state, "state");
+    state = validateName(state, "state");
   } catch (e) {
     errors.push(e);
   }
