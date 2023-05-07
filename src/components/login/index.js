@@ -88,7 +88,7 @@ const Login = () => {
     try {
       const resp = await loginUser({ username, password });
       if (resp.status !== 200) {
-        throw new Error(resp?.response?.data);
+        throw new Error(resp?.response?.data?.error);
       };
       setError();
       toast.success(resp?.data?.message || 'Succesfully logged in!');

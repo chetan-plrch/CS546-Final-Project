@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js";
 import { userData } from "../data/index.js";
-import validation, {validateLoginRequest} from "../validations.js";
+import validation, {validateLoginRequest, validateName} from "../validations.js";
 import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
@@ -31,22 +31,17 @@ router.post("/signup", notAuthenticate, async (req, res) => {
   //validating the request body
   let errors = [];
   try {
-    userInfo.firstName = validation.checkString(userInfo.firstName, "First name");
+    userInfo.firstName = validateName(userInfo.firstName, "First name");
   } catch (e) {
     errors.push(e);
   }
 
   try {
-    userInfo.lastName = validation.checkString(userInfo.lastName, "Last Name");
+    userInfo.lastName = validateName(userInfo.lastName, "Last Name");
   } catch (e) {
     errors.push(e);
   }
 
-  try {
-    userInfo.username = validation.checkString(userInfo.username, "User name");
-  } catch (e) {
-    errors.push(e);
-  }
   try {
     userInfo.username = validation.checkUsername(userInfo.username);
   } catch (e) {
@@ -85,7 +80,7 @@ router.post("/signup", notAuthenticate, async (req, res) => {
 
 if(userInfo.role === "listener"){
     userInfo.isAnonymous = false
-  }
+}
 
 if(userInfo.state){
   try {
@@ -135,15 +130,9 @@ if(userInfo.state){
       userInfo.role,
       userInfo.profilePic
     );
-    //res.json(newUser)
-    console.log(newUser);
     res.status(200).send({ message: "Successfully created user" });
   } catch (e) {
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    //console.log(message);
-    res.status(status).json({ error: message });
-    //console.log(e);
+    res.status(e[0] || 500).json({ error: e?.[1] || "Internal Server Error" });
   }
 });
 
@@ -161,7 +150,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     return res.status(200).send({ message: `Welcome back${name}!` });
 
     } catch (e) {
-    res.status(e?.[0] || 500).json(e?.[1] || "Internal Server Error");
+    res.status(e?.[0] || 500).json({error: e?.[1] || "Internal Server Error"});
     };
   }
 );

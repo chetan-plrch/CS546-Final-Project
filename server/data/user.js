@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import validation, { validateLoginRequest } from "../validations.js";
+import validation, { validateLoginRequest, validateName } from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
@@ -24,22 +24,17 @@ const create = async (
   //validating the request body
   let errors = [];
   try {
-    firstName = validation.checkString(firstName, "Firstname");
+    firstName = validateName(firstName, "Firstname");
   } catch (e) {
     errors.push(e);
   }
 
   try {
-    lastName = validation.checkString(lastName, "Lastname");
+    lastName = validateName(lastName, "Lastname");
   } catch (e) {
     errors.push(e);
   }
 
-  try {
-    username = validation.checkString(username, "Username");
-  } catch (e) {
-    errors.push(e);
-  }
   try {
     username = validation.checkUsername(username);
   } catch (e) {
@@ -104,11 +99,11 @@ const create = async (
   const userNameExits = await userCollection.findOne({ username }, { password: 0 });
   const emailExits = await userCollection.findOne({email}, { password: 0 });
   if (userNameExits) {
-    throw [404, "Error: username already used"];
+    throw [400, "Error: username already used"];
   }
 
   if (emailExits) {
-    throw [404, "Error: email already used"];
+    throw [400, "Error: email already used"];
   }
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
