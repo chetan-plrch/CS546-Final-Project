@@ -61,6 +61,16 @@ const getFeedbackByChatId = async (chatId, userId) => {
   return response.data;
 };
 
+const getAllFeedbacks = async(isView)=>{
+  try{
+    const response = await axiosApi.post("/feedbacks/getall",{isView});
+    //console.log(response);
+    return response;
+  }catch(e){
+    return e;
+  }
+};
+
 export {
   createFeedBack,
   feedBackList,
@@ -68,4 +78,5 @@ export {
   feedbackEdit,
   getFeedback,
   getFeedbackByChatId,
+  getAllFeedbacks
 };
