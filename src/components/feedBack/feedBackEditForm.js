@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
-  Typography,
   TextField,
   FormControlLabel,
   Checkbox,
@@ -15,7 +13,6 @@ import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
 import validations from "../../helper/validations";
 
 const FeedBackEditForm = (props) => {
-  const navigate = useNavigate();
   const feedId = props.feedbackId;
 
   const [data, setData] = useState({
@@ -36,7 +33,6 @@ const FeedBackEditForm = (props) => {
       try {
         const response = await getFeedback(props.feedbackId);
         const result = await response.data;
-        // console.log(result);
         setData({
           rate1: result.rating.reconnect_probability,
           rate2: result.rating.satisfied_with_chat,
@@ -170,9 +166,6 @@ const FeedBackEditForm = (props) => {
           boxShadow={4}
         >
           <Box>
-            {/* <Typography variant="h1" mb={2} color="#222222">
-              Edit Feedback
-            </Typography> */}
             <TextField
               fullWidth
               margin="normal"

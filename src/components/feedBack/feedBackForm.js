@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
   Container,
-  Typography,
+  
   Box,
   Checkbox,
   FormControlLabel,
@@ -11,7 +11,6 @@ import {
 import { Send as SendIcon } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
 import { createFeedBack } from "../../api/feedback";
 import validations from "../../helper/validations";
 
@@ -25,7 +24,6 @@ const FeedBackForm = (props) => {
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState("");
-  const navigate = useNavigate();
 
   const resetForm = () => {
     setRate1("");
@@ -135,10 +133,6 @@ const FeedBackForm = (props) => {
             boxShadow={4}
           >
             <Box>
-              {/* <Typography variant="h1" mb={2}>
-                Submit Feedback for {props.username.toUpperCase()}
-              </Typography> */}
-              
               <TextField
                 fullWidth
                 margin="normal"

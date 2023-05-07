@@ -7,7 +7,6 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { getFeedbackByChatId } from "../../api/feedback";
 import { getUserId } from "../../helper/index";
 import FeedBackForm from "./feedBackForm";
@@ -15,7 +14,6 @@ import Middle from "./middle";
 
 const FeedBackPop = (props) => {
   const { isOpen, chatId, username, closeModal } = props;
-  // const [open, setOpen] = useState(false);
   const [feedbackExists, setFeedbackExists] = useState(false);
   const [userId, setUserID] = useState();
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
@@ -46,12 +44,7 @@ const FeedBackPop = (props) => {
     checkFeedback();
   }, [isOpen]);
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
   const handleClose = () => {
-    // setOpen(false);
     closeModal();
   };
 
@@ -61,15 +54,11 @@ const FeedBackPop = (props) => {
     } else {
       setShowFeedbackForm(true);
     }
-    // setOpen(false);
     closeModal();
   };
 
   return (
     <div>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open Feedback Dialog
-      </Button> */}
       <Dialog
         open={isOpen}
         onClose={handleClose}
