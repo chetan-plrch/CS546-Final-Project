@@ -20,14 +20,15 @@ function CustomTextField(props) {
             name={props.name}
             onChange={onChange}
             value={props.value}
-            label={<span style={{ color: 'grey' }}>{h.capitalizeFirst(props.label ? props.label : props.name)}</span>}
+            color='primary'
+            label={<span style={{ color: '#807000' }}>{h.capitalizeFirst(props.label ? props.label : props.name)}</span>}
             variant="outlined"
             error={typeof props.error === "boolean" && props.error} 
             helperText={props.helperText}
             type={props.type}
             InputProps={props.inputProps}
             required={props.required}
-             styles={{ opacity: 0.5, ...props.styles }}
+             style={{ width: '240px', opacity: 1, ...props.style }}
             aria-invalid={typeof props.error === "boolean" && props.error ? "true" : "false"}
         />
     );
