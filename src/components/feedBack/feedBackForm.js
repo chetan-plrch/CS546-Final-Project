@@ -106,6 +106,7 @@ const FeedBackForm = (props) => {
         toast.success("Feedback submitted successfully");
         resetForm();
         props.onSubmit();
+        onSubmit();
       } else {
         toast.error("Failed to submit feedback");
         setErrors({ ...errors, global: [result.response.data] });

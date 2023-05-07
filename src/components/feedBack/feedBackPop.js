@@ -92,7 +92,7 @@ const FeedBackPop = (props) => {
       >
         <DialogTitle id="feedback-form-dialog-title">Feedback Form for {username.toUpperCase()}</DialogTitle>
         <DialogContent>
-          <FeedBackForm userId={userId} chatId={chatId} username={username} />
+          <FeedBackForm userId={userId} chatId={chatId} username={username} onSubmit={() => setShowFeedbackForm(false)}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowFeedbackForm(false)} color="primary">
@@ -107,7 +107,7 @@ const FeedBackPop = (props) => {
       >
         <DialogTitle id="middle-dialog-title">Update Feedback for {username.toUpperCase()}</DialogTitle>
         <DialogContent>
-          <Middle userId={userId} chatId={chatId} username={username}/>
+          <Middle userId={userId} chatId={chatId} username={username} onSuccess={() => setShowMiddle(false)}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowMiddle(false)} color="primary">

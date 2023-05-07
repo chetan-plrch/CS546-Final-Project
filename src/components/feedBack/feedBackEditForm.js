@@ -7,7 +7,7 @@ import {
   Checkbox,
   Button,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify/dist/react-toastify.js";
+import { toast } from "react-toastify/dist/react-toastify.js";
 import "react-toastify/dist/ReactToastify.css";
 import { feedbackDelete, feedbackEdit, getFeedback } from "../../api/feedback";
 import validations from "../../helper/validations";
@@ -60,6 +60,7 @@ const FeedBackEditForm = (props) => {
 
     if (response.status === 200) {
       toast.success("Feedback Deleted Successfully");
+      props.onSuccess();
     } else {
       toast.error("Error in deleting feedback, try again");
     }
@@ -138,6 +139,7 @@ const FeedBackEditForm = (props) => {
 
       if (response.status === 200) {
         toast.success("Feedback Updated Successfully");
+        props.onSuccess();
       } else {
         toast.error("Error in updating feedback, try again");
       }
@@ -261,7 +263,6 @@ const FeedBackEditForm = (props) => {
           </Box>
         </Box>
       </Container>
-      <ToastContainer />
     </>
   );
 };

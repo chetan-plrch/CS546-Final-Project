@@ -14,6 +14,8 @@ import {
 import { feedBackList } from "../../api/feedback";
 import { getUserId } from "../../helper/index";
 import Middle from "./middle";
+import { ToastContainer } from "react-toastify/dist/react-toastify.js";
+import "react-toastify/dist/ReactToastify.css";
 
 const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -38,6 +40,26 @@ const FeedBackList = () => {
 
     fetchFeedbacks();
   }, [userId]);
+
+
+  const refreshFeedbacks = async () => {
+    try {
+      const response = await feedBackList(userId);
+      if (response.status === 200) {
+        setFeedbacks(
+          response.data.map((feedback, index) => ({ ...feedback, id: index }))
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+    }
+  };
+
+  const handleSuccess = () => {
+    refreshFeedbacks();
+    handleCloseMiddle();
+  };
+  
 
   const handleEditClick = (feedback) => {
     setSelectedFeedback(feedback);
@@ -106,6 +128,7 @@ const FeedBackList = () => {
             <Middle
               chatId={selectedFeedback.chatId}
               userId={selectedFeedback.userId}
+              onSuccess={handleSuccess}
             />
           )}
         </DialogContent>
@@ -115,6 +138,7 @@ const FeedBackList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer />
     </Box>
   );
 };

@@ -17,13 +17,13 @@ const Middle = (props) => {
         console.error("Failed to fetch feedback data:", error);
       }
     };
-    fetchData();
+    fetchData();  
   }, [props.chatId, props.userId]);
 
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        <FeedBackEditForm feedbackId={feedbackId} username={props.username} />
+        <FeedBackEditForm feedbackId={feedbackId} username={props.username} onSuccess={props.onSuccess}/>
       </div>
     </div>
   );
