@@ -1,6 +1,4 @@
-import { getUserId } from "../helper";
 import { axiosApi } from "./api-interceptor";
-import Cookies from 'js-cookie';
 
 const constructResponse = (status, responseJson) => {
   if (status === 200) {
@@ -24,9 +22,7 @@ const formatErrorMessage = (errorResponse) => {
 
 const createUserAccountAxios =  async (user) => {
   try {
-    const response = await axiosApi.post('/user/signup', user, {
-      headers: { "Content-Type": "application/json" }
-    })
+    const response = await axiosApi.post('/user/signup', user)
 
     return constructResponse(response.status, response.data)
   } catch (e) {
@@ -36,17 +32,12 @@ const createUserAccountAxios =  async (user) => {
 
 const loginUser = async (loginData) => {
   try {
-    const response = await axiosApi.post('/user/login', loginData, {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
+    const response = await axiosApi.post('/user/login', loginData);
     return response
-  }catch(e){
-    return constructResponse(e.response.status, e.response.data)
-  }
-  
-}
+  } catch(error) {
+    return error;
+  };
+};
 
 const checkLoggedInOnBackend = async () => {
   try {

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import validation from "../validations.js";
+import validation, { validateLoginRequest } from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
@@ -108,8 +108,8 @@ const create = async (
   }
 
   if (emailExits) {
-        throw [404, "Error: email already used"];
-      }
+    throw [404, "Error: email already used"];
+  }
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -146,46 +146,20 @@ const create = async (
   return res;
 };
 
-const checkLogged = async (username, password) => {
-  let errors = []
+const loginUser = async (name, pwd) => {
+  // Validate request
 
-  if(username.trim() === "" || !username){
-    errors.push("Error: Enter username")
-  }
-  if(password.trim() === "" || !password){
-    errors.push("Error: Enter password")
-  }
-
-  try {
-    username = validation.checkString(username, "Username");
-  } catch (e) {
-    errors.push(e);
-  }
-  try {
-    username = validation.checkUsername(username);
-  } catch (e) {
-    errors.push(e);
-  }
-
-  try {
-    password = validation.checkPassword(password);
-  } catch (e) {
-    errors.push(e);
-  }
-
-  if(errors.length > 0){
-    throw [400,errors]
-  }
+  const { username, password } = validateLoginRequest({username: name, password: pwd});
   const userCollection = await users();
 
   const user = await userCollection.findOne({ username }, { password: 0 });
   if (!user) {
-    throw [400, "username/password one of them is incorrect"];
+    throw [404, "could not find the user!"];
   }
 
   const isPasswordMatch = await bcrypt.compare(password, user.password);
   if (!isPasswordMatch) {
-    throw [400, "username/password one of them is incorrect"];
+    throw [401, "incorrect password!"];
   }
 
   const token = jwt.sign(
@@ -348,4 +322,4 @@ const getAllBlockedUsers = async (id) => {
   return userDetails;
 };
 
-export default { create, checkLogged, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers,allUsers };
+export default { create, loginUser, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers,allUsers };

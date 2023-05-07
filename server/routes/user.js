@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js";
 import { userData } from "../data/index.js";
-import validation from "../validations.js";
+import validation, {validateLoginRequest} from "../validations.js";
 import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
@@ -148,86 +148,25 @@ if(userInfo.state){
 });
 
 router.post("/login", notAuthenticate ,async (req, res) => {
-    const userObj = req.body;
+  try {
+    let {username, password} = validateLoginRequest(req.body);
+    const { user, token } = await userData.loginUser(username, password);
+    const cookieSpecifications = { maxAge: 24 * 60 * 60 * 1000, httpOnly: false };
+    res.cookie("role", user.role, cookieSpecifications);
+    res.cookie("firstname", user.firstName, cookieSpecifications);
+    res.cookie("userId", user._id.toString(), cookieSpecifications);
+    res.cookie("token", token, {...cookieSpecifications, httpOnly: true});
 
-    if (!userObj || Object.keys(userObj).length === 0) {
-      return res
-        .status(400)
-        .json({ error: "There are no fields in the request body" });
-    }
-    //validation for the req body
-    let errors = [];
+    const name = user?.isAnonymous ? '' : `, ${user?.firstName}`;
+    return res.status(200).send({ message: `Welcome back${name}!` });
 
-    if (userObj.username.trim() === "" || !userObj.username) {
-      errors.push("Error: Enter username");
-    }
-    if (userObj.password.trim() === "" || !userObj.password) {
-      errors.push("Error: Enter password");
-    }
-
-    try {
-      userObj.username = validation.checkString(userObj.username, "Username");
     } catch (e) {
-      errors.push(e);
-    }
-    try {
-      userObj.username = validation.checkUsername(userObj.username);
-    } catch (e) {
-      errors.push(e);
-    }
-
-    try {
-      userObj.password = validation.checkPassword(userObj.password);
-    } catch (e) {
-      errors.push(e);
-    }
-  
-    if (errors.length > 0) {
-      res.status(400).send({ errors });
-      return;
-    }
-
-    try {
-      const {user,token} = await userData.checkLogged(
-        userObj.username.trim(),
-        userObj.password.trim()
-      );
-      res.cookie("token", token, {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true
-      });
-
-      res.cookie("userId", user._id.toString(), {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false
-      });
-      res.cookie("firstname", user.firstName, {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false
-      });
-      res.cookie("role", user.role, {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false
-      });
-    
-      if(user.isAnonymous){
-        const message = "AnonymousFruit, Welcome Back"
-        return res.status(200).send({ message });
-      }else{
-        const message = `${user.firstName}, Welcome Back`;
-        return res.status(200).send({ message });
-      }
-      
-    } catch (e) {
-      console.log(e)
-      let status = e[0] ? e[0] : 500;
-      let message = e[1] ? e[1] : "Internal Server Error";
-      res.status(status).json({ error: message });
-    }
+    res.status(e?.[0] || 500).json(e?.[1] || "Internal Server Error");
+    };
   }
 );
 
-router.get("/is-loggedin", authenticate, (req, res) => {
+router.get("/is-loggedin", authenticate, (_req, res) => {
   return res.status(200).send({ message: "This is authorized" });
 });
 

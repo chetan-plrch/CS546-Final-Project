@@ -21,6 +21,7 @@ const Footer = () => {
   useEffect(() => {
     const loggedInUserId = getUserId();
     async function fetchConnections() {
+      setConnections([]);
       const response = await getAllConnections();
       if (response?.data?.users) {
         let { users } = response.data;
@@ -31,7 +32,7 @@ const Footer = () => {
       }
     };
     fetchConnections();
-  }, []);
+  }, [navigate]);
 
   const openChat = (connection) => {
     setSelectedConnection(connection);
