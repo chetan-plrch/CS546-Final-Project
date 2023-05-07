@@ -12,6 +12,9 @@ const exportedMethods = {
       throw errorObject(errorType.BAD_INPUT, `Error: ${varName} should be a non-empty string value`);
     };
     strVal = strVal.trim();
+    if(typeof parseInt(strVal) === "number"){
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot be a number`);
+    }
     if (!strVal) {
       throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot contain just empty spaces`);
     };

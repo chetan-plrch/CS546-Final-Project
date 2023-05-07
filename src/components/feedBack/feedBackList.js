@@ -72,7 +72,7 @@ const FeedBackList = () => {
 
   return (
     <Box>
-      <Typography variant="h5" mb={2}>
+      <Typography variant="h1" mb={2} pt = {10} pb = {5}>
         Feedbacks
       </Typography>
       {feedbacks.length > 0 ? (
