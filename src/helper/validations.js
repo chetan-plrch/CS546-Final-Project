@@ -1,6 +1,6 @@
 import { errorType } from "./constants.js";
 
-const errorObject = (type, msg) => {
+export const errorObject = (type, msg) => {
     const e = new Error(msg)
     e.type = type
     return e
@@ -8,24 +8,26 @@ const errorObject = (type, msg) => {
 
 const exportedMethods = {
   checkString(strVal, varName) {
-    if (!strVal) 
-      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} field needs to have valid values`)
-    if (typeof strVal !== "string") 
-      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} must be a string!`)
+    if (!strVal || typeof strVal !== 'string') {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} should be a non-empty string value`);
+    };
     strVal = strVal.trim();
-    if (strVal.length === 0)
-      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot be an empty string or string with just spaces`)
-    if (!isNaN(strVal))
-      throw errorObject(errorType.BAD_INPUT, `Error: ${strVal} is not a valid value for ${varName} as it only contains digits`)
-    return strVal.trim();
+    if (!strVal) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot contain just empty spaces`);
+    };
+    return strVal;
   },
   checkAge(age) {
     if (!age) {
       throw errorObject(errorType.BAD_INPUT, `Error: age fields need to have valid values`)
-    }
-    if (typeof parseInt(age) !== "number") {
+    };
+    if (isNaN(age)) {
       throw errorObject(errorType.BAD_INPUT, "Error: age should be number")
-    }
+    };
+    age = Number(age);
+    if (!Number.isSafeInteger(age)) {
+      throw errorObject(errorType.BAD_INPUT, "Error: age should be whole number");
+    };
     if (age < 13) {
       throw errorObject(errorType.BAD_INPUT, "Error: under age")
     }
@@ -50,9 +52,17 @@ const exportedMethods = {
   },
   checkUsername(username) {
     username = this.checkString(username, "username");
-    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/; // Regex to validate username
+    if (username.length < 3 || username.length > 20) {
+      throw errorObject(
+        errorType.BAD_INPUT,
+        'Error: username should be between min 3 and max 20 characters long'
+      );
+    };
+    const usernameRegex = /^(?=[a-zA-Z_\d]*[a-zA-Z])[a-zA-Z_\d]{3,20}$/; // Regex to validate username
     if (!usernameRegex.test(username)) {
-      throw errorObject(errorType.BAD_INPUT, "Error: username can only contain alphanumeric characters and underscores and a length between 3 and 20 characters")
+      throw errorObject(
+        errorType.BAD_INPUT,
+        "Error: username should contain atleast 1 letter and can only contain alphanumeric chars and underscores")
     }
     return username.trim().toLowerCase();
   },

@@ -7,8 +7,6 @@ import Login from "./components/login";
 import Users from "./components/users";
 import "./App.css";
 import SignUp from "./components/signup";
-import Middle from "./components/feedBack/middle";
-import Feedback from "./components/feedBack/feedback";
 import FeedBackList from "./components/feedBack/feedBackList";
 import NotFound from "./components/notfound";
 import { checkLoggedInOnBackend } from "./api/index.js";
@@ -73,24 +71,6 @@ const App = () => {
             element={
               <Protected isLoggedIn={isLoggedIn}>
                 <Profile />
-              </Protected>
-            }
-          />
-          <Route
-            exact
-            path="/feedbacks"
-            element={
-              <Protected isLoggedIn={isLoggedIn}>
-                <Feedback />
-              </Protected>
-            }
-          />
-          <Route
-            exact
-            path="/feedbacks/feedback"
-            element={
-              <Protected isLoggedIn={isLoggedIn}>
-                <Middle />
               </Protected>
             }
           />

@@ -22,13 +22,15 @@ const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({}); // Pre-request validation errors
+  const [error, setError] = useState('') // Stores error after login request is made
   const [showPassword, setShowPassword] = useState(false)
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (e) => e.preventDefault();
 
   const handleUsernameChange = (e) => {
+    setError();
     setUsername(e.target.value);
     try {
       validations.checkUsername(e.target.value);
@@ -41,6 +43,7 @@ const Login = () => {
   };
   
   const handlePasswordChange = (e) => {
+    setError();
     setPassword(e.target.value);
     try {
       validations.checkPassword(e.target.value);
@@ -55,52 +58,48 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let newErrors = {};
+    let validationErrors = {};
 
     try {
       validations.checkUsername(username);
     } catch (error) {
-      if (error?.message?.includes?.("username")) {
-        newErrors = { ...newErrors, username: error.message };
-      }
+      validationErrors = {
+        ...validationErrors,
+        username: error?.message || 'Some problem occurred while validating the username!'
+      };
     }
 
     try {
       validations.checkPassword(password);
     } catch (error) {
-      if (error?.message?.includes?.("password")) {
-        newErrors = { ...newErrors, password: error.message };
-      }
+      validationErrors = {
+        ...validationErrors,
+        password: error?.message || 'Some problem occurred while validating the password!'
+      };
     }
 
-    if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
+    if (Object.keys(validationErrors)?.length ) {
+    setErrors(validationErrors);
     return;
   } else {
     setErrors({}); // reset the errors state when the inputs are valid
   }
 
-    const loginData = {
-      username: username,
-      password: password,
-    };
-
     try {
-      const result = await loginUser(loginData);
-
-      if (result.status === 200) {
-        console.log("Login successful");
-        toast.success(result.data.message);
-        setTimeout(() => {
-          navigate("/home");
-        }, 2000);
-      } else {
-        setErrors({ ...errors, global: [result[1]] });
-        toast.error("Error in Logging in");
-      }
+      const resp = await loginUser({ username, password });
+      if (resp.status !== 200) {
+        throw new Error(resp?.response?.data);
+      };
+      setError();
+      toast.success(resp?.data?.message || 'Succesfully logged in!');
+      setTimeout(() => {
+        navigate("/home");
+      }, 500);
     } catch (error) {
-      console.error(error);
-    }
+      const msg = error?.message || 'Could not login. Please try again!';
+      setError(msg);
+      toast.error(msg);
+    };
   };
 
   return (
@@ -172,16 +171,15 @@ const Login = () => {
             fullWidth
             variant="contained"
             color="primary"
+            disabled={!username || !password || errors?.password || errors?.username}
             sx={{ marginTop: 2, marginBottom: 2 }}
           >
             Login
           </Button>
-          {errors.global && (
+          {error && (
             <Box marginTop={2}>
               <Alert severity="error">
-                {errors.global.map((error, index) => (
-                  <div key={index}>{error}</div>
-                ))}
+                <div>{error}</div>
               </Alert>
             </Box>
           )}

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -7,19 +7,20 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { getFeedbackByChatId } from "../../api/feedback";
-import {getUserId} from "../../helper/index"
+import { getUserId } from "../../helper/index";
+import FeedBackForm from "./feedBackForm";
+import Middle from "./middle";
 
 const FeedBackPop = (props) => {
   const { isOpen, chatId, username, closeModal } = props;
-  // const [open, setOpen] = useState(false);
   const [feedbackExists, setFeedbackExists] = useState(false);
   const [userId, setUserID] = useState();
-  const navigate = useNavigate();
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [showMiddle, setShowMiddle] = useState(false);
 
   useEffect(() => {
-    const matchedUserId = getUserId()
+    const matchedUserId = getUserId();
     setUserID(matchedUserId);
   }, []);
 
@@ -43,34 +44,21 @@ const FeedBackPop = (props) => {
     checkFeedback();
   }, [isOpen]);
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
   const handleClose = () => {
-    // setOpen(false);
     closeModal();
   };
 
   const handleAgree = () => {
     if (feedbackExists) {
-      navigate("/feedbacks/feedback", {
-        state: { chatId, username},
-      });
+      setShowMiddle(true);
     } else {
-      navigate("/feedbacks", {
-        state: { chatId, username },
-      });
+      setShowFeedbackForm(true);
     }
-    // setOpen(false);
     closeModal();
   };
-  
+
   return (
     <div>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open Feedback Dialog
-      </Button> */}
       <Dialog
         open={isOpen}
         onClose={handleClose}
@@ -94,6 +82,36 @@ const FeedBackPop = (props) => {
           </Button>
           <Button onClick={handleAgree} color="primary" autoFocus>
             Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showFeedbackForm}
+        onClose={() => setShowFeedbackForm(false)}
+        aria-labelledby="feedback-form-dialog-title"
+      >
+        <DialogTitle id="feedback-form-dialog-title">Feedback Form for {username.toUpperCase()}</DialogTitle>
+        <DialogContent>
+          <FeedBackForm userId={userId} chatId={chatId} username={username} onSubmit={() => setShowFeedbackForm(false)}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowFeedbackForm(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showMiddle}
+        onClose={() => setShowMiddle(false)}
+        aria-labelledby="middle-dialog-title"
+      >
+        <DialogTitle id="middle-dialog-title">Update Feedback for {username.toUpperCase()}</DialogTitle>
+        <DialogContent>
+          <Middle userId={userId} chatId={chatId} username={username} onSuccess={() => setShowMiddle(false)}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowMiddle(false)} color="primary">
+            Close
           </Button>
         </DialogActions>
       </Dialog>
