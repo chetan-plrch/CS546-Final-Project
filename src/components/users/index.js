@@ -6,7 +6,7 @@ import CustomList from '../../common/custom-list';
 import CustomFilter from '../../common/custom-filter';
 import { useNavigate } from 'react-router-dom';
 import { roles, expertFilterOptions } from '../../helper/constants';
-import { getUserId } from '../../helper';
+import { getUserId, getUserRole } from '../../helper';
 
 const Users = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterOptions, setFilterOptions] = useState([]);
   const loggedInUserId = getUserId();
+  const userRole = getUserRole();
 
   useEffect(() => {
     async function getUsers() {
@@ -70,12 +71,17 @@ const Users = () => {
           name='Search'
           value={searchTerm}
           onChange={onUpdateSearchTerm}
-        />
-        <CustomFilter
-          options={expertFilterOptions}
-          selectedIds={filterOptions}
-          updateUserFilter={updateExpertList}
-        />
+        />{
+          userRole === roles.SEEKER ? (
+            <CustomFilter
+            options={expertFilterOptions}
+            selectedIds={filterOptions}
+            updateUserFilter={updateExpertList}
+          />
+          ) : (
+            null
+          )
+        }
       </div>
       <div className='user-list-container'>
       <CustomList
@@ -83,7 +89,7 @@ const Users = () => {
           selectionKey='_id'
           titleKey='fullName'
           imageKey='profilePic'
-          buttonTitle='Connect'
+          buttonTitle={userRole === roles.SEEKER ? 'Connect' : ''}
           onButtonClick={goToChats}
         />
       </div>
