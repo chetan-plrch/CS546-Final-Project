@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import https from "https";
-import fetch from "node-fetch";
 import userData from "./server/data/user.js";
 import { journalData } from "./server/data/index.js";
 import userInfo from "./users.js";
