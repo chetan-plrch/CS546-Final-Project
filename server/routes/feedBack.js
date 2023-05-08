@@ -283,4 +283,23 @@ router.route("/chatId").post(async (req, res) => {
     res.status(status).send({ error: message });
   }
 });
+
+router.route("/getall").post(async(req,res)=>{
+  let feedBackInfo = req.body;
+  if (!feedBackInfo || Object.keys(feedBackInfo).length === 0) {
+    return res
+      .status(400)
+      .json({ error: "There are no fields in the request body" });
+  }
+
+  try {
+    let feedBack = await feedBackData.getAll(feedBackInfo.isView);
+    res.json(feedBack);
+  } catch (e) {
+    let status = e[0] ? e[0] : 500;
+    let message = e[1] ? e[1] : "Internal Server Error";
+    res.status(status).send({ error: message });
+  }
+
+})
 export default router;
