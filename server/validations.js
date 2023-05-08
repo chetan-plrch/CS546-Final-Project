@@ -1,4 +1,5 @@
-import validations from "../src/helper/validations.js";
+import validations, {errorObject} from "../src/helper/validations.js";
+import { errorType } from "../src/helper/constants.js";
 import { ObjectId } from "mongodb";
 
 const checkId = (id, varName) => {
@@ -29,6 +30,23 @@ export const validateLoginRequest = (params) => {
     throw [400, errors]
   };
   return { username, password };
+};
+
+const capitalizeFirst = (str) => {
+  return str ? str[0].toUpperCase() + str.slice(1, str.length) : '';
+};
+
+export const validateName = (value, fieldName) => {
+  try {
+    value = validations.checkString(value, fieldName);
+    const nameRegex = /^[A-Za-z\s]*$/;
+    if (!nameRegex.test(value)) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain letters and spaces`);
+    };
+    return value;
+  } catch(e) {
+    throw e?.message ? capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
+  };
 };
 
 export default { ...validations, checkId };

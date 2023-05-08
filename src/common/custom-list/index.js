@@ -50,7 +50,7 @@ function CustomList(props) {
     }
 
     return (
-      <Box>
+      <Box className='list-container'>
         <span className='list-title'>{listTitle}</span>
         {
             alternateList?.length ? (
