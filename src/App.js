@@ -13,6 +13,7 @@ import { checkLoggedInOnBackend } from "./api/index.js";
 import AppBar from "./common/custom-navbar/index.js";
 import AppFooter from "./common/custom-footer/index.js";
 import Protected from "./components/protected";
+import Journal from "./components/journal/journal";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -98,6 +99,15 @@ const App = () => {
             element={
               <Protected isLoggedIn={isLoggedIn}>
                 <Connections />
+              </Protected>
+            }
+          />
+          <Route
+            exact
+            path="/journal"
+            element={
+              <Protected isLoggedIn={isLoggedIn}>
+                <Journal />
               </Protected>
             }
           />

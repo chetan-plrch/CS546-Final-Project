@@ -3,33 +3,6 @@ import { journalData } from "../data/index.js";
 
 const router = Router();
 
-// router.post('/journal', async (req, res) => {
-//     const { userId, message, date } = req.body;
-//     try {
-//       if (!userId || typeof userId !== 'string') {
-//         throw new Error('Invalid user ID');
-//       }
-  
-//       if (!message || typeof message !== 'string') {
-//         throw new Error('Invalid message');
-//       }
-  
-//       if (typeof date !== 'object' || isNaN(date.getTime())) { 
-//         throw new Error('Invalid Date');
-//       }
-  
-//       const result = await journalData.CreateJournal(userId, message, date);
-//       if (result) {
-//         res.status(200).json(result);
-//       } else {
-//         throw new Error('Journal cannot be created');
-//       }
-//     } catch (e) {
-//       console.log(e);
-//       res.status(400).json({ error: e.message });
-//     }
-//   });
-
 router.post('/journal', async (req, res) => {
   const { userId, message, date } = req.body;
   try {
