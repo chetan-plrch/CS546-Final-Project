@@ -15,6 +15,9 @@ const exportedMethods = {
     if (!strVal) {
       throw errorObject(errorType.BAD_INPUT, `Error: ${varName} cannot contain just empty spaces`);
     };
+    if (/^\d+$/.test(strVal)) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} should not be a number`);
+    };  
     return strVal;
   },
   checkAge(age) {

@@ -5,7 +5,8 @@ import {
     addConnection,
     allActiveChats,
     blockConnection,
-    unblockConnection
+    unblockConnection,
+    getChat
 } from '../data/chat.js'
 import validators from '../../src/helper/validations.js'
 import { getError } from "../util.js";
@@ -99,6 +100,17 @@ router.get('/connections/:connectedUserId', async (req, res) => {
         const { status, message } = getError(e);
         return res.status(status).send({ message });
     };
+})
+
+router.post('/getByChatId', async(req,res)=>{
+    try{
+        const chatId = validators.checkId(req.body.chatId, "chatId")
+        const chat = await getChat(chatId);
+        return res.status(200).send(chat)
+    }catch(e){
+        const { status, message } = getError(e);
+        return res.status(status).send({ message });
+    }
 })
 
 export default router;
