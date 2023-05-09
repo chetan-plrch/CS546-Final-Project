@@ -1,10 +1,8 @@
 .App {
   display: flex;
-  /* background-image: url('./theme2.jpg'); */
-  background-repeat: no-repeat;
+  flex-direction: column;
   background-size: 100vw 100vh;
   min-height: 100vh;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
@@ -83,3 +81,12 @@
   white-space: nowrap;
 }
 
+.spacer-top {
+  margin-top: 90px;
+  width: 100%; 
+}
+
+.spacer-bottom {
+  margin-bottom: 100px;
+  width: 100%;
+}
