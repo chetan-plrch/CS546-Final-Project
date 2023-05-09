@@ -28,8 +28,7 @@ function CustomList(props) {
       onButtonClick,
       onSelectionChange
     } = props
-    
-    // TODO - add default image
+
     const defaultImage = '';
 
     const [showArchivedChats, setShowArchivedChats] = useState(false);

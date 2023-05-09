@@ -166,7 +166,6 @@ const loginUser = async (name, pwd) => {
 };
 
 const getAllUsers = async (queryParams) => {
-  // TODO - 1. Send all if not role provided 2. Check if active 3. Send only relevant fields
   const userCollection = await users();
   queryParams.isActive = queryParams.isActive === 'true';
   const usersResponse = await userCollection.find(queryParams).project({ password: 0 }).toArray();
