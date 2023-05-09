@@ -295,7 +295,7 @@ const getfilteredChatAndUsers = async (chatsObj, blocked) => {
 
 const getUsersByIds = async (ids) => {
     const usersCtx = await users()
-    const usersArr = await usersCtx.find({ _id: {$in: ids} }).toArray();
+    const usersArr = await usersCtx.find({ _id: {$in: ids} }, { password: 0 }).toArray();
     return usersArr.map((user) => formatUser(user));
 }
 

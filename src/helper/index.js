@@ -160,7 +160,7 @@ const helper = {
   capitalizeFirst,
   validator,
   checkLoggedIn,
-  initialPage,
+  initialPage
 };
 
 export default helper;
