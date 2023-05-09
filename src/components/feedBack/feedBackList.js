@@ -23,49 +23,39 @@ const FeedBackList = () => {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [firstNames, setFirstNames] = useState([]); 
   const [selectedFirstName, setSelectedFirstName] = useState(null); 
+  const [fetchFeedback, setFetchFeedback] = useState(true);
 
   const userId = getUserId();
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
-      try {
-        const response = await feedBackList(userId);
-        if (response.status === 200) {
-          setFeedbacks(
-            response.data.map((feedback, index) => ({ ...feedback, id: index }))
-          );
+      if (fetchFeedback) {
+        try {
+          const response = await feedBackList(userId);
+          if (response.status === 200) {
+            const currentList = response.data.map((feedback, index) => ({ ...feedback, id: index }));
+            setFeedbacks([...currentList]);
 
-          // Fetch usernames for each feedback
-          const fetchedFirstNames = await Promise.all(
-            response.data.map((feedback) =>
-              getFirstnames(feedback.chatId, feedback.userId)
-            )
-          );
-          setFirstNames(fetchedFirstNames);
-        }
-      } catch (error) {
-        console.error("Error fetching feedbacks:", error);
-      }
+            // Fetch usernames for each feedback
+            const fetchedFirstNames = await Promise.all(
+              response.data.map((feedback) =>
+                getFirstnames(feedback.chatId, feedback.userId)
+              )
+            );
+            setFirstNames(fetchedFirstNames);
+          }
+        } catch (error) {
+          console.error("Error fetching feedbacks:", error);
+        };
+        setFetchFeedback(false);
+      };
     };
 
     fetchFeedbacks();
-  }, [userId]);
-
-  const refreshFeedbacks = async () => {
-    try {
-      const response = await feedBackList(userId);
-      if (response.status === 200) {
-        setFeedbacks(
-          response.data.map((feedback, index) => ({ ...feedback, id: index }))
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching feedbacks:", error);
-    }
-  };
+  }, [userId, fetchFeedback]);
 
   const handleSuccess = () => {
-    refreshFeedbacks();
+    setFetchFeedback(true);
     handleCloseMiddle();
   };
 
