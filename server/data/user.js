@@ -169,7 +169,7 @@ const getAllUsers = async (queryParams) => {
   // TODO - 1. Send all if not role provided 2. Check if active 3. Send only relevant fields
   const userCollection = await users();
   queryParams.isActive = queryParams.isActive === 'true';
-  const usersResponse = await userCollection.find(queryParams).toArray();
+  const usersResponse = await userCollection.find(queryParams, { password: 0 }).toArray();
   if (!usersResponse?.length) {
     throw [404, "Users not found"];
   };
@@ -203,7 +203,7 @@ const get = async (id) => {
 
 const allUsers = async()=>{
   const collection = await users();
-   const getID = await collection.find({}, { projection: { _id: 1, role: 1 } }).toArray();
+   const getID = await collection.find({}, { _id: 1, role: 1, password: 0 }).toArray();
    const result = getID.map(obj => {
     obj._id = obj._id.toString();
     return obj;

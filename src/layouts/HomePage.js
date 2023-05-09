@@ -68,7 +68,7 @@ const Homepage = () => {
 
   return (
     <>
-      <Box pt={10} pb={5}>
+      <Box>
         <Tabs value={tabValue} onChange={handleChange}>
           <Tab label="Feeds" />
           <Tab label="Reviews" />

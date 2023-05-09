@@ -28,7 +28,7 @@ const App = () => {
     }
 
     checkAuthorized();
-  }, []);
+  }, [window.location.pathname]);
 
   const handleJournalOpen = () => {
     setJournalOpen(true);
