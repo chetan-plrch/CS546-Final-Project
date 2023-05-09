@@ -30,18 +30,19 @@ const FeedBackList = () => {
     const fetchFeedbacks = async () => {
       try {
         const response = await feedBackList(userId);
+        console.log(response);
         if (response.status === 200) {
           setFeedbacks(
             response.data.map((feedback, index) => ({ ...feedback, id: index }))
           );
 
-          // Fetch usernames for each feedback
-          const fetchedFirstNames = await Promise.all(
-            response.data.map((feedback) =>
-              getFirstnames(feedback.chatId, feedback.userId)
-            )
-          );
-          setFirstNames(fetchedFirstNames);
+          // // Fetch usernames for each feedback
+          // const fetchedFirstNames = await (
+          //   response.data.map((feedback) =>
+          //     getFirstnames(feedback.chatId, feedback.userId)
+          //   )
+          // );
+          // setFirstNames(fetchedFirstNames);
         }
       } catch (error) {
         console.error("Error fetching feedbacks:", error);

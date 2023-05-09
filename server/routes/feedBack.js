@@ -86,7 +86,7 @@ router.route("/").post(async (req, res) => {
     return res.json(newFD);
   } catch (e) {
     if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
   }
@@ -116,7 +116,7 @@ router.route("/user").post(async (req, res) => {
     res.json(feedBackList);
   } catch (e) {
     if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
   }
@@ -151,7 +151,7 @@ router
       res.json(feedBack);
     } catch (e) {
       if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
     }
@@ -226,7 +226,7 @@ router
       res.json(newFD);
     } catch (e) {
       if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
     }
@@ -255,7 +255,7 @@ router
       return res.json(deleteFeedBack);
     } catch (e) {
       if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
     }
@@ -270,27 +270,27 @@ router.route("/chatId").post(async (req, res) => {
   }
 
   //validation for the request body
-  // let errors = [];
-  // try {
-  //   feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
-  // } catch (e) {
-  //   errors.push(e?.message);
-  // }
-  // try {
-  //   feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
-  // } catch (e) {
-  //   errors.push(e?.message);
-  // }
-  // if (errors.length > 0) {
-  //   return res.status(400).send(errors);
-  // }
+  let errors = [];
+  try {
+    feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
+  } catch (e) {
+    errors.push(e?.message);
+  }
+  try {
+    feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
+  } catch (e) {
+    errors.push(e?.message);
+  }
+  if (errors.length > 0) {
+    return res.status(400).send(errors);
+  }
 
   try {
     let feedBack = await feedBackData.getByChatId(feedBackInfo.chatId, feedBackInfo.userId);
     res.json(feedBack);
   } catch (e) {
     if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
   }
@@ -324,7 +324,7 @@ router.route("/getall").post(async(req,res)=>{
   } catch (e) {
     console.log(e);
     if (e.type === errorType.BAD_INPUT) {
-      return res.status(400).json({ error: e.message });
+      return res.status(400).json([ e.message ]);
     }
     return res.status(500).json({ error: 'Error: Internal server error' });
   }
