@@ -21,7 +21,6 @@ const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [showMiddle, setShowMiddle] = useState(false);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [firstNames, setFirstNames] = useState([]); 
   const [selectedFirstName, setSelectedFirstName] = useState(null); 
   const [fetchFeedback, setFetchFeedback] = useState(true);
 
@@ -29,26 +28,17 @@ const FeedBackList = () => {
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
-      if (fetchFeedback) {
-        try {
-          const response = await feedBackList(userId);
-          if (response.status === 200) {
-            const currentList = response.data.map((feedback, index) => ({ ...feedback, id: index }));
-            setFeedbacks([...currentList]);
-
-            // Fetch usernames for each feedback
-            const fetchedFirstNames = await Promise.all(
-              response.data.map((feedback) =>
-                getFirstnames(feedback.chatId, feedback.userId)
-              )
-            );
-            setFirstNames(fetchedFirstNames);
-          }
-        } catch (error) {
-          console.error("Error fetching feedbacks:", error);
-        };
-        setFetchFeedback(false);
-      };
+      try {
+        const response = await feedBackList(userId);
+        console.log(response);
+        if (response.status === 200) {
+          setFeedbacks(
+            response.data.map((feedback, index) => ({ ...feedback, id: index }))
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching feedbacks:", error);
+      }
     };
 
     fetchFeedbacks();
@@ -88,19 +78,19 @@ const FeedBackList = () => {
             <Card key={index} sx={{ marginBottom: "16px" }}>
               <CardContent>
                 <Typography component = "div" sx={{ fontSize: "16px" }}>
-                  Feedback given for: {firstNames[index] || "N/A"}
+                  Feedback given for: {feedback.firstName || "N/A"}
                 </Typography>
                 <Typography component = "div" sx={{ fontSize: "16px" }}>
                   Description: {feedback.description || "N/A"}
                 </Typography>
                 <Typography>
-                  Reconnect Probability: {feedback.rating.reconnect_probability}
+                  Reconnect Probability: {feedback?.rating?.reconnect_probability}
                 </Typography>
                 <Typography>
-                  Satisfied with Chat: {feedback.rating.satisfied_with_chat}
+                  Satisfied with Chat: {feedback?.rating?.satisfied_with_chat}
                 </Typography>
                 <Typography>
-                  Listener Rating: {feedback.rating.listener_rating}
+                  Listener Rating: {feedback?.rating?.listener_rating}
                 </Typography>
                 <Typography>
                   Feedback Time:{" "}
@@ -110,7 +100,7 @@ const FeedBackList = () => {
               <CardActions>
                 <Button
                   variant="contained"
-                  onClick={() => handleEditClick(feedback, firstNames[index])}
+                  onClick={() => handleEditClick(feedback, feedback?.firstName)}
                 >
                   Edit
                 </Button>

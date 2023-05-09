@@ -48,17 +48,17 @@ router
     try{
       feedInfo.userId = validations.checkId(feedInfo.userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.feedId = validations.checkId(feedInfo.feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.isLike = validations.checkBoolean(feedInfo.isLike,"isLike")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     if (errors.length > 0) {
@@ -85,17 +85,17 @@ router
     try{
       feedInfo.userId = validations.checkId(feedInfo.userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.feedId = validations.checkId(feedInfo.feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.isUnLike = validations.checkBoolean(feedInfo.isUnLike,"isUnLike")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     if (errors.length > 0) {
@@ -122,23 +122,23 @@ router
     try{
       feedInfo.userId = validations.checkId(feedInfo.userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.feedId = validations.checkId(feedInfo.feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.message = validations.checkString(feedInfo.message,"Comment message")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try {
       // full name of user commenting
       feedInfo.userName = validation.validateName(feedInfo.userName, "User Name");
     } catch(e) {
-      errors.push(e);
+      errors.push(e?.message);
     };
     if (errors.length > 0) {
       return res.status(400).send(errors);
@@ -164,17 +164,17 @@ router
     try{
       feedInfo.userId = validations.checkId(feedInfo.userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.feedId = validations.checkId(feedInfo.feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedInfo.isSave = validations.checkBoolean(feedInfo.isSave,"isSave")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     if (errors.length > 0) {

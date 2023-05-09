@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
     journalInfo.userId = validations.checkId(journalInfo.userId, "userId");
   } catch (e) {
     console.log(e);
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     );
   } catch (e) {
     console.log(e);
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if (errors.length > 0) {
@@ -35,9 +35,10 @@ router.post("/", async (req, res) => {
     return res.json(result);
   } catch (e) {
     console.log(e);
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    return res.status(status).send({ errors: message });
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 });
 
@@ -49,7 +50,7 @@ router.get("/:id", async (req, res) => {
       userId = validations.checkId(userId, "userId");
     } catch (e) {
       console.log(e);
-      errors.push(e);
+      errors.push(e?.message);
     }
     if (errors.length > 0) {
       return res.status(400).send(errors);
@@ -58,9 +59,10 @@ router.get("/:id", async (req, res) => {
     const journal = await journalData.getJournalsByUser(userId);
     return res.json({ journal });
   } catch (e) {
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    return res.status(status).send({ errors: message });
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({[ 'Error: Internal server error' ]);
   }
 });
 

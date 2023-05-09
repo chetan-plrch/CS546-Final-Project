@@ -26,44 +26,44 @@ const create = async (
   try {
     firstName = validation.validateName(firstName, "Firstname");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     lastName = validation.validateName(lastName, "Lastname");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     username = validation.checkUsername(username);
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     email = validation.checkMailID(email);
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     password = validation.checkPassword(password);
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     age = validation.checkAge(age);
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if(city){
   try {
     city = validation.validateName(city, "city");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 }
 
@@ -71,20 +71,20 @@ const create = async (
   try {
     state = validation.validateName(state, "state");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 }
 
   try {
     gender = validation.checkGender(gender)
   } catch (e) {
-    errors.push(e)
+    errors.push(e?.message)
   }
 
   try {
     role = validation.checkRole(role)
   } catch (e) {
-    errors.push(e)
+    errors.push(e?.message)
   }
 
   if(role === "listener"){

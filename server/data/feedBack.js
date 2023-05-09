@@ -1,8 +1,8 @@
 import { ObjectId } from "mongodb";
-import { feedBack,users } from "../config/mongoCollections.js";
+import { feedBack, users, chats } from "../config/mongoCollections.js";
 import validation from "../validations.js";
 import { getChat } from "./chat.js";
-import {userData} from "./index.js"
+import { userData } from "./index.js";
 
 const createFeedBack = async (
   userId,
@@ -18,34 +18,37 @@ const createFeedBack = async (
   try {
     userId = validation.checkId(userId, "userId");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     chatId = validation.checkId(chatId, "chatId");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     rate1 = validation.checkRating(rate1, "reconnect_probability");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     rate2 = validation.checkRating(rate2, "satisfied_with_chat");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     rate3 = validation.checkRating(rate3, "listener_rating");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
-  if(description){
+  if (description) {
     try {
-      description = validation.checkString(description, " feedback description");
+      description = validation.checkString(
+        description,
+        " feedback description"
+      );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
   }
 
@@ -53,13 +56,25 @@ const createFeedBack = async (
     throw [400, errors];
   }
   const userCtx = await users();
-  let user = await userCtx.findOne({_id : new ObjectId(userId)})
-
-
+  let user = await userCtx.findOne({ _id: new ObjectId(userId) });
+  if (!user) {
+    throw [404, "user not found"];
+  }
+  const chatCtx = await chats();
+  let chat = await chatCtx.findOne({_id : new ObjectId(chatId)})
+  if(!chat){
+    throw [404,"chat not found"]
+  }
   const feedBackCollection = await feedBack();
-  const feedBackExistsForChat = await feedBackCollection.findOne({userId: new ObjectId(userId),chatId: new ObjectId(chatId)})
-  if(feedBackExistsForChat){
-    throw [404, "FeedBack already exist,cannot give a new Feedback, you can only update the Feedback"]
+  const feedBackExistsForChat = await feedBackCollection.findOne({
+    userId: new ObjectId(userId),
+    chatId: new ObjectId(chatId),
+  });
+  if (feedBackExistsForChat) {
+    throw [
+      404,
+      "FeedBack already exist,cannot give a new Feedback, you can only update the Feedback",
+    ];
   }
 
   userId = new ObjectId(userId);
@@ -117,6 +132,11 @@ const getAll = async (isview) => {
 
 const getByuserId = async (userId) => {
   userId = validation.checkId(userId, "userId");
+  const userCtx = await users();
+  let user = await userCtx.findOne({ _id: new ObjectId(userId) });
+  if (!user) {
+    throw [404, "user not found"];
+  }
 
   const feedBackCollection = await feedBack();
   let res = [];
@@ -129,8 +149,7 @@ const getByuserId = async (userId) => {
       obj.userId = obj.userId.toString();
       obj.chatId = obj.chatId.toString();
     });
-  } 
-  else {
+  } else {
     throw [404, "Error: No feedback found in the database"];
   }
   return res;
@@ -153,10 +172,18 @@ const getByFeedId = async (id) => {
 
 const getByChatId = async (chatId, userId) => {
   //chatId = chatId.toString();
-  chatId = validation.checkId(chatId, "feedBack ID");
+  try{
+    chatId = validation.checkId(chatId, "chat ID");
+  }catch(e){
+    throw e
+  }
+  
   const feedBackCollection = await feedBack();
   let res;
-  res = await feedBackCollection.findOne({ userId: new ObjectId(userId), chatId: new ObjectId(chatId) });
+  res = await feedBackCollection.findOne({
+    userId: new ObjectId(userId),
+    chatId: new ObjectId(chatId),
+  });
   if (res === null) {
     throw [404, "Error: No feedback found with the ID"];
   }
@@ -203,31 +230,34 @@ const update = async (id, isPublic, rate1, rate2, rate3, description) => {
   try {
     id = validation.checkId(id, "feedBackId");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     rate1 = validation.checkRating(rate1, "reconnect_probability");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     rate2 = validation.checkRating(rate2, "satisfied_with_chat");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     rate3 = validation.checkRating(rate3, "listener_rating");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
-  if(description){
+  if (description) {
     try {
-      description = validation.checkString(description, " feed back description");
+      description = validation.checkString(
+        description,
+        " feedback description"
+      );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
   }
-  
+
   if (errors.length > 0) {
     throw [400, errors];
   }
@@ -261,16 +291,15 @@ const update = async (id, isPublic, rate1, rate2, rate3, description) => {
   return ans;
 };
 
-const getFirstnames = async(chatId, userId)=>{
+const getFirstnames = async (chatId, userId) => {
   const chatInfo = await getChat(chatId);
   //console.log(chatInfo);
-  if(chatInfo){
-    const otherUserId = chatInfo.users.find(id => id !== userId);
+  if (chatInfo) {
+    const otherUserId = chatInfo.users.find((id) => id !== userId);
     const userInfo = await userData.get(otherUserId);
     return userInfo.firstName;
   }
-}
-
+};
 
 export default {
   createFeedBack,
@@ -281,5 +310,5 @@ export default {
   removeByuserId,
   update,
   getByChatId,
-  getFirstnames
+  getFirstnames,
 };

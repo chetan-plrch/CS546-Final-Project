@@ -10,13 +10,13 @@ const CreateJournal = async (userId, message) => {
   try {
     userId = validations.checkId(userId, "userId");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     message = validations.checkString(message, "journal message");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if (errors.length > 0) {
@@ -70,7 +70,7 @@ const getJournalsByUser = async (userId) => {
   try {
     userId = validations.checkId(userId, "userId");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if (errors.length > 0) {
