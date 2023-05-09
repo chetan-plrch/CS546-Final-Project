@@ -11,7 +11,7 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { feedBackList, getFirstnames } from "../../api/feedback";
+import { feedBackList } from "../../api/feedback";
 import { getUserId } from "../../helper/index";
 import Middle from "./middle";
 import { ToastContainer } from "react-toastify/dist/react-toastify.js";
@@ -28,17 +28,20 @@ const FeedBackList = () => {
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
-      try {
-        const response = await feedBackList(userId);
-        console.log(response);
-        if (response.status === 200) {
-          setFeedbacks(
-            response.data.map((feedback, index) => ({ ...feedback, id: index }))
-          );
+      if (fetchFeedback) {
+        try {
+          const response = await feedBackList(userId);
+          console.log(response);
+          if (response.status === 200) {
+            setFeedbacks(
+              response.data.map((feedback, index) => ({ ...feedback, id: index }))
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching feedbacks:", error);
         }
-      } catch (error) {
-        console.error("Error fetching feedbacks:", error);
-      }
+        setFetchFeedback(false);
+      };
     };
 
     fetchFeedbacks();
