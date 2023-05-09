@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { feedBack } from "../config/mongoCollections.js";
+import { feedBack,users } from "../config/mongoCollections.js";
 import validation from "../validations.js";
 import { getChat } from "./chat.js";
 import {userData} from "./index.js"
@@ -52,6 +52,9 @@ const createFeedBack = async (
   if (errors.length > 0) {
     throw [400, errors];
   }
+  const userCtx = await users();
+  let user = await userCtx.findOne({_id : new ObjectId(userId)})
+
 
   const feedBackCollection = await feedBack();
   const feedBackExistsForChat = await feedBackCollection.findOne({userId: new ObjectId(userId),chatId: new ObjectId(chatId)})
