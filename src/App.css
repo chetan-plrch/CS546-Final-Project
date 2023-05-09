@@ -62,20 +62,17 @@
 .footer {
   position: fixed;
   display: flex;
-  left: 0;
   bottom: 0;
   width: 100%;
+  padding: 7px;
   background-color: #00796b;
   text-align: center;
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
-  font-family: monospace;
-  font-weight: 700;
   -webkit-text-decoration: none;
   text-decoration: none;
-  padding-top: 0.6rem;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
