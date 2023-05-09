@@ -1,18 +1,21 @@
-.list-container {
+.comment-list-container {
     display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     overflow: scroll;
-    padding: 10px;
+    justify-content: center;
+    align-items: center;
 }
 .comment-list-item {
     display: flex;
     background-color: aliceblue;
     flex-direction: column;
-    width: 100%;
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     height: auto;
-    padding: 5px;
-    margin: 10px;
     border-radius: 10px;
     height: fit-content;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
