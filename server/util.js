@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "./config/mongoCollections.js";
-import validation from "./validations.js";
+import validation, { validateName, validateNameValue } from "./validations.js";
 
 export const roleType = {
   ADMIN: "ADMIN",
@@ -123,18 +123,18 @@ export async function checkUsernameExists(userId, username) {
 
 export const validateUpdateUser = (userInfo) => {
   userInfo.username = validation.checkUsername(userInfo.username);
-  userInfo.firstName = validation.checkString(userInfo.firstName);
-  userInfo.lastName = validation.checkString(userInfo.lastName);
+  userInfo.firstName = validateNameValue(userInfo.firstName, 'First name');
+  userInfo.lastName = validateNameValue(userInfo.lastName, 'Last name');
   userInfo.email = validation.checkMailID(userInfo.email);
   userInfo.age = validation.checkAge(userInfo.age);
   if (userInfo.password) {
     userInfo.password = validation.checkPassword(userInfo.password);
   }
   if (userInfo.city) {
-    userInfo.city = validation.checkString(userInfo.city);
+    userInfo.city = validateNameValue(userInfo.city, 'City');
   }
   if (userInfo.state) {
-    userInfo.state = validation.checkString(userInfo.state);
+    userInfo.state = validateNameValue(userInfo.state, 'State');
   }
 
   validation.checkBoolean(userInfo.isAnonymous, "isAnonymous");

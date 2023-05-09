@@ -213,7 +213,6 @@ router.put("/update", authenticate, async (req, res) => {
     const updateUser = await userData.update(userId, userInfo);
     return res.status(200).json(updateUser);
   } catch (e) {
-    console.log(e)
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json({ error: e.message });
     }

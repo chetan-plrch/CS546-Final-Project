@@ -82,7 +82,7 @@ const Profile = () => {
     let requiredFields = Array.from(allFields);
 
     let errorsObj = {};
-
+  
     requiredFields.forEach((key) => {
       if (user[key] === "" || ((typeof user[key] === 'string') && user[key].trim() === "")) {
         errorsObj[key] = { ...(errors[key] || {}) };
