@@ -28,14 +28,9 @@ const App = () => {
     checkAuthorized();
   }, [window.location.pathname]);
 
-  
-
-  
   return (
     <div className="App">
-      
       <BrowserRouter>
-      
         <Routes>
           <Route
             exact

@@ -1,6 +1,6 @@
 import { feeds } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
-import validations, { validateName } from "../validations.js";
+import validations from "../validations.js";
 
   const createFeed = async (title, description, type, images) => {
     if (!title || typeof title !== 'string') {
@@ -216,7 +216,7 @@ import validations, { validateName } from "../validations.js";
 
     try {
       // full name of user commenting
-      userName = validateName(userName, "User Name");
+      userName = validation.validateName(userName, "User Name");
     } catch(e) {
       errors.push(e);
     };

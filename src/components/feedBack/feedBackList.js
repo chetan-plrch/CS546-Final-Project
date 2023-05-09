@@ -71,7 +71,7 @@ const FeedBackList = () => {
 
   return (
     <Box>
-      <Typography variant="h1" mb={2}>
+      <Typography component = "div" sx={{ fontSize: "30px" , fontWeight: "bold"}}  >
         Feedbacks
       </Typography>
       {feedbacks.length > 0 ? (
@@ -87,10 +87,10 @@ const FeedBackList = () => {
           {feedbacks.map((feedback, index) => (
             <Card key={index} sx={{ marginBottom: "16px" }}>
               <CardContent>
-                <Typography variant="h2">
+                <Typography component = "div" sx={{ fontSize: "16px" }}>
                   Feedback given for: {firstNames[index] || "N/A"}
                 </Typography>
-                <Typography variant="h3">
+                <Typography component = "div" sx={{ fontSize: "16px" }}>
                   Description: {feedback.description || "N/A"}
                 </Typography>
                 <Typography>
