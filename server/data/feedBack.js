@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 import { feedBack } from "../config/mongoCollections.js";
 import validation from "../validations.js";
+import { getChat } from "./chat.js";
+import {userData} from "./index.js"
 
 const createFeedBack = async (
   userId,
@@ -256,6 +258,17 @@ const update = async (id, isPublic, rate1, rate2, rate3, description) => {
   return ans;
 };
 
+const getFirstnames = async(chatId, userId)=>{
+  const chatInfo = await getChat(chatId);
+  //console.log(chatInfo);
+  if(chatInfo){
+    const otherUserId = chatInfo.users.find(id => id !== userId);
+    const userInfo = await userData.get(otherUserId);
+    return userInfo.firstName;
+  }
+}
+
+
 export default {
   createFeedBack,
   getAll,
@@ -264,5 +277,6 @@ export default {
   remove,
   removeByuserId,
   update,
-  getByChatId
+  getByChatId,
+  getFirstnames
 };

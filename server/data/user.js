@@ -191,7 +191,7 @@ const get = async (id) => {
    } 
    const userCollection = await users();
 
-   const user = await userCollection.findOne({_id: new ObjectId(id)},{projection:{_id:1,firstName:1}});
+   const user = await userCollection.findOne({_id: new ObjectId(id)},{projection:{_id:1,firstName:1,role:1}});
    
    if(user === null){
     throw new Error("No user with that id");
@@ -318,4 +318,16 @@ const getAllBlockedUsers = async (id) => {
   return userDetails;
 };
 
-export default { create, loginUser, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers,allUsers };
+const filterSeekerFeedback = async (feedbackList) => {
+  let newFeedbackList = [];
+  for (const elem of feedbackList) {
+    let user = await get(elem.userId);
+    if (user.role === "seeker") {
+      newFeedbackList.push(elem);
+    }
+  }
+  return newFeedbackList;
+};
+
+
+export default { create, loginUser, get, remove, update,getAllUsers, updateUserRandom,getAllBlockedUsers,allUsers,filterSeekerFeedback };
