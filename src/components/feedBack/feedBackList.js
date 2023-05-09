@@ -84,13 +84,13 @@ const FeedBackList = () => {
                   Description: {feedback.description || "N/A"}
                 </Typography>
                 <Typography>
-                  Reconnect Probability: {feedback.rating.reconnect_probability}
+                  Reconnect Probability: {feedback?.rating?.reconnect_probability}
                 </Typography>
                 <Typography>
-                  Satisfied with Chat: {feedback.rating.satisfied_with_chat}
+                  Satisfied with Chat: {feedback?.rating?.satisfied_with_chat}
                 </Typography>
                 <Typography>
-                  Listener Rating: {feedback.rating.listener_rating}
+                  Listener Rating: {feedback?.rating?.listener_rating}
                 </Typography>
                 <Typography>
                   Feedback Time:{" "}
@@ -100,7 +100,7 @@ const FeedBackList = () => {
               <CardActions>
                 <Button
                   variant="contained"
-                  onClick={() => handleEditClick(feedback, firstNames[index])}
+                  onClick={() => handleEditClick(feedback, feedback?.firstName)}
                 >
                   Edit
                 </Button>
