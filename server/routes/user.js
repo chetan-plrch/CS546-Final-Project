@@ -176,16 +176,16 @@ router.get('/:id', async (req,res) =>{
     if(!user){
       throw new Error('No user with that id');
     }
-    res.status(200).json({user});
+    return res.status(200).json({user});
   } catch (error) {
-    console.log(error);
     if (error.message === 'Invalid id') {
-      res.status(400).json({ error: 'Invalid id' });
+      return res.status(400).json({ error: 'Invalid id' });
     } else if (error.message === 'No user with that id') {
-      res.status(404).json({ error: 'No user with that id' });
+      return res.status(404).json({ error: 'No user with that id' });
     } else {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+      return res.status(500).json({ error: 'Internal Server Error' });
+    };
+    return res.status(500).send({ errors: "Internal Server Error" });
   } 
 }).delete(async (req,res) => {
   const id = req.params.id;
@@ -240,8 +240,8 @@ router.put('/delete', authenticate, async (req, res, next) => {
       return res.status(200).json({ message: 'Successfully change the profile status' })
     }
     
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+  } catch (e) {
+    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
   }
 });
 
