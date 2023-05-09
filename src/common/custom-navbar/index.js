@@ -65,7 +65,8 @@ function ResponsiveAppBar() {
     }
   };
 
-  const navigateToPage = (page) => {
+  const navigateToPage = (p) => {
+    const page = p.replace(/(\r\n|\n|\r)/gm, "").trim()
     if (page === "HOME") {
       navigate("/home");
     } else if (page === "LISTENERS") {
