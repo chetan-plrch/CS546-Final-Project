@@ -23,8 +23,14 @@ export const getError = (e) => {
 
 export const getChatUserIds = (chats) => {
     const usersMap = []
+    const usersSet = new Set()
     chats.forEach((chat) => {
-        chat.users.forEach(userId => usersMap.push(userId))
+        chat.users.forEach(userId => {
+            if (!usersSet.has(userId)) {
+                usersSet.add(userId)
+                usersMap.push(userId)
+            }
+        })
     })
     return usersMap.map(userId => new ObjectId(userId))
 };
@@ -71,20 +77,17 @@ export const removeBlockedChats = (chats, blockedUserIds) => {
         }
     }, [])
     
-    // return myChats.sort((chatA, chatB) => {
-    //     const topConvA = chatA.conversation
-    //     const topConvB = chatB.conversation
-    //     if (topConvA && topConvB) {
-    //         const aSentAt = topConvA[topConvA.length - 1].sentAt
-    //         const bSentAt = topConvB[topConvB.length - 1].sentAt
+    return myChats.sort((chatA, chatB) => {
+        const topConvA = chatA.conversation
+        const topConvB = chatB.conversation
+        if (topConvA && topConvB) {
+            const aSentAt = topConvA[topConvA.length - 1].sentAt
+            const bSentAt = topConvB[topConvB.length - 1].sentAt
 
-    //         console.log(new Date(aSentAt).valueOf() - new Date(bSentAt).valueOf())
-    //         return new Date(aSentAt).valueOf() - new Date(bSentAt).valueOf()
-    //     }
-    //     return 0
-    // });
-
-    return myChats
+            return new Date(bSentAt).valueOf() - new Date(aSentAt).valueOf()
+        }
+        return 0
+    });
 }
 
 export const errorObject = (type, msg) => {

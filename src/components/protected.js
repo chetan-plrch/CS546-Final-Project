@@ -28,7 +28,7 @@ const Protected = (props) => {
             } else {
                 // For all the other scenarios
                 await delay(1000)
-                 setUnprotect(true)
+                setUnprotect(true)
              }
         }
 

@@ -28,9 +28,9 @@ const handleUnLike = async (unlikeData) => {
     return e;
   }
 };
-const handleComment = async (commentData) => {
+const handleComment = async (commentsData) => {
   try {
-    const response = await axiosApi.put(`/feeds/feed/comment`, commentData);
+    const response = await axiosApi.put(`/feeds/feed/comment`, commentsData);
     return response;
   } catch (e) {
     return e;
@@ -38,7 +38,7 @@ const handleComment = async (commentData) => {
 };
 const handleSavePost = async (savePostData) => {
   try {
-    const response = await axiosApi.put(`/feeds/feed/comment`, savePostData);
+    const response = await axiosApi.put(`/feeds/feed/savepost`, savePostData);
     return response;
   } catch (e) {
     return e;
