@@ -66,18 +66,30 @@ const Homepage = () => {
     setTabValue(newValue);
   };
 
-  const getUpdatedLikes = (likesList, isLiked) => {
-    if (isLiked) {
-      likesList.push(userId);
+  const getUpdatedArray = (list, booleanValue) => {
+    if (booleanValue) {
+      list.push(userId);
     } else {
-      likesList.splice(likesList.indexOf(userId), 1);
+      list.splice(list.indexOf(userId), 1);
     };
-    return likesList;
+    return list;
   };
   const updateFeed = (feedId, action, value) => {
     const updatedFeeds = feeds.map((eachFeed) => {
-      if (eachFeed?._id === feedId && action === feedInteractions.like) {
-        eachFeed.liked = getUpdatedLikes(eachFeed.liked, value);
+      if (eachFeed?._id === feedId) {
+        if (action === feedInteractions.like) {
+          eachFeed.liked = getUpdatedArray(eachFeed.liked, value);
+        };
+        if (action === feedInteractions.save) {
+          eachFeed.saved = getUpdatedArray(eachFeed.saved, value);
+        };
+        if (action === feedInteractions.comment) {
+          eachFeed?.comment?.[userId]?.push({
+            comment: value?.comment,
+            userName: value?.userName,
+            commentedAt: new Date().toISOString()
+          });
+        };
       };
       return eachFeed;
     });

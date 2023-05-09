@@ -1,6 +1,6 @@
 import { feeds } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
-import validations from "../validations.js";
+import validations, { validateName } from "../validations.js";
 
   const createFeed = async (title, description, type, images) => {
     if (!title || typeof title !== 'string') {
@@ -195,8 +195,9 @@ import validations from "../validations.js";
     }
   }
   
-  const updateComment = async (userId, feedId, message) => {
-    let errors = []
+  const updateComment = async (feedInfo) => {
+    let { userId, feedId, message, userName } = feedInfo || {};
+    let errors = [];
     try{
       userId = validations.checkId(userId,"user Id")
     }catch(e){
@@ -213,26 +214,39 @@ import validations from "../validations.js";
       errors.push(e)
     }
 
+    try {
+      // full name of user commenting
+      userName = validateName(userName, "User Name");
+    } catch(e) {
+      errors.push(e);
+    };
+
     if (errors.length > 0) {
       throw [400, errors];
     }
 
     const feedsCollection = await feeds();
     const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
-  
-    if (feed.comment.hasOwnProperty(userId)) {
-      // If the user has already commented, append the new message to the existing array
-      await feedsCollection.updateOne(
-        { _id: new ObjectId(feedId) },
-        { $push: { [`comment.${userId}`]: message } }
-      );
+
+    const addCommentResp = await feedsCollection.findOneAndUpdate(
+      { _id: new ObjectId(feedId) },
+      {
+        $push: {
+          [`comment.${userId}`]: {
+            userName,
+            comment: message,
+            commentedAt: new Date().toISOString()
+          }
+        }
+      },
+      {returnDocument: 'after'}
+    );
+
+    if (addCommentResp && addCommentResp?.lastErrorObject && addCommentResp?.lastErrorObject?.updatedExisting) {
+      return true;
     } else {
-      // If the user has not commented before, create a new array with the new message
-      await feedsCollection.updateOne(
-        { _id: new ObjectId(feedId) },
-        { $set: { [`comment.${userId}`]: [message] } }
-      );
-    }
+      throw new Error('Unable to add comment on the post. Please try again!');
+    };
   };
 
   const savePost = async(userId, feedId, isSave)=>{

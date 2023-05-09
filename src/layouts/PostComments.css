@@ -1,0 +1,28 @@
+.list-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+    padding: 10px;
+}
+.comment-list-item {
+    display: flex;
+    background-color: aliceblue;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.commented-user-details {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.footer-container {
+    padding: 5px;
+}
