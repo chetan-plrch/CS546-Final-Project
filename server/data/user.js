@@ -274,13 +274,13 @@ const updateUserRandom = async (id, { permanent, isActive }) => {
 
 const update = async(id, userObj) => {
   const userId = validation.checkId(id)
-  const userInfo = validateUpdateUser(userObj)
+  let userInfo = validateUpdateUser(userObj)
   delete userInfo._id
 
   const usersCol = await users();
   if (userInfo.password) {
     const newPassword = await bcrypt.hash(userInfo.password, 10);
-    updateObj = { ...userInfo, password: newPassword }
+    userInfo = { ...userInfo, password: newPassword }
   }
   
   const updatedInfo = await usersCol.findOneAndUpdate({ _id: new ObjectId(userId) }, {
