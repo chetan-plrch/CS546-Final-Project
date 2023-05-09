@@ -39,7 +39,7 @@
 .received-message {
     padding-left: 10px;
     padding-top: 1px;
-    color: orange;
+    color: rgb(0, 85, 255);
 }
 .custom-chat-container {
     display: flex;
