@@ -11,6 +11,7 @@ import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 import FeedBackPop from '../../components/feedBack/feedBackPop';
 import { feedbackTriggerCount } from '../../helper/constants';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 function ChatWindow(props) {
     const {
@@ -150,7 +151,7 @@ function ChatWindow(props) {
     return (
         <div className='custom-chat-container'>
             <ToastContainer />
-            <span>{online ? 'online' : 'offline'}</span>
+            <div>Your status: <FiberManualRecordIcon fontSize="small" color={online ? 'success' : 'error' } />{online ? 'online' : 'offline'}</div>
             <div className='header-container'>
                 {
                     allowSearch ? (
