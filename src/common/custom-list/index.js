@@ -127,6 +127,7 @@ CustomList.propTypes = {
     imageSource: PropTypes.any,
     listTitle: PropTypes.string,
     contentKey: PropTypes.string,
+    imageKey: PropTypes.string,
     selectedId: PropTypes.string,
     buttonTitle: PropTypes.string,
     onButtonClick: PropTypes.func,

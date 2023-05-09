@@ -129,6 +129,7 @@ const Connections = () => {
           alternateList={archivedConnections || []}
           titleKey='fullName'
           listTitle='Connections'
+          imageKey='profilePic'
           contentKey='lastMessage'
           selectedId={selectedConnectionId}
           onSelectionChange={(connectionId) => changeChatWindow(connectionId)}
