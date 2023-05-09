@@ -143,6 +143,10 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     const cookieSpecifications = { maxAge: 24 * 60 * 60 * 1000, httpOnly: false };
     res.cookie("role", user.role, cookieSpecifications);
     res.cookie("firstname", user.firstName, cookieSpecifications);
+    res.cookie("username",
+        user?.isAnonymous ? "Anonymous" : `${user.firstName} ${user.lastName}`,
+        cookieSpecifications
+    );
     res.cookie("userId", user._id.toString(), cookieSpecifications);
     res.cookie("token", token, {...cookieSpecifications, httpOnly: true});
 

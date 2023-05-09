@@ -28,9 +28,9 @@ const handleUnLike = async (unlikeData) => {
     return e;
   }
 };
-const handleComment = async (commentData) => {
+const handleComment = async (commentsData) => {
   try {
-    const response = await axiosApi.put(`/feeds/feed/comment`, commentData);
+    const response = await axiosApi.put(`/feeds/feed/comment`, commentsData);
     return response;
   } catch (e) {
     return e;

@@ -82,6 +82,13 @@ const Homepage = () => {
         if (action === feedInteractions.save) {
           eachFeed.saved = getUpdatedArray(eachFeed.saved, value);
         };
+        if (action === feedInteractions.comment) {
+          eachFeed?.comment?.[userId]?.push({
+            comment: value?.comment,
+            userName: value?.userName,
+            commentedAt: new Date().toISOString()
+          });
+        };
       };
       return eachFeed;
     });

@@ -143,6 +143,10 @@ export const getUserId = () => {
   return userId;
 };
 
+export const getUserName = () => {
+  return Cookies.get('username');
+};
+
 export const getUserRole = () => {
     let userRole = Cookies.get('role');
     return userRole;
