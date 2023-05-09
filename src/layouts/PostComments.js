@@ -58,7 +58,7 @@ const PostComments = (props) => {
     >
       {
         feedComments?.length ? (
-          <div className='list-container'>
+          <div className='comment-list-container'>
             {
               feedComments?.map(function(eachComment, index) {
                 return (

@@ -136,7 +136,7 @@ router
     }
     try {
       // full name of user commenting
-      feedInfo.userName = validation.validateName(feedInfo.userName, "User Name");
+      feedInfo.userName = validations.validateName(feedInfo.userName, "User Name");
     } catch(e) {
       errors.push(e?.message);
     };

@@ -13,7 +13,7 @@ const JournalList = () => {
       setIsLoading(true);
       const userId = getUserId();
       const response = await getJournal(userId);
-      if (response && response.data.journal) {
+      if (response && response?.data?.journal) {
         setJournals(response.data.journal);
       }
       setIsLoading(false);

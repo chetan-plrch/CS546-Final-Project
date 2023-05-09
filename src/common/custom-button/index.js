@@ -10,6 +10,12 @@ function CustomButton(props) {
         onClick={onClick}
         classes={styles}
         color={isPrimary ? 'primary' : 'secondary'}
+        sx={{
+            '&.Mui-disabled': {
+              color: "black",
+              opacity: '0.75'
+            }
+          }}
     >
         {title}
     </Button>

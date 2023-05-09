@@ -173,8 +173,14 @@ const Login = () => {
             fullWidth
             variant="contained"
             color="primary"
-            sx={{ marginTop: 2, marginBottom: 2 }}
-            style={{ width: '350px', color:'white'}}
+            sx={{
+              marginTop: 2,
+              marginBottom: 2,
+              '&.Mui-disabled': {
+                color: "black",
+                opacity: '0.75'
+              }}}
+            disabled={!username || !password || !!errors?.username || !!errors?.password}
 
           >
             Login
