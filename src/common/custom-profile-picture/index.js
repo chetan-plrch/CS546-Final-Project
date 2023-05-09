@@ -8,7 +8,7 @@ const ProfileImage = (props) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    const MAX_FILE_SIZE = 102.4; // 100KB
+    const MAX_FILE_SIZE = 510; // 500KB
     const fileSizeKiloBytes = file.size / 1024;
 
     const allowedExtensions = /(\jpg|\jpeg|\png|\gif)$/i;

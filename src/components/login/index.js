@@ -173,7 +173,6 @@ const Login = () => {
             fullWidth
             variant="contained"
             color="primary"
-            disabled={!username || !password || !!errors?.password || !!errors?.username}
             sx={{ marginTop: 2, marginBottom: 2 }}
             style={{ width: '350px', color:'white'}}
 

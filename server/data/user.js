@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import validation, { validateLoginRequest, validateName } from "../validations.js";
+import validation, { validateLoginRequest } from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
@@ -24,13 +24,13 @@ const create = async (
   //validating the request body
   let errors = [];
   try {
-    firstName = validateName(firstName, "Firstname");
+    firstName = validation.validateName(firstName, "Firstname");
   } catch (e) {
     errors.push(e?.message);
   }
 
   try {
-    lastName = validateName(lastName, "Lastname");
+    lastName = validation.validateName(lastName, "Lastname");
   } catch (e) {
     errors.push(e?.message);
   }
@@ -61,7 +61,7 @@ const create = async (
 
   if(city){
   try {
-    city = validateName(city, "city");
+    city = validation.validateName(city, "city");
   } catch (e) {
     errors.push(e?.message);
   }
@@ -69,7 +69,7 @@ const create = async (
 
   if(state){
   try {
-    state = validateName(state, "state");
+    state = validation.validateName(state, "state");
   } catch (e) {
     errors.push(e?.message);
   }
@@ -274,13 +274,13 @@ const updateUserRandom = async (id, { permanent, isActive }) => {
 
 const update = async(id, userObj) => {
   const userId = validation.checkId(id)
-  const userInfo = validateUpdateUser(userObj)
+  let userInfo = validateUpdateUser(userObj)
   delete userInfo._id
 
   const usersCol = await users();
   if (userInfo.password) {
     const newPassword = await bcrypt.hash(userInfo.password, 10);
-    updateObj = { ...userInfo, password: newPassword }
+    userInfo = { ...userInfo, password: newPassword }
   }
   
   const updatedInfo = await usersCol.findOneAndUpdate({ _id: new ObjectId(userId) }, {
