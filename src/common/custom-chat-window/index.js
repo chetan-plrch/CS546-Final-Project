@@ -58,14 +58,11 @@ function ChatWindow(props) {
     useEffect(() => {
         initConnection(senderId)
         receiveMessage(onReceiveMessage);
-    }, []);
-
-    useEffect(() => {
         let element = document.getElementById('chat-container');
         if (element) {
             element.scrollTop = element.scrollHeight - element.clientHeight
         };
-    }, [conversation])
+    }, [conversation]);
 
     const onChangeOfValue = (_key, value) => {
         setCurrentMessage(value);
