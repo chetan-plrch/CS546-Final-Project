@@ -202,7 +202,7 @@ const get = async (id) => {
 
 const allUsers = async()=>{
   const collection = await users();
-   const getID = await collection.find({}).project({ _id: 1, role: 1, password: 0 }).toArray();
+   const getID = await collection.find({}).project({ _id: 1, role: 1 }).toArray();
    const result = getID.map(obj => {
     obj._id = obj._id.toString();
     return obj;
@@ -235,8 +235,11 @@ const allUsers = async()=>{
 
 
 const updateUserRandom = async (id, { permanent, isActive }) => {
-  const db = await users();
 
+  validation.checkBoolean(permanent)
+  validation.checkBoolean(isActive)
+
+  const db = await users();
   const user = await db.findOne({ _id: new ObjectId(id) }, { projection:{ password: 0 } });
   if (!user) {
     throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
