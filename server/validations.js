@@ -32,9 +32,9 @@ export const validateLoginRequest = (params) => {
   return { username, password };
 };
 
-const capitalizeFirst = (str) => {
-  return str ? str[0].toUpperCase() + str.slice(1, str.length) : '';
-};
+// const capitalizeFirst = (str) => {
+//   return str ? str[0].toUpperCase() + str.slice(1, str.length) : '';
+// };
 
 export const validateName = (value, fieldName) => {
   // try {

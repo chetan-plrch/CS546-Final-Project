@@ -53,7 +53,7 @@ const createFeedBack = async (
     throw [400, errors];
   }
   const userCtx = await users();
-  // let user = await userCtx.findOne({user})
+  let user = await userCtx.findOne({_id : new ObjectId(userId)})
 
 
   const feedBackCollection = await feedBack();

@@ -124,6 +124,9 @@ const exportedMethods = {
       throw errorObject(errorType.BAD_INPUT, 'The image size too long')
     }
   },
+  capitalizeFirst(str) {
+    return str ? str[0].toUpperCase() + str.slice(1, str.length) : '';
+  },
   validateName(value, fieldName) {
     try {
       value = validations.checkString(value, fieldName);
@@ -136,7 +139,7 @@ const exportedMethods = {
       }
       return value;
     } catch(e) {
-      throw e?.message ? capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
+      throw e?.message ? this.capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
     };
   }
 };
