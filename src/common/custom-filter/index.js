@@ -8,6 +8,7 @@ import CustomButton from '../custom-button';
 
 function CustomFilter(props) {
   const {options, selectedIds, updateUserFilter } = props;
+  const originalIds = JSON.parse(JSON.stringify(selectedIds));
   const [showOptions, setShowOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState(selectedIds);
 
@@ -23,7 +24,7 @@ function CustomFilter(props) {
 
   const resetToOriginal = () => {
     setShowOptions(!showOptions)
-    setSelectedOptions([...selectedIds])
+    setSelectedOptions(originalIds)
   };
 
   const setFilter = () => {
