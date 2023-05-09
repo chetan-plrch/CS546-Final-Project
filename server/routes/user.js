@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js"
+import { authenticate, destroyToken } from "../middleware/index.js"
 import { userData } from "../data/index.js";
-import validation, {validateLoginRequest, validateName} from "../validations.js"
+import validation, {validateLoginRequest} from "../validations.js"
 import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists, validateUpdateUser } from "../util.js";
 const router = Router();
@@ -32,13 +32,13 @@ router.post("/signup", async (req, res) => {
   //validating the request body
   let errors = [];
   try {
-    userInfo.firstName = validateName(userInfo.firstName, "First name");
+    userInfo.firstName = validation.validateName(userInfo.firstName, "First name");
   } catch (e) {
     errors.push(e.message);
   }
 
   try {
-    userInfo.lastName = validateName(userInfo.lastName, "Last Name");
+    userInfo.lastName = validation.validateName(userInfo.lastName, "Last Name");
   } catch (e) {
     errors.push(e.message);
   }
@@ -73,7 +73,7 @@ router.post("/signup", async (req, res) => {
 
   if (userInfo.city) {
   try {
-    userInfo.city = validateName(userInfo.city, "city");
+    userInfo.city = validation.validateName(userInfo.city, "city");
   } catch (e) {
     errors.push(e.message);
   }
@@ -85,7 +85,7 @@ if(userInfo.role === "listener"){
 
 if(userInfo.state){
   try {
-    userInfo.state = validateName(userInfo.state, "state");
+    userInfo.state = validation.validateName(userInfo.state, "state");
   } catch (e) {
     errors.push(e.message);
   }

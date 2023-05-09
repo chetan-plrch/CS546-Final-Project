@@ -32,22 +32,5 @@ export const validateLoginRequest = (params) => {
   return { username, password };
 };
 
-export const validateNameValue = (value, fieldName) => {
-  value = validations.checkString(value, fieldName);
-  const nameRegex = /^[A-Za-z\s]*$/;
-  if (!nameRegex.test(value)) {
-    throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain letters and spaces`);
-  };
-  return value;
-};
-
-export const validateName = (value, fieldName) => {
-  try {
-    return validateNameValue(value, fieldName)
-  } catch(e) {
-    throw e?.message ? capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
-  };
-};
-
 export default { ...validations, checkId };
 //export default validations
