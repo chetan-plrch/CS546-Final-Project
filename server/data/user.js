@@ -235,10 +235,6 @@ const allUsers = async()=>{
 
 
 const updateUserRandom = async (id, { permanent, isActive }) => {
-
-  validation.checkBoolean(permanent)
-  validation.checkBoolean(isActive)
-
   const db = await users();
   const user = await db.findOne({ _id: new ObjectId(id) }, { projection:{ password: 0 } });
   if (!user) {
@@ -247,6 +243,8 @@ const updateUserRandom = async (id, { permanent, isActive }) => {
 
   let updatedUser = {};
   if (permanent) {
+    validation.checkBoolean(permanent)
+
     const newUsername = crypto.randomBytes(8).toString('hex');
     const newPassword = crypto.randomBytes(12).toString('hex');
 
@@ -264,6 +262,7 @@ const updateUserRandom = async (id, { permanent, isActive }) => {
       isActive: false
     };
   } else {
+    validation.checkBoolean(isActive)
     updatedUser = { isActive }
   }
 
