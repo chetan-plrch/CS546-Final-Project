@@ -48,8 +48,11 @@ const exportedMethods = {
   },
   checkMailID(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex to validate email address
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email.trim())) {
       throw errorObject(errorType.BAD_INPUT, "Error: Enter valid email ID")
+    }
+    if(email.length > 30 || email.length < 0){
+      throw errorObject(errorType.BAD_INPUT, "Error: email can be max of 20 characters") 
     }
     return email.trim().toLowerCase();
   },
@@ -117,6 +120,24 @@ const exportedMethods = {
     if (typeof val !== 'string') {
       throw errorObject(errorType.BAD_INPUT, 'The image needs to be of string type')
     }
+    if(val.length > 100000){
+      throw errorObject(errorType.BAD_INPUT, 'The image size too long')
+    }
+  },
+  validateName(value, fieldName) {
+    try {
+      value = validations.checkString(value, fieldName);
+      const nameRegex = /^[A-Za-z\s]*$/;
+      if (!nameRegex.test(value)) {
+        throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain letters and spaces`);
+      };
+      if(value.length > 50 || value.length >0){
+        throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain 50 characters`);
+      }
+      return value;
+    } catch(e) {
+      throw e?.message ? capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
+    };
   }
 };
 
