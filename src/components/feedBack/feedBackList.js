@@ -97,10 +97,10 @@ const FeedBackList = () => {
           {feedbacks.map((feedback, index) => (
             <Card key={index} sx={{ marginBottom: "16px" }}>
               <CardContent>
-                <Typography variant="h6">
+                <Typography variant="h2">
                   Feedback given for: {firstNames[index] || "N/A"}
                 </Typography>
-                <Typography variant="h6">
+                <Typography variant="h3">
                   Description: {feedback.description || "N/A"}
                 </Typography>
                 <Typography>

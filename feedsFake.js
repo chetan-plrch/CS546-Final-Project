@@ -331,13 +331,15 @@ const feeds = [
     },
     {
       title: "Don't Give Up",
-      description:
-        "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+      description: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
       type: "motivational-post",
       images: [
         "https://images.pexels.com/photos/21696/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
       ],
     },
+    {
+
+    }
   ];
 
   export default feeds;

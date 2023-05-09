@@ -213,6 +213,7 @@ const Profile = () => {
               value={user.email}
               onChange={onChangeOfValue}
             />
+            {console.log('user',user)}
             <CustomTextField
               onBlur={onBlur}
               error={!!getHelperText("password")}
@@ -316,7 +317,7 @@ const Profile = () => {
             blockedUsers.map((user) => {
               return (
                 <div className="blocked-item">
-                  <div className="blocked-username">{user.firstName}</div>
+                  <div className="blocked-username">{user.firstName} {user.lastName}</div>
                   <Button
                     onClick={() => unblockUserProfile(user._id)}
                     variant={"outlined"}

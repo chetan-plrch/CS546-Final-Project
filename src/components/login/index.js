@@ -129,21 +129,22 @@ const Login = () => {
             margin="normal"
             fullWidth
             id="userName"
-            // label={<span style={{ fontWeight: 'bold', color: 'black' }}>Username</span>}
-            label ="Username"
+            label={<span style={{ color: '#807000' }}>Username</span>}
             autoComplete="username"
             autoFocus
             value={username}
             onChange={handleUsernameChange}
             error={!!errors.username}
             helperText={errors.username}
+            style={{ width: '350px', opacity: 1 }}
+            
           />
           <TextField
             variant="outlined"
             margin="normal"
             fullWidth
             name="password"
-            label={<span style={{ fontWeight: 'bold', color: 'black' }}>Password</span>}
+            label={<span style={{ color: '#807000' }}>Password</span>}
             type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
@@ -165,6 +166,7 @@ const Login = () => {
             }}
             error={!!errors.password}
             helperText={errors.password}
+            style={{ width: '350px', opacity: 1 }}
           />
           <Button
             type="submit"
@@ -173,6 +175,8 @@ const Login = () => {
             color="primary"
             disabled={!username || !password || !!errors?.password || !!errors?.username}
             sx={{ marginTop: 2, marginBottom: 2 }}
+            style={{ width: '350px', color:'white'}}
+
           >
             Login
           </Button>

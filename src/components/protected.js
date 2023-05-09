@@ -4,9 +4,13 @@ import AppBar from '../common/custom-navbar/index.js'
 import AppFooter from '../common/custom-footer/index.js'
 import { useNavigate } from 'react-router-dom'
 import { initialPage, delay } from '../helper'
+import Journal from './journal/journal'
+import { Fab, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const Protected = (props) => {
     const [unprotect, setUnprotect] = useState(props.isLoggedIn)
+    const [journalOpen, setJournalOpen] = useState(false);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -33,6 +37,14 @@ const Protected = (props) => {
         }
     }, [props.isLoggedIn])
 
+    const handleJournalOpen = () => {
+        setJournalOpen(true);
+      };
+    
+      const handleJournalClose = () => {
+        setJournalOpen(false);
+      };
+      
     if (unprotect) {
         return <>
             <AppBar />
@@ -43,6 +55,31 @@ const Protected = (props) => {
         </>
     }
     return <>
+    <Fab
+          color="primary"
+          aria-label="add"
+          size = "large"
+          style={{
+            position: 'fixed',
+            bottom: 100,
+            right: 16,
+            padding : '10px'
+          }}
+          onClick={handleJournalOpen}
+        >
+          <AddIcon />
+        </Fab>
+
+        <Dialog
+          open={journalOpen}
+          onClose={handleJournalClose}
+          aria-labelledby="journal-dialog-title"
+        >
+          <DialogTitle id="journal-dialog-title">Journal</DialogTitle>
+          <DialogContent>
+            <Journal onClose={handleJournalClose} />
+          </DialogContent>
+        </Dialog>
         <AppBar />
         <PageLoader />
         <AppFooter />
