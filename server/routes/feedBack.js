@@ -218,7 +218,6 @@ router
         feedBackInfo.rate3,
         feedBackInfo.description
       );
-      //console.log(newFD);
       res.json(newFD);
     } catch (e) {
       let status = e[0] ? e[0] : 500;
