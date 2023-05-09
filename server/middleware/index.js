@@ -21,7 +21,7 @@ export const authenticate = async (req, res, next) => {
 
         const { _id } = decoded;
         // const sanitizedId = sanitize(_id);
-        const user = await userCtn.findOne({ _id: new ObjectId(_id) }, { password: 0 });
+        const user = await userCtn.findOne({ _id: new ObjectId(_id) }, { projection:{ password: 0 } });
 
         if (!user) {
             return res.status(401).json({ message: 'Unauthorized request: User not found' });
