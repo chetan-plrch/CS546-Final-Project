@@ -296,8 +296,16 @@ const getfilteredChatAndUsers = async (chatsObj, blocked) => {
 const getUsersByIds = async (ids) => {
     const usersCtx = await users()
     const usersArr = await usersCtx.find({ _id: {$in: ids }, isActive: true }).project({ password: 0 }).toArray();
-    return usersArr.map((user) => formatUser(user));
+    return ids.reduce((acc, userId) => {
+        let user = usersArr.find((u) => userId.toString() === u._id.toString())
+        if (user) {
+            return [...acc, formatUser(user)]
+        }
+        return acc;
+    }, []);
 }
+
+
 
 const getUserWithLastMessage = (users, chats) => {
     return users.map((user) => {
