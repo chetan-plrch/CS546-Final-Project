@@ -60,11 +60,11 @@ const createFeedBack = async (
   if (!user) {
     throw [404, "user not found"];
   }
-  // const chatCtx = await chats();
-  // let chat = await chatCtx.findOne({_id : new ObjectId(chatId)})
-  // if(!chat){
-  //   throw [404,"chat not found"]
-  // }
+  const chatCtx = await chats();
+  let chat = await chatCtx.findOne({_id : new ObjectId(chatId)})
+  if(!chat){
+    throw [404,"chat not found"]
+  }
   const feedBackCollection = await feedBack();
   const feedBackExistsForChat = await feedBackCollection.findOne({
     userId: new ObjectId(userId),
