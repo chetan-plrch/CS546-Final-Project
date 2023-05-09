@@ -5,9 +5,12 @@ import JournalInput from './journalInput';
 
 const Journal = (props) => {
   return (
+    <>
     <Container>
       <JournalInput onClose={props.onClose}/>
     </Container>
+    
+    </>
   );
 };
 export default Journal

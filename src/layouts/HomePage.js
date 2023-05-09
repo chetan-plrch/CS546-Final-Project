@@ -6,12 +6,6 @@ import { getUserId } from "../helper";
 import Box from "@mui/material/Box";
 import { getAllFeedbacks } from "../api/feedback";
 import FeedbackCard from "./FeedbackCard";
-import Journal from "../components/journal/journal";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
 
 const useInfiniteScroll = (callback) => {
   const handleScroll = useCallback(() => {
@@ -34,15 +28,7 @@ const Homepage = () => {
   const [page, setPage] = useState(1);
   const [feedbacks, setFeedbacks] = useState([]);
   const [tabValue, setTabValue] = useState(0);
-  const [journalOpen, setJournalOpen] = useState(false);
 
-  const handleJournalOpen = () => {
-    setJournalOpen(true);
-  };
-
-  const handleJournalClose = () => {
-    setJournalOpen(false);
-  };
 
   const loadMoreFeeds = async () => {
     setPage((prevPage) => prevPage + 1);
@@ -106,32 +92,6 @@ const Homepage = () => {
           </List>
         )}
       </Box>
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{
-          position: "fixed",
-          bottom: 16,
-          right: 16,
-          "&:hover": {
-            backgroundColor: "secondary.main",
-          },
-        }}
-        onClick={handleJournalOpen}
-      >
-        <AddIcon />
-      </Fab>
-
-      <Dialog
-        open={journalOpen}
-        onClose={handleJournalClose}
-        aria-labelledby="journal-dialog-title"
-      >
-        <DialogTitle id="journal-dialog-title">Journal</DialogTitle>
-        <DialogContent>
-          <Journal onClose={handleJournalClose} />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

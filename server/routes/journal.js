@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { journalData } from "../data/index.js";
-
+import { ObjectId } from "mongodb";
 const router = Router();
 
-router.post('/journal', async (req, res) => {
+router.post('/', async (req, res) => {
   const { userId, message, date } = req.body;
   try {
     if (!userId || typeof userId !== 'string') {
@@ -20,7 +20,7 @@ router.post('/journal', async (req, res) => {
 
     const result = await journalData.CreateJournal(userId, message, date);
     if (result) {
-      res.status(200).json(result);
+      return res.status(200).json(result);
     } else {
       throw new Error('Journal cannot be created');
     }
@@ -31,18 +31,19 @@ router.post('/journal', async (req, res) => {
 });
 
   
-  router.get('/journal/:id', async (req, res) => {
+  router.get('/:id', async (req, res) => {
     try {
-      const id = req.params.id;
-      if (!ObjectId.isValid(id)) {
+      const userId = req.params.id;
+      if (!ObjectId.isValid(userId)) {
         throw new Error('Invalid id');
       }
-      const journal = await journalData.getJournal(id);
+      const journal = await journalData.getJournalsByUser(userId);
       if (!journal) {
         throw new Error('No journal with that id');
       }
-      res.json({ journal });
+      return res.json({ journal });
     } catch (error) {
+      console.log(error);
       if (error.message === 'Invalid id') {
         res.status(400).json({ error: 'Invalid id' });
       } else if (error.message === 'No journal with that id') {
@@ -53,7 +54,7 @@ router.post('/journal', async (req, res) => {
     }
   });
   
-  router.delete('/journal/:id', async (req,res) =>{
+  router.delete('/:id', async (req,res) =>{
     const id = req.params.id;
     
     if (!ObjectId.isValid(id)) {
@@ -67,6 +68,7 @@ router.post('/journal', async (req, res) => {
       }
       return res.json({ journalId: id, deleted: true });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   });

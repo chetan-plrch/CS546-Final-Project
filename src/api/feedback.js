@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosApi } from "./api-interceptor";
 
 const createFeedBack = async (feedbackData) => {
