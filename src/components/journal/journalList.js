@@ -47,14 +47,14 @@ const JournalList = () => {
             Journals
           </Typography>
           <List>
-            {journals.map((journal) => (
-              <ListItem key={journal._id}>
+            {journals.map((journal, index) => (
+              <ListItem key={index}>
                 <ListItemText
-                  primary={journal.message}
-                  secondary={journal.date}
+                  primary={journal?.message}
+                  secondary={journal?.date}
                 />
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(journal._id)}>
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(journal?._id)}>
                     <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>

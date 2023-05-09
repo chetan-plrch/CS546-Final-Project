@@ -83,7 +83,7 @@ const Profile = () => {
 
     let errorsObj = {};
 
-    requiredFields.forEach((key) => {
+    requiredFields?.forEach((key) => {
       if (user[key] === "" || ((typeof user[key] === 'string') && user[key].trim() === "")) {
         errorsObj[key] = { ...(errors[key] || {}) };
         if (!errorsObj[key].helperText) {
@@ -314,9 +314,9 @@ const Profile = () => {
           {blockedUsers.length <= 0 ? (
             <div className="empty-blocked-list">No blocked users</div>
           ) : (
-            blockedUsers.map((user) => {
+            blockedUsers.map((user, index) => {
               return (
-                <div className="blocked-item">
+                <div key={index} className="blocked-item">
                   <div className="blocked-username">{user.firstName} {user.lastName}</div>
                   <Button
                     onClick={() => unblockUserProfile(user._id)}

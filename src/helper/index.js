@@ -77,7 +77,7 @@ const capitalizeFirst = (str) => {
 const validator = (user, field, err) => {
   const errorObj = {};
 
-  Object.keys(user).forEach((attribute) => {
+  Object.keys(user)?.forEach((attribute) => {
     errorObj[attribute] = { ...(err[attribute] || {}) };
   });
 

@@ -175,9 +175,9 @@ function ChatWindow(props) {
             {
                 (conversation?.length || (searchTerm && filteredChats.length)) ? (
                     <div className='chat-container' id='chat-container'>
-                        {(searchTerm ? filteredChats : conversation)?.map(function(item) {
+                        {(searchTerm ? filteredChats : conversation)?.map(function(item, index) {
                             return <span
-                                        key={item?.sentAt}
+                                        key={index}
                                         className={item?.senderId === senderId ? 'sent-message' : 'received-message'}
                                     >
                                         {item?.message}
