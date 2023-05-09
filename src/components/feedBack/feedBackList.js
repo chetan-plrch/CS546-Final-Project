@@ -23,6 +23,7 @@ const FeedBackList = () => {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [firstNames, setFirstNames] = useState([]); 
   const [selectedFirstName, setSelectedFirstName] = useState(null); 
+  const [fetchFeedback, setFetchFeedback] = useState(true);
 
   const userId = getUserId();
 
@@ -50,23 +51,10 @@ const FeedBackList = () => {
     };
 
     fetchFeedbacks();
-  }, [userId]);
-
-  const refreshFeedbacks = async () => {
-    try {
-      const response = await feedBackList(userId);
-      if (response.status === 200) {
-        setFeedbacks(
-          response.data.map((feedback, index) => ({ ...feedback, id: index }))
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching feedbacks:", error);
-    }
-  };
+  }, [userId, fetchFeedback]);
 
   const handleSuccess = () => {
-    refreshFeedbacks();
+    setFetchFeedback(true);
     handleCloseMiddle();
   };
 

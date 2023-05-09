@@ -33,13 +33,13 @@ function CustomSelect(props) {
         size="small"
         onChange={handleChangeEvent}
       >
-        {options.map(({ label, value }) => {
+        {options.map(({ label, value }, index) => {
             return <FormControlLabel sx={{
                 '& .MuiSvgIcon-root': {
                   fontSize: 18,
                 },
               }}
-              key={value}
+              key={index}
               value={value}
               control={<Radio />}
               label={label}

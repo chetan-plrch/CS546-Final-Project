@@ -314,7 +314,7 @@ router.route("/getall").post(async(req,res)=>{
     }
     const firstNames = await Promise.all(promises);
     let i =0;
-    seekerFeedBack.forEach(elem => {
+    seekerFeedBack?.forEach(elem => {
       elem.firstName = firstNames[i]
       i=i+1
     });

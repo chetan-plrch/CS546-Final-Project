@@ -11,7 +11,6 @@ import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 import FeedBackPop from '../../components/feedBack/feedBackPop';
 import { feedbackTriggerCount } from '../../helper/constants';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 function ChatWindow(props) {
     const {
@@ -35,7 +34,6 @@ function ChatWindow(props) {
     const [chatId, setChatId] = useState('');
     const filter = new Filter();
     const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
-    const [online, setOnline] = useState(false)
 
     useEffect(() => {
         const senderId = getUserId();
@@ -58,11 +56,7 @@ function ChatWindow(props) {
     }, [connectionId]);
 
     useEffect(() => {
-        initConnection(senderId, () => {
-            setOnline(true)
-        }, () => {
-            setOnline(false)
-        })
+        initConnection(senderId)
         receiveMessage(onReceiveMessage);
         let element = document.getElementById('chat-container');
         if (element) {
@@ -73,7 +67,7 @@ function ChatWindow(props) {
     const onChangeOfValue = (_key, value) => {
         setCurrentMessage(value);
     };
-    const sendText = () => {
+    const sendText = async () => {
         sendMessage(senderId, connectionId, filter.clean(currentMessage));
         const msgObj = {
             sentAt: new Date().toString(),
@@ -87,6 +81,12 @@ function ChatWindow(props) {
         setCurrentMessage('');
         setMsgCount(msgCount + 1);
         if (msgCount + 1 === feedbackTriggerCount && !openFeedbackModal) {
+            if (!chatId) {
+                const response = await getChatHistory(connectionId);
+                if (response?.data?.chats) {
+                    setChatId(response.data.chats[0]?._id);
+                };
+            }
             setOpenFeedbackModal(true);
         };
     };
@@ -151,7 +151,7 @@ function ChatWindow(props) {
     return (
         <div className='custom-chat-container'>
             <ToastContainer />
-            <div>Your status: <FiberManualRecordIcon fontSize="small" color={online ? 'success' : 'error' } />{online ? 'online' : 'offline'}</div>
+            <span className='chat-window-title'>{connectionName ? connectionName : 'Current Chat'}</span>
             <div className='header-container'>
                 {
                     allowSearch ? (
@@ -172,9 +172,9 @@ function ChatWindow(props) {
             {
                 (conversation?.length || (searchTerm && filteredChats.length)) ? (
                     <div className='chat-container' id='chat-container'>
-                        {(searchTerm ? filteredChats : conversation)?.map(function(item) {
+                        {(searchTerm ? filteredChats : conversation)?.map(function(item, index) {
                             return <span
-                                        key={item?.sentAt}
+                                        key={index}
                                         className={item?.senderId === senderId ? 'sent-message' : 'received-message'}
                                     >
                                         {item?.message}
