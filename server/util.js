@@ -22,26 +22,29 @@ export const getError = (e) => {
 };
 
 export const getChatUserIds = (chats) => {
-    const usersSet = chats.reduce((acc, chat) => {
-        chat.users.forEach(userId => acc.add(userId))
-        return acc;
-    }, new Set())
-    return Array.from(usersSet).map(userId => new ObjectId(userId))
+    const usersMap = []
+    chats.forEach((chat) => {
+        chat.users.forEach(userId => usersMap.push(userId))
+    })
+    return usersMap.map(userId => new ObjectId(userId))
 };
 
 export const formatUser = (user) => {
     if (user.isAnonymous) {
         return {
-            ...user,
             _id: user._id.toString(),
             firstName: 'Anonymous',
+            age: 'N/A',
+            email: 'anonymous@leaf.com',
+            gender: 'N/A',
+            city: 'N/A',
+            state: 'N/A',
             lastName: 'User',
             profilePic: null,
             username: user._id.toString(),
         }
     } else {
         return {
-            ...user,
             _id: user._id.toString(),
             firstName: user.firstName,
             lastName: user.lastName,
@@ -59,14 +62,29 @@ export const formatListOfUsers = (users) => {
 }
 
 export const removeBlockedChats = (chats, blockedUserIds) => {
-    return chats.reduce((acc, chat) => {
+    const myChats = chats.reduce((acc, chat) => {
         const found = blockedUserIds.find(blockId => chat.users.includes(blockId))
         if (found) {
             return acc
         } else {
             return [...acc, chat]
         }
-    }, []);
+    }, [])
+    
+    // return myChats.sort((chatA, chatB) => {
+    //     const topConvA = chatA.conversation
+    //     const topConvB = chatB.conversation
+    //     if (topConvA && topConvB) {
+    //         const aSentAt = topConvA[topConvA.length - 1].sentAt
+    //         const bSentAt = topConvB[topConvB.length - 1].sentAt
+
+    //         console.log(new Date(aSentAt).valueOf() - new Date(bSentAt).valueOf())
+    //         return new Date(aSentAt).valueOf() - new Date(bSentAt).valueOf()
+    //     }
+    //     return 0
+    // });
+
+    return myChats
 }
 
 export const errorObject = (type, msg) => {
@@ -77,7 +95,7 @@ export const errorObject = (type, msg) => {
 
 export async function checkEmailExists(userId, email) {
     const userCollection = await users()
-    const emailExists = await userCollection.findOne({ email, _id: { $ne: new ObjectId(userId) } }, { password: 0 })
+    const emailExists = await userCollection.findOne({ email, _id: { $ne: new ObjectId(userId) } }, { projection:{ password: 0 } });
     if (emailExists) {
         throw errorObject(errorType.BAD_INPUT, 'Error: Email already in use')
     }
@@ -85,7 +103,7 @@ export async function checkEmailExists(userId, email) {
 
 export async function checkUsernameExists(userId, username) {
     const userCollection = await users()
-    const usernameExists = await userCollection.findOne({ username, _id: { $ne: new ObjectId(userId) }}, { password: 0 })
+    const usernameExists = await userCollection.findOne({ username, _id: { $ne: new ObjectId(userId) }}, { projection:{ password: 0 } });
     if (usernameExists) {
         throw errorObject(errorType.BAD_INPUT, 'Error: Username already in use')
     }

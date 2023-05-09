@@ -17,7 +17,7 @@
 }
 
 .update-container-dialog {
-  width: 550px;
+  min-width: 480px;
   background-color: rgb(255, 255, 255);
   padding: 20px 35px;
   border-radius: 10px;
@@ -128,4 +128,9 @@
 
 .empty-blocked-list {
   padding: 30px
+}
+
+.action-div {
+  display: flex;
+  flex-direction: column;
 }
