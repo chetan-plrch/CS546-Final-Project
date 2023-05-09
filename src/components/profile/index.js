@@ -82,10 +82,8 @@ const Profile = () => {
     let requiredFields = Array.from(allFields);
 
     let errorsObj = {};
-    console.log('user --- ', user)
 
     requiredFields.forEach((key) => {
-      console.log('--- key', key)
       if (user[key] === "" || ((typeof user[key] === 'string') && user[key].trim() === "")) {
         errorsObj[key] = { ...(errors[key] || {}) };
         if (!errorsObj[key].helperText) {
@@ -123,18 +121,18 @@ const Profile = () => {
     if (deleted) {
       if (permanent) {
         toast.success("Profile Deleted Successfully");
-        await delay(1500);
+        toast.success(`Logging you out..`);
+        await delay(2000);
         navigate('/login')
       } else {
         toast.success(`Profile ${isActive ? 'Activated' : 'Deactivated'} Successfully`);
-        await delay(1500);
-        navigate('/login')
+        setUser({ ...user, isActive })
       }
     } else {
       if (permanent) {
         toast.error("Error in deleting profile, try again later");
       } else {
-        toast.error("Error in deactivating profile, try again later");
+        toast.error(`Error in ${isActive ? 'activating' : 'deactivating'} profile, try again later`);
       }
     }
   }
@@ -179,17 +177,15 @@ const Profile = () => {
           <div className="input-dialog">
             <div className="header-dialog">Update profile</div>
             <CustomTextField
-              styles={{ width: 15,fontWeight: 'bold', color: 'black' }}
+              styles={{ fontWeight: 'bold', color: 'black' }}
               onBlur={onBlur}
               error={!!getHelperText("username")}
               helperText={getHelperText("username")}
               name="username"
               value={user.username}
               onChange={onChangeOfValue}
-             
             />
             <CustomTextField
-              styles={{ width: 15 }}
               onBlur={onBlur}
               error={!!getHelperText("firstName")}
               helperText={getHelperText("firstName")}
@@ -197,10 +193,8 @@ const Profile = () => {
               label="first name"
               value={user.firstName}
               onChange={onChangeOfValue}
-              
             />
             <CustomTextField
-              styles={{ width: 15, }}
               onBlur={onBlur}
               error={!!getHelperText("lastName")}
               helperText={getHelperText("lastName")}
@@ -211,17 +205,14 @@ const Profile = () => {
               
             />
             <CustomTextField
-              styles={{ width: 15 }}
               onBlur={onBlur}
               error={!!getHelperText("email")}
               helperText={getHelperText("email")}
               name="email"
               value={user.email}
               onChange={onChangeOfValue}
-              
             />
             <CustomTextField
-              styles={{ width: 15 }}
               onBlur={onBlur}
               error={!!getHelperText("password")}
               helperText={getHelperText("password")}
@@ -246,17 +237,14 @@ const Profile = () => {
               
             />
             <CustomTextField
-              styles={{ width: 15 }}
               onBlur={onBlur}
               error={!!getHelperText("age")}
               helperText={getHelperText("age")}
               name="age"
               value={user.age}
               onChange={onChangeOfValue}
-              
             />
             <CustomTextField
-              styles={{ width: 15 }}
               onBlur={onBlur}
               error={!!getHelperText("city")}
               helperText={getHelperText("city")}
@@ -264,10 +252,8 @@ const Profile = () => {
               label="city (optional)"
               value={user.city}
               onChange={onChangeOfValue}
-              
             />
             <CustomTextField
-              styles={{ width: 15 }}
               onBlur={onBlur}
               error={!!getHelperText("state")}
               helperText={getHelperText("state")}
@@ -275,7 +261,6 @@ const Profile = () => {
               label="state (optional)"
               value={user.state}
               onChange={onChangeOfValue}
-              
             />
             {anonymousDisabled ? null : (
               <CustomCheckbox
@@ -297,19 +282,15 @@ const Profile = () => {
           />
           <Button
             onClick={updateUser}
-            variant={saving ? "outlined" : "contained"}
+            variant={"contained"}
             styles={{ backgroundColor: "#00796b" }}
             className="signup-button"
           >
-            {saving ? (
-              <CircularProgress size={25} color="success" />
-            ) : (
-              "Update profile"
-            )}
+            Update profile
           </Button>
           <Button
             onClick={() => deleteAccount({ isActive: !user.isActive })}
-            variant={saving ? "outlined" : "contained"}
+            variant={"contained"}
             styles={{ backgroundColor: "#000000" }}
             color={user.isActive ? "error" : "success"}
             className="signup-button"
@@ -318,7 +299,7 @@ const Profile = () => {
           </Button>
           <Button
             onClick={() => deleteAccount({ permanent: true })}
-            variant={saving ? "outlined" : "contained"}
+            variant={"outlined"}
             styles={{ backgroundColor: "#000000" }}
             color="error"
             className="signup-button"
