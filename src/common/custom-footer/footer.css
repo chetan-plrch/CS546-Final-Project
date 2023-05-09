@@ -1,10 +1,14 @@
 .each-chat {
-    padding: 10px;
     background-color: white;
-    margin: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 20%;
+    justify-content: center;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 15px;
 }

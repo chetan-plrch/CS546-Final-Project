@@ -75,7 +75,7 @@ const Homepage = () => {
         {tabValue === 0 && (
           <List>
             {feeds.map((feed, index) => (
-              <ListItem key={index}>
+              <ListItem key={index} sx={{display: 'flex', justifyContent: 'center'}}>
                 <Feedcard feed={feed} userId={userId} />
               </ListItem>
             ))}

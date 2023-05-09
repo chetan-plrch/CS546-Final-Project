@@ -1,5 +1,10 @@
 import React from 'react';
 import './Feedcard.css';
+import {
+  TurnedInNot,
+  ChatBubbleOutline,
+  FavoriteBorderOutlined
+} from '@mui/icons-material';
 
 const FeedCard = (props) => {
   const { feed, userId } = props;
@@ -19,8 +24,22 @@ const FeedCard = (props) => {
         alt={feed?.title}
         style={{ width: '100%', height: '500px', objectFit: 'fill', padding: '10px' }}
     />
-        <div>
+    <div className='description-container'>
       <span className='description'>{feed?.description}</span>
+    </div>
+    <div className='interactions'>
+      <div>
+        <span>Like</span>
+        <FavoriteBorderOutlined />
+      </div>
+      <div>
+        <span>Comment</span>
+        <ChatBubbleOutline />
+      </div>
+      <div>
+        <span>Save</span>
+        <TurnedInNot />
+      </div>
     </div>
   </div>
   );
