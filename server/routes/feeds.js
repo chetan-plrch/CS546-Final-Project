@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { feedData } from "../data/index.js";
-import validations from "../validations.js";
+import validations, { validateName } from "../validations.js";
 
 const router = Router();
 
@@ -112,7 +112,7 @@ router
 router
 .route("/feed/comment")
 .put(async(req,res)=>{
-  let feedInfo = req.body;
+  let feedInfo = req.body || {};
   if (!feedInfo || Object.keys(feedInfo).length === 0) {
     return res
       .status(400)
@@ -134,12 +134,17 @@ router
     }catch(e){
       errors.push(e)
     }
-
+    try {
+      // full name of user commenting
+      feedInfo.userName = validateName(feedInfo.userName, "User Name");
+    } catch(e) {
+      errors.push(e);
+    };
     if (errors.length > 0) {
       return res.status(400).send(errors);
     }
   try{
-    const feed = await feedData.updateComment(feedInfo.userId,feedInfo.feedId,feedInfo.message);
+    const feed = await feedData.updateComment(feedInfo);
     return res.json(feed)
   }catch(e){
     return res.json(feed)
