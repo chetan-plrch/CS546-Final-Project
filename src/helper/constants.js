@@ -24,3 +24,9 @@ export const errorType = {
     UNAUTHORIZED: 'UNAUTHORIZED',
     NOT_FOUND: 'NOT_FOUND'
 };
+
+export const feedInteractions = {
+    like: 'LIKE',
+    comment: 'COMMENT',
+    save: 'SAVE'
+};
