@@ -69,6 +69,7 @@ const JournalInput = ({ onClose }) => {
           onClick={onClose}
           sx={{
             mt: 2,
+            color:"black"
           }}
         >
           Cancel
