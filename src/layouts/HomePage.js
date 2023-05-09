@@ -6,6 +6,7 @@ import { getUserId } from "../helper";
 import Box from "@mui/material/Box";
 import { getAllFeedbacks } from "../api/feedback";
 import FeedbackCard from "./FeedbackCard";
+import { feedInteractions } from "../helper/constants";
 
 const useInfiniteScroll = (callback) => {
   const handleScroll = useCallback(() => {
@@ -24,6 +25,7 @@ const useInfiniteScroll = (callback) => {
 };
 
 const Homepage = () => {
+  const userId = getUserId();
   const [feeds, setFeeds] = useState([]);
   const [page, setPage] = useState(1);
   const [feedbacks, setFeedbacks] = useState([]);
@@ -63,7 +65,23 @@ const Homepage = () => {
     setTabValue(newValue);
   };
 
-  const userId = getUserId();
+  const getUpdatedLikes = (likesList, isLiked) => {
+    if (isLiked) {
+      likesList.push(userId);
+    } else {
+      likesList.splice(likesList.indexOf(userId), 1);
+    };
+    return likesList;
+  };
+  const updateFeed = (feedId, action, value) => {
+    const updatedFeeds = feeds.map((eachFeed) => {
+      if (eachFeed?._id === feedId && action === feedInteractions.like) {
+        eachFeed.liked = getUpdatedLikes(eachFeed.liked, value);
+      };
+      return eachFeed;
+    });
+    setFeeds([...updatedFeeds]);
+  };
 
   return (
     <>
@@ -76,7 +94,11 @@ const Homepage = () => {
           <List>
             {feeds.map((feed, index) => (
               <ListItem key={index} sx={{display: 'flex', justifyContent: 'center'}}>
-                <Feedcard feed={feed} userId={userId} />
+                <Feedcard
+                  feed={feed}
+                  userId={userId}
+                  updateFeedInteractions={updateFeed}
+                  />
               </ListItem>
             ))}
           </List>
