@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 import crypto from 'crypto'
-import { formatUser, errorObject, errorType } from "../util.js";
+import { formatUser, errorObject, errorType, validateUpdateUser } from "../util.js";
 
 const create = async (
   firstName,
@@ -272,28 +272,28 @@ const updateUserRandom = async (id, { permanent, isActive }) => {
 };
 
 
-const update = async({
-  id, username, firstName, lastName, email, password, city, state, age, isAnonymous, profilePic 
-}) => {
-  let updateObj = { username, firstName, lastName, email, city, state, age, isAnonymous, profilePic }
+const update = async(id, userObj) => {
   const userId = validation.checkId(id)
+  const userInfo = validateUpdateUser(userObj)
+  delete userInfo._id
 
   const usersCol = await users();
-  if (password) {
-    const newPassword = await bcrypt.hash(password, 10);
-    updateObj = { ...updateObj, password: newPassword }
+  if (userInfo.password) {
+    const newPassword = await bcrypt.hash(userInfo.password, 10);
+    updateObj = { ...userInfo, password: newPassword }
   }
   
-  const result = await usersCol.findOneAndUpdate({ _id: new ObjectId(userId) }, {
-    $set: updateObj
-  }, { returnOriginal: false });
-
-  const updatedDoc = await usersCol.findOne({ _id: new ObjectId(id) }, { projection:{ password: 0 } });
-
-  return {
-    ...updatedDoc,
-    _id: updatedDoc._id.toString(),
-  };
+  const updatedInfo = await usersCol.findOneAndUpdate({ _id: new ObjectId(userId) }, {
+    $set: userInfo
+  }, {returnDocument: 'after'});
+  if (updatedInfo.lastErrorObject.n === 0) {
+    throw errorObject(errorType.BAD_INPUT, 'Failed to update the profile');
+  }
+  updatedInfo.value._id = updatedInfo.value._id.toString();
+  
+  const user = updatedInfo.value
+  delete user.password
+  return user;
 };
 
 const getAllBlockedUsers = async (id) => {

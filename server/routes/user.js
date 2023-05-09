@@ -3,7 +3,7 @@ import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.
 import { userData } from "../data/index.js";
 import validation, {validateLoginRequest, validateName} from "../validations.js"
 import { unblockConnection} from '../data/chat.js'
-import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
+import { errorType, checkEmailExists, checkUsernameExists, validateUpdateUser } from "../util.js";
 const router = Router();
 import { ObjectId } from "mongodb";
 
@@ -207,33 +207,13 @@ router.get('/:id', async (req,res) =>{
 router.put("/update", authenticate, async (req, res) => {
   try {
     const userId = validation.checkId(req.user._id.toString());
-
-    const userInfo = req.body
-    userInfo.username = validation.checkUsername(userInfo.username);
-    userInfo.firstName = validation.checkString(userInfo.firstName);
-    userInfo.lastName = validation.checkString(userInfo.lastName);
-    userInfo.email = validation.checkMailID(userInfo.email)
-    userInfo.age = validation.checkAge(userInfo.age);
-    validation.checkBoolean(userInfo.isAnonymous, 'isAnonymous');
-
-    if (userInfo.password) {
-      userInfo.password = validation.checkPassword(userInfo.password);
-    }
-    if (userInfo.city) {
-      userInfo.city = validation.checkString(userInfo.city);
-    }
-    if (userInfo.state) {
-      userInfo.state = validation.checkString(userInfo.state);
-    }
-    if (userInfo.profilePic) {
-      validation.checkImage(userInfo.profilePic);
-    }
-
+    const userInfo = validateUpdateUser(req.body)
     await checkEmailExists(userId, userInfo.email)
     await checkUsernameExists(userId, userInfo.username)
-    const updateUser = await userData.update({ id: userId, ...userInfo });
+    const updateUser = await userData.update(userId, userInfo);
     return res.status(200).json(updateUser);
   } catch (e) {
+    console.log(e)
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json({ error: e.message });
     }
