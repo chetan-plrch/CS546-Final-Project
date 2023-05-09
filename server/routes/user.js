@@ -217,7 +217,7 @@ router.put("/update", authenticate, async (req, res) => {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json({ error: e.message });
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 })
 
@@ -251,7 +251,7 @@ router.get('/blocked/users', authenticate, async (req, res) => {
       } else if (e.type === errorType.NOT_FOUND) {
           return res.status(404).send({ message: e.message })
       }
-      return res.status(500).send({ message: 'Error: Internal server error' })
+      return res.status(500).send([ 'Error: Internal server error' ])
     }
 });
 

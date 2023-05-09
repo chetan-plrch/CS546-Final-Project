@@ -89,7 +89,7 @@ router.route("/").post(async (req, res) => {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 });
 
@@ -130,7 +130,7 @@ router.route("/user").post(async (req, res) => {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 });
 
@@ -165,7 +165,7 @@ router
       if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
     }
   })
   .put(async (req, res) => {
@@ -240,7 +240,7 @@ router
       if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
     }
   })
   .delete(async (req, res) => {
@@ -269,7 +269,7 @@ router
       if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
     }
   });
 
@@ -304,7 +304,7 @@ router.route("/chatId").post(async (req, res) => {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 });
 
@@ -338,7 +338,7 @@ router.route("/getall").post(async(req,res)=>{
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 })
 

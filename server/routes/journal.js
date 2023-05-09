@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json({ error: e.message });
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json([ 'Error: Internal server error' ]);
   }
 });
 
@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json({ error: e.message });
     }
-    return res.status(500).json({ error: 'Error: Internal server error' });
+    return res.status(500).json({[ 'Error: Internal server error' ]);
   }
 });
 
