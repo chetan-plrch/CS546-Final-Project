@@ -38,7 +38,7 @@ const handleComment = async (commentData) => {
 };
 const handleSavePost = async (savePostData) => {
   try {
-    const response = await axiosApi.put(`/feeds/feed/comment`, savePostData);
+    const response = await axiosApi.put(`/feeds/feed/savepost`, savePostData);
     return response;
   } catch (e) {
     return e;
