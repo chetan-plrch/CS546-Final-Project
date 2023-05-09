@@ -111,6 +111,7 @@ const Profile = () => {
         setSaving(false);
       } else {
         toast.success("Update successful!");
+        setApiStatus({ error: false, success: false })
       }
       setSaving(false);
     }
@@ -274,7 +275,7 @@ const Profile = () => {
             )}
           </div>
         </div>
-        <div>
+        <div className="action-div">
           <CommonMessage
             success={apiStatus.success}
             error={apiStatus.error}

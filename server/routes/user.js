@@ -137,7 +137,7 @@ if(userInfo.state){
   }
 });
 
-router.post("/login", notAuthenticate ,async (req, res) => {
+router.post("/login" ,async (req, res) => {
   try {
     let {username, password} = validateLoginRequest(req.body);
     const { user, token } = await userData.loginUser(username, password);
