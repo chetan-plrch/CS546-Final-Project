@@ -66,7 +66,7 @@ const SignUp = () => {
     let requiredFields = Array.from(allFields);
 
     let errorsObj = {};
-    requiredFields.forEach((key) => {
+    requiredFields?.forEach((key) => {
       if (!user[key]?.trim()) {
         errorsObj[key] = { ...(errors[key] || {}) };
         if (!errorsObj[key].helperText) {
