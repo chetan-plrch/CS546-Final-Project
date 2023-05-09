@@ -67,7 +67,6 @@ const Footer = () => {
                 width: '70%',
               }}}
             >
-              <DialogTitle>{selectedConnection?.fullName}</DialogTitle>
               <DialogContent>
                 <ChatWindow
                   allowMessaging={true}
