@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import validation, { validateLoginRequest, validateName } from "../validations.js";
+import validation, { validateLoginRequest } from "../validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
@@ -24,13 +24,13 @@ const create = async (
   //validating the request body
   let errors = [];
   try {
-    firstName = validateName(firstName, "Firstname");
+    firstName = validation.validateName(firstName, "Firstname");
   } catch (e) {
     errors.push(e);
   }
 
   try {
-    lastName = validateName(lastName, "Lastname");
+    lastName = validation.validateName(lastName, "Lastname");
   } catch (e) {
     errors.push(e);
   }
@@ -61,7 +61,7 @@ const create = async (
 
   if(city){
   try {
-    city = validateName(city, "city");
+    city = validation.validateName(city, "city");
   } catch (e) {
     errors.push(e);
   }
@@ -69,7 +69,7 @@ const create = async (
 
   if(state){
   try {
-    state = validateName(state, "state");
+    state = validation.validateName(state, "state");
   } catch (e) {
     errors.push(e);
   }

@@ -127,20 +127,19 @@ const exportedMethods = {
   capitalizeFirst(str) {
     return str ? str[0].toUpperCase() + str.slice(1, str.length) : '';
   },
-  validateName(value, fieldName) {
-    try {
-      value = validations.checkString(value, fieldName);
-      const nameRegex = /^[A-Za-z\s]*$/;
-      if (!nameRegex.test(value)) {
-        throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain letters and spaces`);
-      };
-      if(value.length > 50 || value.length >0){
-        throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain 50 characters`);
-      }
-      return value;
-    } catch(e) {
-      throw e?.message ? this.capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
+  validateNameValue(value, fieldName) {
+    value = this.checkString(value, fieldName);
+    const nameRegex = /^[A-Za-z\s]*$/;
+    if (!nameRegex.test(value)) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain letters and spaces`);
     };
+    if(value.length > 50 || value.length < 1){
+      throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can have min of 1 to to max 50 of characters`);
+    }
+    return value;
+  },
+  validateName(value, fieldName) {
+    return this.validateNameValue(value, fieldName)
   }
 };
 

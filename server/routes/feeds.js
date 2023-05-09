@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { feedData } from "../data/index.js";
-import validations, { validateName } from "../validations.js";
+import validations from "../validations.js";
 
 const router = Router();
 
@@ -136,7 +136,7 @@ router
     }
     try {
       // full name of user commenting
-      feedInfo.userName = validateName(feedInfo.userName, "User Name");
+      feedInfo.userName = validation.validateName(feedInfo.userName, "User Name");
     } catch(e) {
       errors.push(e);
     };

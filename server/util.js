@@ -123,18 +123,18 @@ export async function checkUsernameExists(userId, username) {
 
 export const validateUpdateUser = (userInfo) => {
   userInfo.username = validation.checkUsername(userInfo.username);
-  userInfo.firstName = validation.checkString(userInfo.firstName);
-  userInfo.lastName = validation.checkString(userInfo.lastName);
+  userInfo.firstName = validation.validateNameValue(userInfo.firstName, 'First name');
+  userInfo.lastName = validation.validateNameValue(userInfo.lastName, 'Last name');
   userInfo.email = validation.checkMailID(userInfo.email);
   userInfo.age = validation.checkAge(userInfo.age);
   if (userInfo.password) {
     userInfo.password = validation.checkPassword(userInfo.password);
   }
   if (userInfo.city) {
-    userInfo.city = validation.checkString(userInfo.city);
+    userInfo.city = validation.validateNameValue(userInfo.city, 'City');
   }
   if (userInfo.state) {
-    userInfo.state = validation.checkString(userInfo.state);
+    userInfo.state = validation.validateNameValue(userInfo.state, 'State');
   }
 
   validation.checkBoolean(userInfo.isAnonymous, "isAnonymous");
