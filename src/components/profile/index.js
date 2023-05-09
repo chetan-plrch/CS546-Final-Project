@@ -319,8 +319,8 @@ const Profile = () => {
                   <Button
                     onClick={() => unblockUserProfile(user._id)}
                     variant={"outlined"}
-                    styles={{ backgroundColor: "#000000" }}
-                    className="signup-button"
+                    classes={{ backgroundColor: "#000000" }}
+                    className="blocked-button"
                     color="error"
                   >
                     Unblock
