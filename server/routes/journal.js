@@ -3,6 +3,7 @@ import { journalData } from "../data/index.js";
 import { ObjectId } from "mongodb";
 const router = Router();
 import validations from "../validations.js";
+import { errorType } from "../util.js";
 
 router.post("/", async (req, res) => {
   let journalInfo = req.body;
