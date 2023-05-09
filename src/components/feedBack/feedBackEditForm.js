@@ -171,7 +171,7 @@ const FeedBackEditForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Willing to reconnect</span>}
+              label={<span style={{  color: '#80700'}}>Willing to reconnect</span>}
               type="number"
               name="rate1"
               value={data.rate1}
@@ -186,7 +186,7 @@ const FeedBackEditForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Will you recommend the listener</span>}
+              label={<span style={{  color: '#80700'}}>Will you recommend the listener</span>}
               type="number"
               name="rate2"
               value={data.rate2}
@@ -201,7 +201,7 @@ const FeedBackEditForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Overall rating for the listener</span>}
+              label={<span style={{  color: '#80700'}}>Overall rating for the listener</span>}
               type="number"
               name="rate3"
               value={data.rate3}
@@ -216,7 +216,7 @@ const FeedBackEditForm = (props) => {
             <TextField
               fullWidth
               margin="normal"
-              label={<span style={{ fontWeight: 'bold', color: '##757575', fontStyle: 'italic' }}>Description(Optional)</span>}
+              label={<span style={{  color: '#80700'}}>Description(Optional)</span>}
               name="description"
               value={data.description}
               onChange={handleChange}
