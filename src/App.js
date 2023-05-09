@@ -46,10 +46,12 @@ const App = () => {
       <Fab
           color="primary"
           aria-label="add"
+          size = "large"
           style={{
             position: 'fixed',
-            bottom: 16,
+            bottom: 100,
             right: 16,
+            padding : '10px'
           }}
           onClick={handleJournalOpen}
         >

@@ -35,6 +35,10 @@ const JournalList = () => {
     return <CircularProgress />;
   }
 
+  if (journals.length === 0) {
+    return <Typography variant="h6">No journals found.</Typography>;
+  }
+
   return (
     <div>
       <Grid container spacing={2}>

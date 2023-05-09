@@ -15,8 +15,7 @@ const JournalInput = ({ onClose }) => {
   const handleCreateJournal = async () => {
     try {
       const userId = getUserId();
-      const date = new Date().toISOString();
-      const response = await createJournal({ userId, message, date });
+      const response = await createJournal({ userId, message });
       if (response.status === 200) {
         toast.success("Journal created successfully!");
         setMessage("");
