@@ -85,7 +85,8 @@ router.route("/").post(async (req, res) => {
     );
     return res.json(newFD);
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 });
 
@@ -123,7 +124,8 @@ router.route("/user").post(async (req, res) => {
     });
     res.json(feedBackList);
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 });
 
@@ -155,7 +157,8 @@ router
       let feedBack = await feedBackData.getByFeedId(feedBackInfo.feedBackId);
       res.json(feedBack);
     } catch (e) {
-      return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+      const msg = e?.[1] || e?.message;
+      return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
     }
   })
   .put(async (req, res) => {
@@ -227,7 +230,8 @@ router
       );
       res.json(newFD);
     } catch (e) {
-      return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+      const msg = e?.[1] || e?.message;
+      return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
     }
   })
   .delete(async (req, res) => {
@@ -253,7 +257,8 @@ router
       let deleteFeedBack = await feedBackData.remove(feedBackInfo.feedBackId);
       return res.json(deleteFeedBack);
     } catch (e) {
-      return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+      const msg = e?.[1] || e?.message;
+      return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
     }
   });
 
@@ -285,7 +290,8 @@ router.route("/chatId").post(async (req, res) => {
     let feedBack = await feedBackData.getByChatId(feedBackInfo.chatId, feedBackInfo.userId);
     res.json(feedBack);
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   };
 });
 
@@ -295,6 +301,11 @@ router.route("/getall").post(async(req,res)=>{
     return res
       .status(400)
       .json({ error: "There are no fields in the request body" });
+  }
+  try {
+    feedBackInfo.isView = validation.checkBoolean(feedBackInfo.isView, 'isView');
+  } catch (e) {
+    return res.status(400).send(e?.message);
   }
   try {
     let feedBack = await feedBackData.getAll(feedBackInfo.isView);
@@ -315,7 +326,8 @@ router.route("/getall").post(async(req,res)=>{
 
     res.json(seekerFeedBack);
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 })
 

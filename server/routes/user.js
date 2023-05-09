@@ -156,7 +156,8 @@ router.post("/login" ,async (req, res) => {
     return res.status(200).send({ message: `Welcome back${name}!` });
 
     } catch (e) {
-    res.status(e?.[0] || 500).json({error: e?.[1] || "Internal Server Error"});
+      const msg = e?.[1] || e?.message;
+      return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
     };
   }
 );
@@ -241,7 +242,8 @@ router.put('/delete', authenticate, async (req, res, next) => {
     }
     
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 });
 

@@ -35,7 +35,8 @@ router.post("/", async (req, res) => {
     );
     return res.json(result);
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 });
 
@@ -56,7 +57,8 @@ router.get("/:id", async (req, res) => {
     const journal = await journalData.getJournalsByUser(userId);
     return res.json({ journal });
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 });
 
@@ -74,7 +76,8 @@ router.delete("/:id", async (req, res) => {
     }
     return res.json({ journalId: id, deleted: true });
   } catch (e) {
-    return res.status(e?.[0] || 500).send({ errors: e?.[1] || "Internal Server Error" });
+    const msg = e?.[1] || e?.message;
+    return res.status(e?.[0] || 500).send({ errors: msg || "Internal Server Error" });
   }
 });
 
