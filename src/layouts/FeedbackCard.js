@@ -1,10 +1,13 @@
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 
-const FeedbackCard = ({ feedback, userId }) => {
+const FeedbackCard = ({ feedback }) => {
   return (
     <Card>
       <CardContent>
+        <Typography>
+          Feedback for the Listener: {feedback.firstName}
+        </Typography>
         <Typography>
           Reconnect Probability: {feedback.rating.reconnect_probability}
         </Typography>

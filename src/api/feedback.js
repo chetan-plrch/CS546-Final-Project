@@ -73,7 +73,7 @@ const getAllFeedbacks = async(isView)=>{
 const getFirstnames = async (chatId, userId) => {
   try {
     const chatInfo = await axiosApi.post("/chat/getByChatId", { chatId });
-    const otherUserId = chatInfo.data[0].users.find(id => id !== userId);
+    const otherUserId = chatInfo.data.users.find(id => id !== userId);
     const userInfo = await axiosApi.get(`/user/${otherUserId}`);
     return userInfo.data.user.firstName;
   } catch (e) {

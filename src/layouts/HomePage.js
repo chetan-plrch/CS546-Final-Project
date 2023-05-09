@@ -42,16 +42,17 @@ const Homepage = () => {
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
-      const fetchedFeedbacks = await getAllFeedbacks(true);
+      let fetchedFeedbacks = await getAllFeedbacks(true);
+      //console.log(fetchedFeedbacks);
       if (Array.isArray(fetchedFeedbacks.data)) {
         setFeedbacks(fetchedFeedbacks.data);
       } else {
         console.error("getAllFeedbacks did not return an array");
       }
     };
-
     fetchFeedbacks();
   }, []);
+  
 
   useEffect(() => {
     const fetchFeeds = async () => {
@@ -118,12 +119,12 @@ const Homepage = () => {
         )}
         {tabValue === 1 && Array.isArray(feedbacks) && (
           <List>
-            {feedbacks.map((feedback, index) => (
-              <ListItem key={index}>
-                <FeedbackCard feedback={feedback} userId={userId} />
-              </ListItem>
-            ))}
-          </List>
+          {feedbacks.map((feedback, index) => (
+            <ListItem key={index}>
+              <FeedbackCard feedback={feedback}/>
+            </ListItem>
+          ))}
+        </List>
         )}
       </Box>
     </>

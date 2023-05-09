@@ -2,6 +2,7 @@ import { Router } from "express";
 import { feedBackData } from "../data/index.js";
 import validation from "../validations.js";
 const router = Router();
+import { userData } from "../data/index.js"
 
 router.route("/").post(async (req, res) => {
   let feedBackInfo = req.body;
@@ -290,15 +291,30 @@ router.route("/getall").post(async(req,res)=>{
       .status(400)
       .json({ error: "There are no fields in the request body" });
   }
-
   try {
     let feedBack = await feedBackData.getAll(feedBackInfo.isView);
-    res.json(feedBack);
+    let seekerFeedBack = await userData.filterSeekerFeedback(feedBack);
+
+    const promises = []
+    for (let i = 0; i < seekerFeedBack.length; i++) {
+      const feedback = seekerFeedBack[i];
+      promises.push(feedBackData.getFirstnames(feedback.chatId, feedback.userId));
+    }
+    const firstNames = await Promise.all(promises);
+    let i =0;
+    seekerFeedBack.forEach(elem => {
+      elem.firstName = firstNames[i]
+      i=i+1
+    });
+    //console.log(firstNames);
+
+    res.json(seekerFeedBack);
   } catch (e) {
+    console.log(e);
     let status = e[0] ? e[0] : 500;
     let message = e[1] ? e[1] : "Internal Server Error";
     res.status(status).send({ error: message });
   }
-
 })
+
 export default router;

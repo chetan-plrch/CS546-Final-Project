@@ -356,7 +356,7 @@ const getChat = async(chatId)=>{
     chatId = validators.checkId(chatId, "chat Id");
     const chatCollection = await chats()
     let ans = []
-    ans = await chatCollection.find({_id : new ObjectId(chatId)}, {projection: {_id:1,users:1}}).toArray();
+    ans = await chatCollection.findOne({_id : new ObjectId(chatId)}, {projection: {_id:1,users:1}});
     return ans;
 }
 
