@@ -21,7 +21,6 @@ const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [showMiddle, setShowMiddle] = useState(false);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [firstNames, setFirstNames] = useState([]); 
   const [selectedFirstName, setSelectedFirstName] = useState(null); 
   const [fetchFeedback, setFetchFeedback] = useState(true);
 
@@ -36,14 +35,6 @@ const FeedBackList = () => {
           setFeedbacks(
             response.data.map((feedback, index) => ({ ...feedback, id: index }))
           );
-
-          // // Fetch usernames for each feedback
-          // const fetchedFirstNames = await (
-          //   response.data.map((feedback) =>
-          //     getFirstnames(feedback.chatId, feedback.userId)
-          //   )
-          // );
-          // setFirstNames(fetchedFirstNames);
         }
       } catch (error) {
         console.error("Error fetching feedbacks:", error);
@@ -87,7 +78,7 @@ const FeedBackList = () => {
             <Card key={index} sx={{ marginBottom: "16px" }}>
               <CardContent>
                 <Typography component = "div" sx={{ fontSize: "16px" }}>
-                  Feedback given for: {firstNames[index] || "N/A"}
+                  Feedback given for: {feedback.firstName || "N/A"}
                 </Typography>
                 <Typography component = "div" sx={{ fontSize: "16px" }}>
                   Description: {feedback.description || "N/A"}

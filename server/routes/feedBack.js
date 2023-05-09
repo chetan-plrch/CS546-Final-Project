@@ -85,6 +85,7 @@ router.route("/").post(async (req, res) => {
     );
     return res.json(newFD);
   } catch (e) {
+    console.log(e);
     if (e.type === errorType.BAD_INPUT) {
       return res.status(400).json([ e.message ]);
     }
@@ -113,6 +114,17 @@ router.route("/user").post(async (req, res) => {
 
   try {
     let feedBackList = await feedBackData.getByuserId(feedBackInfo.userId);
+    const promises = []
+    for (let i = 0; i < feedBackList.length; i++) {
+      const feedback = feedBackList[i];
+      promises.push(feedBackData.getFirstnames(feedback.chatId, feedback.userId));
+    }
+    const firstNames = await Promise.all(promises);
+    let i =0;
+    feedBackList?.forEach(elem => {
+      elem.firstName = firstNames[i]
+      i=i+1
+    });
     res.json(feedBackList);
   } catch (e) {
     if (e.type === errorType.BAD_INPUT) {
