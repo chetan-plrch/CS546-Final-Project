@@ -6,6 +6,7 @@ import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists, validateUpdateUser } from "../util.js";
 const router = Router();
 import { ObjectId } from "mongodb";
+import validations from "../validations.js";
 
 
 router.get("/user", authenticate, async (req, res) => {
@@ -223,6 +224,9 @@ router.put("/update", authenticate, async (req, res) => {
 router.put('/delete', authenticate, async (req, res, next) => {
   const userId = req.user._id.toString();
   try {
+    validations.checkBoolean(req.body.permanent)
+    validations.checkBoolean(req.body.isActive)
+
     const result = await userData.updateUserRandom(userId, req.body);
     
     if (req.body.permanent) {

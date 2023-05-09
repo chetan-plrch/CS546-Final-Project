@@ -84,7 +84,8 @@ router.get('/all-active-chats', async (req, res) => {
 
 router.get('/active-chat/:connectedUserId', async (req, res) => {
     try {
-        const connections = await activeChat(req.user._id.toString(), req.params.connectedUserId)
+        const validatedConnectedUserId = validators.checkId(req.params.connectedUserId, 'connectedUserId');
+        const connections = await activeChat(req.user._id.toString(), validatedConnectedUserId)
         return res.status(200).send(connections)
     } catch(e) {
         const { status, message } = getError(e);
@@ -94,7 +95,8 @@ router.get('/active-chat/:connectedUserId', async (req, res) => {
 
 router.get('/connections/:connectedUserId', async (req, res) => {
     try {
-        const connections = await activeChat(req.user._id.toString(), req.params.connectedUserId, true)
+        const validatedConnectedUserId = validators.checkId(req.params.connectedUserId, 'connectedUserId');
+        const connections = await activeChat(req.user._id.toString(), validatedConnectedUserId, true)
         return res.status(200).send(connections)
     } catch(e) {
         const { status, message } = getError(e);
