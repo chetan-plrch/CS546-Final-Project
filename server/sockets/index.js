@@ -1,6 +1,7 @@
-import { sockets } from '../config/mongoCollections.js'
+import { sockets, users } from '../config/mongoCollections.js'
 import { Server } from 'socket.io'
 import { addMessagesToChat, mapSocketIdToUser } from '../data/chat.js'
+import { ObjectId } from 'mongodb'
 
 const ioS = new Server(3002, {
     cors: {
@@ -30,7 +31,19 @@ const sendMessage = async (senderId, receiverId, message) => {
     const socketsCtx = await sockets()
     const socketMapping = await socketsCtx.findOne({ userId: receiverId })
     if (socketMapping) {
-        ioS.to(socketMapping.socketId).emit('message', { senderId, receiverId, message } )
+        const usersCol = await users()
+        const user = await usersCol.findOne({ _id: new ObjectId(receiverId) }, { projection: { password: 0 } });
+        if (user) {
+            const blocked = user?.connections?.blocked ?? []
+            if (!blocked.includes(senderId)) {
+                ioS.to(socketMapping.socketId).emit('message', { senderId, receiverId, message } )
+            } else {
+                console.log('Message not sent: sender is blocked by receiver', senderId, receiverId)
+            }
+        } else {
+            console.log('ERROR: Receiver not found in the database')
+        }
+
     } else {
         const socketMap = await socketsCtx.findOne({ userId: senderId })
         if (socketMap) {

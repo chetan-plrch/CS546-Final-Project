@@ -360,7 +360,7 @@ const userInfo = {
                 "role": "seeker"
               },
               {
-                "firstName": "J-Hope",
+                "firstName": "JHope",
                 "lastName": "Jung",
                 "username": "J_Hope",
                 "email": "jhope@bts.com",

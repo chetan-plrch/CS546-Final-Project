@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js";
+import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js"
 import { userData } from "../data/index.js";
-import validation, {validateLoginRequest} from "../validations.js";
+import validation, {validateLoginRequest, validateName} from "../validations.js"
 import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
+import { ObjectId } from "mongodb";
 
 
 router.get("/user", authenticate, async (req, res) => {
@@ -21,7 +22,7 @@ router.get("/all-users", async (req, res) => {
   };
 });
 
-router.post("/signup", notAuthenticate, async (req, res) => {
+router.post("/signup", async (req, res) => {
   let userInfo = req.body;
   if (!userInfo || Object.keys(userInfo).length === 0) {
     return res
@@ -31,22 +32,17 @@ router.post("/signup", notAuthenticate, async (req, res) => {
   //validating the request body
   let errors = [];
   try {
-    userInfo.firstName = validation.checkString(userInfo.firstName, "First name");
+    userInfo.firstName = validateName(userInfo.firstName, "First name");
   } catch (e) {
     errors.push(e);
   }
 
   try {
-    userInfo.lastName = validation.checkString(userInfo.lastName, "Last Name");
+    userInfo.lastName = validateName(userInfo.lastName, "Last Name");
   } catch (e) {
     errors.push(e);
   }
 
-  try {
-    userInfo.username = validation.checkString(userInfo.username, "User name");
-  } catch (e) {
-    errors.push(e);
-  }
   try {
     userInfo.username = validation.checkUsername(userInfo.username);
   } catch (e) {
@@ -77,7 +73,7 @@ router.post("/signup", notAuthenticate, async (req, res) => {
 
   if (userInfo.city) {
   try {
-    userInfo.city = validation.checkString(userInfo.city, "city");
+    userInfo.city = validateName(userInfo.city, "city");
   } catch (e) {
     errors.push(e);
   }
@@ -85,11 +81,11 @@ router.post("/signup", notAuthenticate, async (req, res) => {
 
 if(userInfo.role === "listener"){
     userInfo.isAnonymous = false
-  }
+}
 
 if(userInfo.state){
   try {
-    userInfo.state = validation.checkString(userInfo.state, "state");
+    userInfo.state = validateName(userInfo.state, "state");
   } catch (e) {
     errors.push(e);
   }
@@ -135,19 +131,13 @@ if(userInfo.state){
       userInfo.role,
       userInfo.profilePic
     );
-    //res.json(newUser)
-    console.log(newUser);
     res.status(200).send({ message: "Successfully created user" });
   } catch (e) {
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    //console.log(message);
-    res.status(status).json({ error: message });
-    //console.log(e);
+    res.status(e[0] || 500).json({ error: e?.[1] || "Internal Server Error" });
   }
 });
 
-router.post("/login", notAuthenticate ,async (req, res) => {
+router.post("/login" ,async (req, res) => {
   try {
     let {username, password} = validateLoginRequest(req.body);
     const { user, token } = await userData.loginUser(username, password);
@@ -161,7 +151,7 @@ router.post("/login", notAuthenticate ,async (req, res) => {
     return res.status(200).send({ message: `Welcome back${name}!` });
 
     } catch (e) {
-    res.status(e?.[0] || 500).json(e?.[1] || "Internal Server Error");
+    res.status(e?.[0] || 500).json({error: e?.[1] || "Internal Server Error"});
     };
   }
 );
@@ -177,27 +167,13 @@ router.get('/:id', async (req,res) =>{
       throw new Error('Invalid id');
     }
     const user = await userData.get(id);
+    console.log(user);
     if(!user){
       throw new Error('No user with that id');
     }
-    res.status(200).json({
-      _id:user._id.toString(),
-      username:user.username,
-    firstName:user.firstName,
-    lastName: user.lastName,
-    email:user.email,
-    password:user.password,
-    gender:user.gender,
-    city:user.city,
-    state:user.state,
-    age:user.age,
-    isAnonymous:user.isAnonymous,
-    role:user.role,
-    profileUrl:user.profileUrl,
-    connections:user.connections,
-    isActive:user.isActive,
-    });
+    res.status(200).json({user});
   } catch (error) {
+    console.log(error);
     if (error.message === 'Invalid id') {
       res.status(400).json({ error: 'Invalid id' });
     } else if (error.message === 'No user with that id') {
@@ -266,7 +242,12 @@ router.put('/delete', authenticate, async (req, res, next) => {
   try {
     const result = await userData.updateUserRandom(userId, req.body);
     
-    return destroyToken(req, res, next)
+    if (req.body.permanent) {
+      return destroyToken(req, res, next)
+    } else {
+      return res.status(200).json({ message: 'Successfully change the profile status' })
+    }
+    
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

@@ -2,15 +2,17 @@ import io from 'socket.io-client'
 
 let socket = null
 
-export const initConnection = (userId) => {
+export const initConnection = (userId, connectCB = () => {}, disconnectCB = () => {}) => {
     socket = io("http://localhost:3002", { query: { userId } });
 
     socket.on("connect", () => {
         console.log('--- Socket connected! ---', socket.id);
+        connectCB()
     });
       
     socket.on("disconnect", () => {
         console.log('--- Socket disconnected! ---', socket.id);
+        disconnectCB()
     });
 }
 

@@ -90,7 +90,7 @@ function ResponsiveAppBar() {
     <AppBar position="fixed" sx={{ backgroundColor: teal[700] }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <LeafIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+
           <Typography
             variant="h6"
             noWrap
@@ -104,8 +104,10 @@ function ResponsiveAppBar() {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              alignItems: "center"
             }}
           >
+            <LeafIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
             NEW LEAF
           </Typography>
           {checkLogInTrace() ? (

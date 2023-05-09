@@ -13,9 +13,14 @@ import { checkLoggedInOnBackend } from "./api/index.js";
 import AppBar from "./common/custom-navbar/index.js";
 import AppFooter from "./common/custom-footer/index.js";
 import Protected from "./components/protected";
+import Journal from "./components/journal/journal";
+import { Fab, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { ToastContainer } from "react-toastify/dist/react-toastify";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [journalOpen, setJournalOpen] = useState(false);
   useEffect(() => {
     async function checkAuthorized() {
       const isUserLoggedIn = await checkLoggedInOnBackend();
@@ -23,13 +28,46 @@ const App = () => {
     }
 
     checkAuthorized();
-  }, []);
+  }, [window.location.pathname]);
+
+  const handleJournalOpen = () => {
+    setJournalOpen(true);
+  };
+
+  const handleJournalClose = () => {
+    setJournalOpen(false);
+  };
 
   
   return (
     <div className="App">
       
       <BrowserRouter>
+      <Fab
+          color="primary"
+          aria-label="add"
+          size = "large"
+          style={{
+            position: 'fixed',
+            bottom: 100,
+            right: 16,
+            padding : '10px'
+          }}
+          onClick={handleJournalOpen}
+        >
+          <AddIcon />
+        </Fab>
+
+        <Dialog
+          open={journalOpen}
+          onClose={handleJournalClose}
+          aria-labelledby="journal-dialog-title"
+        >
+          <DialogTitle id="journal-dialog-title">Journal</DialogTitle>
+          <DialogContent>
+            <Journal onClose={handleJournalClose} />
+          </DialogContent>
+        </Dialog>
         <Routes>
           <Route
             exact
@@ -113,6 +151,7 @@ const App = () => {
           />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </div>
   );
 };

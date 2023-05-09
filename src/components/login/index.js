@@ -88,13 +88,13 @@ const Login = () => {
     try {
       const resp = await loginUser({ username, password });
       if (resp.status !== 200) {
-        throw new Error(resp?.response?.data);
+        throw new Error(resp?.response?.data?.error);
       };
       setError();
       toast.success(resp?.data?.message || 'Succesfully logged in!');
       setTimeout(() => {
         navigate("/home");
-      }, 500);
+      }, 1000);
     } catch (error) {
       const msg = error?.message || 'Could not login. Please try again!';
       setError(msg);
@@ -173,7 +173,7 @@ const Login = () => {
             fullWidth
             variant="contained"
             color="primary"
-            disabled={!username || !password || errors?.password || errors?.username}
+            disabled={!username || !password || !!errors?.password || !!errors?.username}
             sx={{ marginTop: 2, marginBottom: 2 }}
             style={{ width: '350px', color:'white'}}
 

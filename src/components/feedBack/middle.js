@@ -23,7 +23,7 @@ const Middle = (props) => {
   return (
     <div className={styles.feedbackContainer}>
       <div className={styles.feedbackItem}>
-        <FeedBackEditForm feedbackId={feedbackId} username={props.username} onSuccess={props.onSuccess}/>
+        <FeedBackEditForm feedbackId={feedbackId} onSuccess={props.onSuccess}/>
       </div>
     </div>
   );

@@ -29,6 +29,7 @@ const Homepage = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [tabValue, setTabValue] = useState(0);
 
+
   const loadMoreFeeds = async () => {
     setPage((prevPage) => prevPage + 1);
     const fetchedFeeds = await getFeeds(page);
@@ -67,7 +68,7 @@ const Homepage = () => {
 
   return (
     <>
-      <Box pt={10} pb={5}>
+      <Box>
         <Tabs value={tabValue} onChange={handleChange}>
           <Tab label="Feeds" />
           <Tab label="Reviews" />

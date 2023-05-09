@@ -9,8 +9,8 @@ const addConnection = async (userId, connectionUserId) => {
     }
     const userCtn = await users()
     const [user, connectingUser] = await Promise.all([
-        userCtn.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
-        userCtn.findOne({ _id: new ObjectId(connectionUserId) }, { password: 0 })
+        userCtn.findOne({ _id: new ObjectId(userId) }, { projection:{ password: 0 } }),
+        userCtn.findOne({ _id: new ObjectId(connectionUserId) }, { projection:{ password: 0 } })
     ]);
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
@@ -55,8 +55,8 @@ const blockConnection = async (userId, blockUserId) => {
 
     const userCtn = await users()
     const [user, blockedUser] = await Promise.all([
-        userCtn.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
-        userCtn.findOne({ _id: new ObjectId(blockUserId) }, { password: 0 })
+        userCtn.findOne({ _id: new ObjectId(userId) }, { projection:{ password: 0 } }),
+        userCtn.findOne({ _id: new ObjectId(blockUserId) }, { projection:{ password: 0 } })
     ]);
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
@@ -100,8 +100,8 @@ const unblockConnection = async (userId, unblockUserId) => {
     }
     const userCtn = await users()
     const [user, unblockedUser] = await Promise.all([
-        userCtn.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
-        userCtn.findOne({ _id: new ObjectId(unblockUserId) }, { password: 0 })
+        userCtn.findOne({ _id: new ObjectId(userId) }, { projection:{ password: 0 } }),
+        userCtn.findOne({ _id: new ObjectId(unblockUserId) }, { projection:{ password: 0 } })
     ]);
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
@@ -149,8 +149,8 @@ const addMessagesToChat = async (sId, rId, message) => {
         throw errorObject(errorType.BAD_INPUT, 'User Id of both sender and receiver cannot be same')
     }
     const [sender, receiver] = await Promise.all([
-        usersCtx.findOne({ _id: new ObjectId(senderId) }, { password: 0 }),
-        usersCtx.findOne({ _id: new ObjectId(receiverId) }, { password: 0 }),
+        usersCtx.findOne({ _id: new ObjectId(senderId) }, { projection:{ password: 0 } }),
+        usersCtx.findOne({ _id: new ObjectId(receiverId) }, { projection:{ password: 0 } })
     ])
     if ((!sender) || (!receiver)) {
         throw errorObject(errorType.NOT_FOUND, 'User doesnt exist in the system with the given Id')
@@ -208,8 +208,8 @@ const activeChat = async (uId, anUserId, onlyUsers) => {
         throw errorObject(errorType.BAD_INPUT, 'User Id of both the users cannot be same')
     }
     const [user1, user2] = await Promise.all([
-        usersCtx.findOne({ _id: new ObjectId(userId) }, { password: 0 }),
-        usersCtx.findOne({ _id: new ObjectId(anotherUserId) }, { password: 0 }),
+        usersCtx.findOne({ _id: new ObjectId(userId) }, { projection:{ password: 0 } }),
+        usersCtx.findOne({ _id: new ObjectId(anotherUserId) }, { projection:{ password: 0 } })
     ])
     if ((!user1) || (!user2)) {
         throw errorObject(errorType.NOT_FOUND, 'User doesnt exist in the system with the given Id')
@@ -261,7 +261,7 @@ const allActiveChats = async (userId, onlyUsers) => {
     const chatsCtx = await chats()
     const usersCtx = await users()
 
-    const user = await usersCtx.findOne({ _id: new ObjectId(userId) }, { password: 0 })
+    const user = await usersCtx.findOne({ _id: new ObjectId(userId) }, { projection:{ password: 0 } })
     if (!user) {
         throw errorObject(errorType.NOT_FOUND, 'User not found')
     }
@@ -295,7 +295,7 @@ const getfilteredChatAndUsers = async (chatsObj, blocked) => {
 
 const getUsersByIds = async (ids) => {
     const usersCtx = await users()
-    const usersArr = await usersCtx.find({ _id: {$in: ids} }).toArray();
+    const usersArr = await usersCtx.find({ _id: {$in: ids }, isActive: true }).project({ password: 0 }).toArray();
     return usersArr.map((user) => formatUser(user));
 }
 
@@ -344,4 +344,12 @@ const getAllChatId = async()=>{
     return result;
 }
 
-export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser,archiveChat, getAllChatId };
+const getChat = async(chatId)=>{
+    chatId = validators.checkId(chatId, "chat Id");
+    const chatCollection = await chats()
+    let ans = []
+    ans = await chatCollection.find({_id : new ObjectId(chatId)}, {projection: {_id:1,users:1}}).toArray();
+    return ans;
+}
+
+export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser,archiveChat, getAllChatId, getChat };

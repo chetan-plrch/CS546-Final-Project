@@ -8,8 +8,8 @@ const CommonMessage = (props) => {
     }
 
     if (Array.isArray(props.message)) {
-        message = props.message.map((msg) => {
-            return <div className={className}>
+        message = props.message.map((msg, index) => {
+            return <div key={index} className={className}>
                 {msg}
             </div>
         })

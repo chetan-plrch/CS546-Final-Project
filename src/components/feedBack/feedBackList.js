@@ -11,7 +11,7 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { feedBackList } from "../../api/feedback";
+import { feedBackList, getFirstnames } from "../../api/feedback";
 import { getUserId } from "../../helper/index";
 import Middle from "./middle";
 import { ToastContainer } from "react-toastify/dist/react-toastify.js";
@@ -21,6 +21,8 @@ const FeedBackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [showMiddle, setShowMiddle] = useState(false);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [firstNames, setFirstNames] = useState([]); 
+  const [selectedFirstName, setSelectedFirstName] = useState(null); 
 
   const userId = getUserId();
 
@@ -32,6 +34,14 @@ const FeedBackList = () => {
           setFeedbacks(
             response.data.map((feedback, index) => ({ ...feedback, id: index }))
           );
+
+          // Fetch usernames for each feedback
+          const fetchedFirstNames = await Promise.all(
+            response.data.map((feedback) =>
+              getFirstnames(feedback.chatId, feedback.userId)
+            )
+          );
+          setFirstNames(fetchedFirstNames);
         }
       } catch (error) {
         console.error("Error fetching feedbacks:", error);
@@ -40,7 +50,6 @@ const FeedBackList = () => {
 
     fetchFeedbacks();
   }, [userId]);
-
 
   const refreshFeedbacks = async () => {
     try {
@@ -59,10 +68,10 @@ const FeedBackList = () => {
     refreshFeedbacks();
     handleCloseMiddle();
   };
-  
 
-  const handleEditClick = (feedback) => {
+  const handleEditClick = (feedback, firstName) => {
     setSelectedFeedback(feedback);
+    setSelectedFirstName(firstName); 
     setShowMiddle(true);
   };
 
@@ -72,7 +81,7 @@ const FeedBackList = () => {
 
   return (
     <Box>
-      <Typography variant="h1" mb={2} pt = {10} pb = {5}>
+      <Typography variant="h1" mb={2} pt={10} pb={5}>
         Feedbacks
       </Typography>
       {feedbacks.length > 0 ? (
@@ -89,6 +98,9 @@ const FeedBackList = () => {
             <Card key={index} sx={{ marginBottom: "16px" }}>
               <CardContent>
                 <Typography variant="h6">
+                  Feedback given for: {firstNames[index] || "N/A"}
+                </Typography>
+                <Typography variant="h6">
                   Description: {feedback.description || "N/A"}
                 </Typography>
                 <Typography>
@@ -100,11 +112,15 @@ const FeedBackList = () => {
                 <Typography>
                   Listener Rating: {feedback.rating.listener_rating}
                 </Typography>
+                <Typography>
+                  Feedback Time:{" "}
+                  {new Date(feedback.feedBackDate).toLocaleString()}
+                </Typography>
               </CardContent>
               <CardActions>
                 <Button
                   variant="contained"
-                  onClick={() => handleEditClick(feedback)}
+                  onClick={() => handleEditClick(feedback, firstNames[index])}
                 >
                   Edit
                 </Button>
@@ -122,7 +138,9 @@ const FeedBackList = () => {
         onClose={handleCloseMiddle}
         aria-labelledby="middle-dialog-title"
       >
-        <DialogTitle id="middle-dialog-title">Update Feedback</DialogTitle>
+        <DialogTitle id="middle-dialog-title">
+        Update Feedback for {selectedFirstName}
+        </DialogTitle>
         <DialogContent>
           {selectedFeedback && (
             <Middle

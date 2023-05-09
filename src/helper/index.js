@@ -58,9 +58,13 @@ const validateAge = (age) => {
   };
 };
 
-const validateCity = (city) => {
+const validateLocation = (value, fieldName) => {
   try {
-    validations.checkString(city, 'city');
+    validations.checkString(value, fieldName);
+    const regex = /^[A-Za-z\s]*$/;
+    if (!regex.test(value)) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${fieldName} can only contain letters and spaces`);
+    };
   } catch(e) {
     return formatErrorMessage(e.toString());
   }
@@ -104,14 +108,14 @@ const validator = (user, field, err) => {
       errorObj.age.helperText = validateAge(user.age);
       break;
     case field === 'city':
-      errorObj.city.helperText = validateCity(user.city);
+      errorObj.city.helperText = validateLocation(user.city, 'city');
       break;
     case field === 'state':
-      errorObj.state.helperText = validateCity(user.state)
+      errorObj.state.helperText = validateLocation(user.state, 'state')
       break;
     case field === 'role' && user?.role:
     case field === 'gender' && user?.gender:
-      errorObj.gender.helperText = '';
+      errorObj[field].helperText = '';
       break;
   };
 
@@ -156,7 +160,7 @@ const helper = {
   capitalizeFirst,
   validator,
   checkLoggedIn,
-  initialPage,
+  initialPage
 };
 
 export default helper;

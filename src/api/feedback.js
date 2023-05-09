@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosApi } from "./api-interceptor";
 
 const createFeedBack = async (feedbackData) => {
@@ -71,6 +70,18 @@ const getAllFeedbacks = async(isView)=>{
   }
 };
 
+const getFirstnames = async (chatId, userId) => {
+  try {
+    const chatInfo = await axiosApi.post("/chat/getByChatId", { chatId });
+    const otherUserId = chatInfo.data[0].users.find(id => id !== userId);
+    const userInfo = await axiosApi.get(`/user/${otherUserId}`);
+    return userInfo.data.user.firstName;
+  } catch (e) {
+    return e;
+  }
+};
+
+
 export {
   createFeedBack,
   feedBackList,
@@ -78,5 +89,6 @@ export {
   feedbackEdit,
   getFeedback,
   getFeedbackByChatId,
-  getAllFeedbacks
+  getAllFeedbacks,
+  getFirstnames
 };

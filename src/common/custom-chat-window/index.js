@@ -11,6 +11,7 @@ import { getUserId } from '../../helper';
 import { toast, ToastContainer } from 'react-toastify/dist/react-toastify.js';
 import FeedBackPop from '../../components/feedBack/feedBackPop';
 import { feedbackTriggerCount } from '../../helper/constants';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 function ChatWindow(props) {
     const {
@@ -34,6 +35,7 @@ function ChatWindow(props) {
     const [chatId, setChatId] = useState('');
     const filter = new Filter();
     const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
+    const [online, setOnline] = useState(false)
 
     useEffect(() => {
         const senderId = getUserId();
@@ -56,7 +58,11 @@ function ChatWindow(props) {
     }, [connectionId]);
 
     useEffect(() => {
-        initConnection(senderId)
+        initConnection(senderId, () => {
+            setOnline(true)
+        }, () => {
+            setOnline(false)
+        })
         receiveMessage(onReceiveMessage);
         let element = document.getElementById('chat-container');
         if (element) {
@@ -145,6 +151,7 @@ function ChatWindow(props) {
     return (
         <div className='custom-chat-container'>
             <ToastContainer />
+            <div>Your status: <FiberManualRecordIcon fontSize="small" color={online ? 'success' : 'error' } />{online ? 'online' : 'offline'}</div>
             <div className='header-container'>
                 {
                     allowSearch ? (
