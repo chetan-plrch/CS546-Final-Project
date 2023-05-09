@@ -129,7 +129,7 @@ const SignUp = () => {
           <div className="input-dialog">
             <div className="header-dialog">Sign up</div>
             <CustomTextField
-             style={{color: "blue", fontStyle: "italic"}}
+             style={{color: "blue"}}
               className="my-custom-textfield"
               error={!!getHelperText("username")}
               helperText={getHelperText("username")}
