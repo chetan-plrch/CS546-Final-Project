@@ -4,6 +4,9 @@ import validators from '../validations.js'
 import { removeBlockedChats, formatUser, getChatUserIds, errorObject, errorType } from '../util.js'
 
 const addConnection = async (userId, connectionUserId) => {
+    connectionUserId = validators.checkId(connectionUserId, 'connectionUserId')
+    userId = validators.checkId(userId, 'userId')
+
     if (userId === connectionUserId) {
         throw errorObject(errorType.NOT_FOUND, 'User id and connecting user id cannot be same!')
     }
@@ -49,6 +52,9 @@ const addConnection = async (userId, connectionUserId) => {
 }
 
 const blockConnection = async (userId, blockUserId) => {
+    userId = validators.checkId(userId, 'userId')
+    blockUserId = validators.checkId(blockUserId, 'blockUserId')
+
     if (userId === blockUserId) {
         throw errorObject(errorType.BAD_INPUT, 'User id and blocking user id cannot be same!')
     }
@@ -95,6 +101,9 @@ const blockConnection = async (userId, blockUserId) => {
 }
 
 const unblockConnection = async (userId, unblockUserId) => {
+    userId = validators.checkId(userId, 'userId')
+    unblockUserId = validators.checkId(unblockUserId, 'unblockUserId')
+
     if (userId === unblockUserId) {
         throw errorObject(errorType.BAD_INPUT, 'User id and unblocking user id cannot be same!')
     }
@@ -140,6 +149,10 @@ const unblockConnection = async (userId, unblockUserId) => {
 }
 
 const addMessagesToChat = async (sId, rId, message) => {
+    sId = validators.checkId(sId, 'sId')
+    rId = validators.checkId(rId, 'rId')
+    message = validators.checkString(message, 'message')
+
     const chatsCtx = await chats()
     const usersCtx = await users()
     const senderId = validators.checkId(sId, 'senderId')
@@ -258,6 +271,8 @@ const archiveChat = async (uId, chatId) => {
 
 
 const allActiveChats = async (userId, onlyUsers) => {
+    userId = validators.checkId(userId, 'userId');
+
     const chatsCtx = await chats()
     const usersCtx = await users()
 

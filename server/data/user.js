@@ -235,8 +235,11 @@ const allUsers = async()=>{
 
 
 const updateUserRandom = async (id, { permanent, isActive }) => {
-  const db = await users();
 
+  validation.checkBoolean(permanent)
+  validation.checkBoolean(isActive)
+
+  const db = await users();
   const user = await db.findOne({ _id: new ObjectId(id) }, { projection:{ password: 0 } });
   if (!user) {
     throw errorObject(errorType.NOT_FOUND, 'User not found in the system')
