@@ -3,6 +3,7 @@ import { feedBackData } from "../data/index.js";
 import validation from "../validations.js";
 const router = Router();
 import { userData } from "../data/index.js"
+import { errorType } from "../util.js";
 
 router.route("/").post(async (req, res) => {
   let feedBackInfo = req.body;
@@ -17,19 +18,19 @@ router.route("/").post(async (req, res) => {
   try {
     feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
     feedBackInfo.isPublic = validation.checkBoolean(feedBackInfo.isPublic, 'isPublic');
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
@@ -38,7 +39,7 @@ router.route("/").post(async (req, res) => {
       "reconnect_probability"
     );
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     feedBackInfo.rate2 = validation.checkRating(
@@ -46,7 +47,7 @@ router.route("/").post(async (req, res) => {
       "satisfied_with_chat"
     );
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     feedBackInfo.rate3 = validation.checkRating(
@@ -54,7 +55,7 @@ router.route("/").post(async (req, res) => {
       "listener_rating"
     );
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if(feedBackInfo.description){
@@ -64,7 +65,7 @@ router.route("/").post(async (req, res) => {
         "feedback description"
       );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
   }
   
@@ -103,7 +104,7 @@ router.route("/user").post(async (req, res) => {
   try {
     feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   if (errors.length > 0) {
     return res.status(400).send(errors);
@@ -137,7 +138,7 @@ router
         "feedback Id"
       );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
     if (errors.length > 0) {
       return res.status(400).send(errors);
@@ -164,13 +165,13 @@ router
     try {
       feedBackInfo.feedBackId = validation.checkId(feedBackInfo.feedBackId, "feedback Id");
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
 
     try {
       feedBackInfo.isPublic = validation.checkBoolean(feedBackInfo.isPublic, 'isPublic');
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
   
     try {
@@ -179,7 +180,7 @@ router
         "reconnect_probability"
       );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
     try {
       feedBackInfo.rate2 = validation.checkRating(
@@ -187,7 +188,7 @@ router
         "satisfied_with_chat"
       );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
     try {
       feedBackInfo.rate3 = validation.checkRating(
@@ -195,7 +196,7 @@ router
         "listener_rating"
       );
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
     if(feedBackInfo.description){
       try {
@@ -204,7 +205,7 @@ router
           "feedback description"
         );
       } catch (e) {
-        errors.push(e);
+        errors.push(e?.message);
       }
     }
     if (errors.length > 0) {
@@ -239,7 +240,7 @@ router
     try {
       feedBackInfo.feedBackId = validation.checkId(feedBackInfo.feedBackId, "feedback Id");
     } catch (e) {
-      errors.push(e);
+      errors.push(e?.message);
     }
     if (errors.length > 0) {
       return res.status(400).send(errors);
@@ -264,23 +265,29 @@ router.route("/chatId").post(async (req, res) => {
   }
 
   //validation for the request body
-  let errors = [];
-  try {
-    feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
-  } catch (e) {
-    errors.push(e);
-  }
-  if (errors.length > 0) {
-    return res.status(400).send(errors);
-  }
+  // let errors = [];
+  // try {
+  //   feedBackInfo.chatId = validation.checkId(feedBackInfo.chatId, "chat Id");
+  // } catch (e) {
+  //   errors.push(e?.message);
+  // }
+  // try {
+  //   feedBackInfo.userId = validation.checkId(feedBackInfo.userId, "user Id");
+  // } catch (e) {
+  //   errors.push(e?.message);
+  // }
+  // if (errors.length > 0) {
+  //   return res.status(400).send(errors);
+  // }
 
   try {
     let feedBack = await feedBackData.getByChatId(feedBackInfo.chatId, feedBackInfo.userId);
     res.json(feedBack);
   } catch (e) {
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    res.status(status).send({ error: message });
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
   }
 });
 

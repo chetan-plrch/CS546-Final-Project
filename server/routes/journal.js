@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
     journalInfo.userId = validations.checkId(journalInfo.userId, "userId");
   } catch (e) {
     console.log(e);
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   try {
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     );
   } catch (e) {
     console.log(e);
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if (errors.length > 0) {
@@ -49,7 +49,7 @@ router.get("/:id", async (req, res) => {
       userId = validations.checkId(userId, "userId");
     } catch (e) {
       console.log(e);
-      errors.push(e);
+      errors.push(e?.message);
     }
     if (errors.length > 0) {
       return res.status(400).send(errors);

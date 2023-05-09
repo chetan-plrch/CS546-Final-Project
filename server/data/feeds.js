@@ -94,17 +94,17 @@ import validations, { validateName } from "../validations.js";
     try{
       userId = validations.checkId(userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedId = validations.checkId(feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       isLike = validations.checkBoolean(isLike,"isLike")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     if (errors.length > 0) {
@@ -147,17 +147,17 @@ import validations, { validateName } from "../validations.js";
     try{
       userId = validations.checkId(userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedId = validations.checkId(feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       isUnLike = validations.checkBoolean(isUnLike,"isUnLike")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     if (errors.length > 0) {
@@ -201,24 +201,24 @@ import validations, { validateName } from "../validations.js";
     try{
       userId = validations.checkId(userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedId = validations.checkId(feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       message = validations.checkString(message,"Comment message")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     try {
       // full name of user commenting
       userName = validateName(userName, "User Name");
     } catch(e) {
-      errors.push(e);
+      errors.push(e?.message);
     };
 
     if (errors.length > 0) {
@@ -254,17 +254,17 @@ import validations, { validateName } from "../validations.js";
     try{
       userId = validations.checkId(userId,"user Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       feedId = validations.checkId(feedId,"feed Id")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
     try{
       isSave = validations.checkBoolean(isSave,"isSave")
     }catch(e){
-      errors.push(e)
+      errors.push(e?.message)
     }
 
     if (errors.length > 0) {

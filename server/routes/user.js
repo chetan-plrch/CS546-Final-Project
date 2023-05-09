@@ -34,31 +34,31 @@ router.post("/signup", async (req, res) => {
   try {
     userInfo.firstName = validateName(userInfo.firstName, "First name");
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   try {
     userInfo.lastName = validateName(userInfo.lastName, "Last Name");
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   try {
     userInfo.username = validation.checkUsername(userInfo.username);
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   try {
     userInfo.email = validation.checkMailID(userInfo.email);
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   try {
     userInfo.password = validation.checkPassword(userInfo.password);
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   if(userInfo.password !== userInfo.confirmPassword){
@@ -68,14 +68,14 @@ router.post("/signup", async (req, res) => {
   try {
     userInfo.age = validation.checkAge(userInfo.age);
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   if (userInfo.city) {
   try {
     userInfo.city = validateName(userInfo.city, "city");
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 }
 
@@ -87,27 +87,27 @@ if(userInfo.state){
   try {
     userInfo.state = validateName(userInfo.state, "state");
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 }
 
   try {
     userInfo.gender = validation.checkGender(userInfo.gender);
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   try {
     userInfo.role = validation.checkRole(userInfo.role);
   } catch (e) {
-    errors.push(e.message);
+    errors.push(e?.message);
   }
 
   if (userInfo.profilePic) {
     try {
       userInfo.profilePic = validation.checkImage(userInfo.profilePic);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e?.message);
     }
   }
 

@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 const checkId = (id, varName) => {
   id = validations.checkId(id, varName);
 
-  if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+  if (!ObjectId.isValid(id)) throw errorObject(errorType.BAD_INPUT, `Error: ${varName} must be a valid ObjectId`);
 
   return id;
 };
@@ -18,12 +18,12 @@ export const validateLoginRequest = (params) => {
   try {
     username = validations.checkUsername(username);
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
   try {
     password = validations.checkPassword(password);
   } catch (e) {
-    errors.push(e);
+    errors.push(e?.message);
   }
 
   if (errors?.length) {
