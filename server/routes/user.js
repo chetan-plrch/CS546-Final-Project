@@ -5,6 +5,7 @@ import validation, {validateLoginRequest, validateName} from "../validations.js"
 import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
+import { ObjectId } from "mongodb";
 
 
 router.get("/user", authenticate, async (req, res) => {
@@ -166,27 +167,13 @@ router.get('/:id', async (req,res) =>{
       throw new Error('Invalid id');
     }
     const user = await userData.get(id);
+    console.log(user);
     if(!user){
       throw new Error('No user with that id');
     }
-    res.status(200).json({
-      _id:user._id.toString(),
-      username:user.username,
-    firstName:user.firstName,
-    lastName: user.lastName,
-    email:user.email,
-    password:user.password,
-    gender:user.gender,
-    city:user.city,
-    state:user.state,
-    age:user.age,
-    isAnonymous:user.isAnonymous,
-    role:user.role,
-    profileUrl:user.profileUrl,
-    connections:user.connections,
-    isActive:user.isActive,
-    });
+    res.status(200).json({user});
   } catch (error) {
+    console.log(error);
     if (error.message === 'Invalid id') {
       res.status(400).json({ error: 'Invalid id' });
     } else if (error.message === 'No user with that id') {

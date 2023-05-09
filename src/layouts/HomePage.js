@@ -29,6 +29,7 @@ const Homepage = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [tabValue, setTabValue] = useState(0);
 
+
   const loadMoreFeeds = async () => {
     setPage((prevPage) => prevPage + 1);
     const fetchedFeeds = await getFeeds(page);

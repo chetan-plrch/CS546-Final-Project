@@ -3,126 +3,103 @@
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import { journal } from "../config/mongoCollections.js";
+import validations from "../validations.js";
 
-// const CreateJournal = async(userId ,message , date) => {
-    
-//     if (!userId || typeof userId !== 'string'){
-//         throw new Error ('Invalid user ID')
-//     } 
-
-//     if (!message || typeof message !== 'string'){
-//         throw new Error ('Invalid Message')
-//     }
-
-//     if (typeof date !== 'object' || isNaN(date.getTime())) {
-//         throw new Error('Invalid Date');
-//       }
-      
-//       try{
-//         const userdb = await users();
-//         const user = await userdb.findOne({ _id: new ObjectId(userId) })
-
-//         if(!user) {
-//             throw new Error('User not found with this userId ')
-//         }
-
-//         const journaldb = await journal();
-//         const insert = await journaldb.insertOne({
-//             userId: userId,
-//             message: message,
-//             date: date
-//         });
-
-//         const insertedId = insert.insertedId.toString();
-        
-//         return { journalId: insertedId };
-//              } catch (err) {
-//             throw new Error('Failed to create journal entry');
-//     }
-// };
-
-const CreateJournal = async(userId ,message , dateString) => {
-    
-  if (!userId || typeof userId !== 'string'){
-      throw new Error ('Invalid user ID')
-  } 
-
-  if (!message || typeof message !== 'string'){
-      throw new Error ('Invalid Message')
+const CreateJournal = async (userId, message) => {
+  let errors = [];
+  try {
+    userId = validations.checkId(userId, "userId");
+  } catch (e) {
+    errors.push(e);
   }
 
-  if (typeof dateString !== 'string' || isNaN(Date.parse(dateString))) {
-      throw new Error('Invalid Date');
+  try {
+    message = validations.checkString(message, "journal message");
+  } catch (e) {
+    errors.push(e);
   }
 
-  const date = new Date(dateString);
-    
-  try{
-      const userdb = await users();
-      const user = await userdb.findOne({ _id: new ObjectId(userId) }, { projection:{ password: 0 } })
+  if (errors.length > 0) {
+    throw [400, errors];
+  }
 
-      if(!user) {
-          throw new Error('User not found with this userId ')
-      }
+  const userCtx = await users();
+  const user = await userCtx.findOne(
+    { _id: new ObjectId(userId) },
+    { password: 0 }
+  );
+  if (!user) {
+    throw [404, "User not found with this userId "];
+  }
+  let now = new Date();
+  let journalDate = now.toISOString();
 
-      const journaldb = await journal();
-      const insert = await journaldb.insertOne({
-          userId: userId,
-          message: message,
-          date: date
-      });
+  const journaldb = await journal();
+  const insert = await journaldb.insertOne({
+    userId: userId,
+    message: message,
+    date: journalDate,
+  });
+  if (!insert.acknowledged || !insert.insertedId)
+    throw [404, "Could not create new journal"];
 
-      const insertedId = insert.insertedId.toString();
-      
-      return { journalId: insertedId };
-  } catch (err) {
-      throw new Error('Failed to create journal entry');
+  const insertedId = insert.insertedId.toString();
+  return { journalId: insertedId };
+};
+
+const getJournal = async (id) => {
+  if (!id || typeof id !== "string" || id.trim().length === 0) {
+    throw new Error("Invalid id");
+  }
+  id = id.trim();
+
+  if (!ObjectId.isValid(id)) {
+    throw new Error("invalid object ID");
+  }
+
+  const journaldb = await journal();
+  const journals = await journaldb.find({ userId: id }).toArray();
+  if (journals === null) {
+    throw new Error("No journal with that id");
+  }
+  return journals;
+};
+
+const getJournalsByUser = async (userId) => {
+  let errors = [];
+  try {
+    userId = validations.checkId(userId, "userId");
+  } catch (e) {
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    throw [400, errors];
+  }
+
+  const journaldb = await journal();
+  const journals = await journaldb.find({ userId: userId }).toArray();
+
+  if (journals.length === 0) {
+    throw [404,"No journals found for this user"];
+  }
+  return journals;
+};
+
+const remove = async (journalId) => {
+  try {
+    const journalCtx = await journal();
+    const deletionInfo = await journalCtx.findOneAndDelete({
+      _id: new ObjectId(journalId),
+    });
+    if (deletionInfo.deletedCount === 0) {
+      throw `Could not delete journal with id ${journalId}`;
+    }
+    return true;
+  } catch (error) {
+    console.error(`Error occurred while deleting journal: ${error}`);
+    return false;
   }
 };
 
-
-const getJournal = async (id) => {
-
-    if (!id || typeof id !== "string" || id.trim().length === 0) {
-      throw new Error("Invalid id");
-    }
-     id = id.trim();
-  
-     if (!ObjectId.isValid(id)){
-      throw new Error ('invalid object ID');
-     } 
-  
-     const journaldb = await journal();
-     const getID = await journaldb.findOne({_id: new ObjectId(id)});
-     if(getID === null){
-      throw new Error("No journal with that id");
-     }
-  
-     getID._id = getID._id.toString();
-     return getID;
-    }
-
-    const remove = async (id) => {
-        if (!id || typeof id !== "string" || id.trim().length === 0) {
-          throw new Error("Invalid ID provided");
-        }
-        id = id.trim();
-      
-        if (!ObjectId.isValid(id)){
-          throw new Error ('invalid object ID');
-         } 
-      
-        const db = await journal();
-      
-        const journal = await db.findOne({ _id: new ObjectId(id) });
-        if (!journal) {
-          throw new Error("journal not found");
-        }
-      
-        await db.deleteOne({ _id: new ObjectId(id) });
-      
-        const message =  "Journal has been successfully deleted!";
-        return message;
-      };
-
-export default {CreateJournal, getJournal, remove}
+export default { CreateJournal, getJournal, remove, getJournalsByUser };

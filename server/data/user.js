@@ -189,15 +189,16 @@ const get = async (id) => {
    if (!ObjectId.isValid(id)){
     throw new Error ('invalid object ID');
    } 
+   const userCollection = await users();
 
-   const getID = await collection.findOne({_id: new ObjectId(id)});
-  
+   const user = await userCollection.findOne({_id: new ObjectId(id)},{projection:{_id:1,firstName:1}});
    
-   if(getID === null){
+   if(user === null){
     throw new Error("No user with that id");
    }
 
-   getID._id = getID._id.toString();
+   user._id = user._id.toString();
+   return user
 }
 
 const allUsers = async()=>{

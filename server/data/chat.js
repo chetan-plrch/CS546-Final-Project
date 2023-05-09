@@ -344,4 +344,12 @@ const getAllChatId = async()=>{
     return result;
 }
 
-export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser,archiveChat, getAllChatId };
+const getChat = async(chatId)=>{
+    chatId = validators.checkId(chatId, "chat Id");
+    const chatCollection = await chats()
+    let ans = []
+    ans = await chatCollection.find({_id : new ObjectId(chatId)}, {projection: {_id:1,users:1}}).toArray();
+    return ans;
+}
+
+export  { addConnection, blockConnection, unblockConnection, addMessagesToChat, allActiveChats, activeChat, mapSocketIdToUser,archiveChat, getAllChatId, getChat };
