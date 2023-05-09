@@ -115,7 +115,7 @@ import validations from "../validations.js";
     const feed = await feedsCollection.findOne({ _id: new ObjectId(feedId) });
 
     if(isLike){
-      //Adding the userId to the Liekd Array
+      //Adding the userId to the Liked Array
       if (!feed.liked.includes(userId)) {
         await feedsCollection.updateOne(
           { _id: new ObjectId(feedId) },
