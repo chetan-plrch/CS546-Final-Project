@@ -87,3 +87,7 @@
   margin-bottom: 120px;
   width: 100%;
 }
+
+.avatar-element {
+  cursor: pointer;
+}
