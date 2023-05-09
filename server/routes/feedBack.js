@@ -85,9 +85,10 @@ router.route("/").post(async (req, res) => {
     );
     return res.json(newFD);
   } catch (e) {
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    return res.status(status).send({ errors: message });
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
   }
 });
 
@@ -114,9 +115,10 @@ router.route("/user").post(async (req, res) => {
     let feedBackList = await feedBackData.getByuserId(feedBackInfo.userId);
     res.json(feedBackList);
   } catch (e) {
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    res.status(status).send({ error: message });
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
   }
 });
 
@@ -148,9 +150,10 @@ router
       let feedBack = await feedBackData.getByFeedId(feedBackInfo.feedBackId);
       res.json(feedBack);
     } catch (e) {
-      let status = e[0] ? e[0] : 500;
-      let message = e[1] ? e[1] : "Internal Server Error";
-      res.status(status).send({ error: message });
+      if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
     }
   })
   .put(async (req, res) => {
@@ -222,9 +225,10 @@ router
       );
       res.json(newFD);
     } catch (e) {
-      let status = e[0] ? e[0] : 500;
-      let message = e[1] ? e[1] : "Internal Server Error";
-      res.status(status).send({ errors: message });
+      if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
     }
   })
   .delete(async (req, res) => {
@@ -250,9 +254,10 @@ router
       let deleteFeedBack = await feedBackData.remove(feedBackInfo.feedBackId);
       return res.json(deleteFeedBack);
     } catch (e) {
-      let status = e[0] ? e[0] : 500;
-      let message = e[1] ? e[1] : "Internal Server Error";
-      return res.status(status).send({ error: message });
+      if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
     }
   });
 
@@ -318,9 +323,10 @@ router.route("/getall").post(async(req,res)=>{
     res.json(seekerFeedBack);
   } catch (e) {
     console.log(e);
-    let status = e[0] ? e[0] : 500;
-    let message = e[1] ? e[1] : "Internal Server Error";
-    res.status(status).send({ error: message });
+    if (e.type === errorType.BAD_INPUT) {
+      return res.status(400).json({ error: e.message });
+    }
+    return res.status(500).json({ error: 'Error: Internal server error' });
   }
 })
 
