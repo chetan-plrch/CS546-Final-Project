@@ -59,7 +59,7 @@ const Homepage = () => {
     fetchFeeds();
   }, [page]);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_event, newValue) => {
     setTabValue(newValue);
   };
 

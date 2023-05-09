@@ -1,0 +1,37 @@
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: aliceblue;
+    padding: 10px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -moz-box-shadow: rgba(0,0,0,0.8) 0 0 10px;
+    box-shadow: rgba(0,0,0,0.5) 0 0 4px;
+}
+
+.post-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.post-date {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.description {
+    color: brown;
+    font-weight: bold;
+}
