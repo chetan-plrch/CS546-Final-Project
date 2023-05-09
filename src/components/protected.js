@@ -36,7 +36,9 @@ const Protected = (props) => {
     if (unprotect) {
         return <>
             <AppBar />
+            <div className='spacer-top' />
             {props.children}
+            <div className="spacer-bottom" />
             <AppFooter />
         </>
     }

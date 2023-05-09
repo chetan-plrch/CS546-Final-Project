@@ -27,7 +27,7 @@ function CustomTextField(props) {
             type={props.type}
             InputProps={props.inputProps}
             required={props.required}
-             styles={{ opacity: 0.5, ...props.styles }}
+            style={{ width: '280px' }}
             aria-invalid={typeof props.error === "boolean" && props.error ? "true" : "false"}
         />
     );

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js";
+import { authenticate,notAuthenticate, destroyToken } from "../middleware/index.js"
 import { userData } from "../data/index.js";
-import validation, {validateLoginRequest, validateName} from "../validations.js";
+import validation, {validateLoginRequest, validateName} from "../validations.js"
 import { unblockConnection} from '../data/chat.js'
 import { errorType, checkEmailExists, checkUsernameExists } from "../util.js";
 const router = Router();
@@ -21,7 +21,7 @@ router.get("/all-users", async (req, res) => {
   };
 });
 
-router.post("/signup", notAuthenticate, async (req, res) => {
+router.post("/signup", async (req, res) => {
   let userInfo = req.body;
   if (!userInfo || Object.keys(userInfo).length === 0) {
     return res
@@ -255,7 +255,12 @@ router.put('/delete', authenticate, async (req, res, next) => {
   try {
     const result = await userData.updateUserRandom(userId, req.body);
     
-    return destroyToken(req, res, next)
+    if (req.body.permanent) {
+      return destroyToken(req, res, next)
+    } else {
+      return res.status(200).json({ message: 'Successfully change the profile status' })
+    }
+    
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
