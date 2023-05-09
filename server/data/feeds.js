@@ -216,7 +216,7 @@ import validations from "../validations.js";
 
     try {
       // full name of user commenting
-      userName = validation.validateName(userName, "User Name");
+      userName = validations.validateName(userName, "User Name");
     } catch(e) {
       errors.push(e);
     };
