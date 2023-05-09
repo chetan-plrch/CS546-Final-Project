@@ -139,11 +139,7 @@ const exportedMethods = {
     return value;
   },
   validateName(value, fieldName) {
-    try {
-      return this.validateNameValue(value, fieldName)
-    } catch(e) {
-      throw e?.message ? this.capitalizeFirst(e?.message?.replace('Error: ', '')) : '';
-    };
+    return this.validateNameValue(value, fieldName)
   }
 };
 

@@ -12,11 +12,7 @@ const validateUsername = (username) => {
 
 const validateFirstname = (firstName) => {
   try {
-    validations.checkString(firstName, 'firstName');
-    const nameRegex = /^[A-Za-z\s]*$/;
-    if (!nameRegex.test(firstName)) {
-      throw errorObject(errorType.BAD_INPUT, `firstName can only contain letters and spaces`);
-    };
+    validations.validateName(firstName, 'firstName');
   } catch(e) {
     return formatErrorMessage(e.toString());
   };
@@ -24,11 +20,7 @@ const validateFirstname = (firstName) => {
 
 const validateLastname = (lastName) => {
   try {
-    validations.checkString(lastName, 'lastName');
-    const nameRegex = /^[A-Za-z\s]*$/;
-    if (!nameRegex.test(lastName)) {
-      throw errorObject(errorType.BAD_INPUT, `lastName can only contain letters and spaces`);
-    };
+    validations.validateName(lastName, 'lastName');
   } catch(e) {
     return formatErrorMessage(e.toString());
   }
@@ -60,11 +52,7 @@ const validateAge = (age) => {
 
 const validateLocation = (value, fieldName) => {
   try {
-    validations.checkString(value, fieldName);
-    const regex = /^[A-Za-z\s]*$/;
-    if (!regex.test(value)) {
-      throw errorObject(errorType.BAD_INPUT, `${fieldName} can only contain letters and spaces`);
-    };
+    validations.validateName(value, fieldName);
   } catch(e) {
     return formatErrorMessage(e.toString());
   }
