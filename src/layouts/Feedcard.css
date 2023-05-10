@@ -7,10 +7,6 @@
     background-color: aliceblue;
     padding: 10px;
     border-radius: 20px;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    -moz-box-shadow: rgba(0,0,0,0.8) 0 0 10px;
-    box-shadow: rgba(0,0,0,0.5) 0 0 4px;
 }
 
 .post-title {
