@@ -51,8 +51,7 @@ function CustomList(props) {
     return (
       <Box className='list-container'>
         <span className='list-title'>{listTitle}</span>
-        {
-            alternateList?.length ? (
+
               <Link onClick={() => toggleArchiveChat(alternateList[0]?.[selectionKey])} sx={{padding: '5px', cursor: 'pointer'}}>
                 {
                   showArchivedChats ? (
@@ -62,8 +61,6 @@ function CustomList(props) {
                    )
                 }
               </Link>
-            ) : null
-        }
         <List
           sx={{ '--ListItemDecorator-size': '56px' }}
         >

@@ -111,10 +111,12 @@ const Connections = () => {
       setConnections(updatedConnections);
       const updatedArchivedConnections = archivedConnections.filter((connection) => connection._id !== selectedConnectionId);
       setArchivedConnections(updatedArchivedConnections);
-      if (updatedConnections?.length) {
-        setSelectedConnectionId(updatedConnections[0]?._id);
-        setSelectedConnectionName(updatedConnections[0]?.fullName);
-      };
+      if (updatedArchivedConnections?.length) {
+        setSelectedConnectionId(updatedArchivedConnections[0]?._id);
+        setSelectedConnectionName(updatedArchivedConnections[0]?.fullName);
+      } else {
+        setArchivedConnections([]);
+      }
     };
   };
 
