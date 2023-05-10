@@ -18,8 +18,8 @@ https://github.com/chetan-plrch/CS546-Final-Project
 ## Prerequisite
 Prefer using private browsing modes such as `incognito` for `chrome` since the browser plugins cause some unusual intermittent behaviour due to their features
 ## Steps to execute the application
-1. Download the repo from the git repo link https://github.com/chetan-plrch/CS546-Final-Project/tree/master
-2. Please use branch `master` to clone the repo
+1. Download the repo from the git repo link https://github.com/chetan-plrch/CS546-Final-Project/tree/develop
+2. Please use branch `develop` to clone the repo
 3. To download all the dependencies, go to project path and run
 `npm install`
 4. To add data for testing purposes to the database, run `npm run seed`
