@@ -8,6 +8,7 @@ import { addMessagesToChat, getAllChatId } from "./server/data/chat.js";
 import { feedData } from "./server/data/index.js";
 import { feedBackData } from "./server/data/index.js";
 import feeds from "./feedsFake.js";
+import { dbConnection, dropDatabase } from "./server/config/mongoConnection.js";
 
 
 const createFeeds = async () => {
@@ -129,6 +130,9 @@ const createConversations = async (seekerIds, listenerIds) => {
 
 const createUsersAndJournals = async (users, messages) => {
   try {
+    await dbConnection()
+    await dropDatabase()
+
     for (const user of users) {
       const profilePicBase64 = await imageUrlToBase64(faker.image.avatar());
       const createdUser = await userData.create(
