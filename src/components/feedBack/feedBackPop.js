@@ -66,7 +66,7 @@ const FeedBackPop = (props) => {
         aria-labelledby="feedback-dialog-title"
         aria-describedby="feedback-dialog-description"
       >
-        <DialogTitle id="feedback-dialog-title">Feedback</DialogTitle>
+        <Typography component = "div" sx={{ fontSize: "20px" }}>Feedback</Typography>
         <DialogContent>
           <DialogContentText id="feedback-dialog-description">
             {feedbackExists
