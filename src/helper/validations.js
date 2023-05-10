@@ -17,7 +17,10 @@ const exportedMethods = {
     };
     if (/^\d+$/.test(strVal)) {
       throw errorObject(errorType.BAD_INPUT, `Error: ${varName} should not be a number`);
-    };  
+    };
+    if (strVal.length > 1000) {
+      throw errorObject(errorType.BAD_INPUT, `Error: ${varName} should have lesser than 1000 characters`)
+    }
     return strVal;
   },
   checkAge(age) {
