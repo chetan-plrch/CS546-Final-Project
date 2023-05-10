@@ -92,4 +92,6 @@ After every session ends which in our case its ``5 messages`` which triggers the
 3. Archive and unarchive chat
 <br>Users can choose to archive or unarchive a chat at any point.
 
+## Where to find the seed created user's credentials (username and password to login):
+In the root - users.js
 
