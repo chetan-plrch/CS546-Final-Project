@@ -3,6 +3,7 @@ import { Card, CardContent, Typography } from '@mui/material';
 
 const FeedbackCard = ({ feedback }) => {
   return (
+    <>
     <Card>
       <CardContent>
         <Typography>
@@ -17,12 +18,13 @@ const FeedbackCard = ({ feedback }) => {
         <Typography>
           Listener Rating: {feedback.rating.listener_rating}
         </Typography>
-        <Typography variant="h6">Description</Typography>
+        <Typography component = "div" sx={{ fontSize: "20px" }}>Description</Typography>
         <Typography>{feedback.description}</Typography>
-        <Typography variant="h6">Feedback Date</Typography>
+        <Typography component = "div" sx={{ fontSize: "20px" }}>Feedback Date</Typography>
         <Typography>{new Date(feedback.feedBackDate).toLocaleString()}</Typography>
       </CardContent>
     </Card>
+    </>
   );
 };
 

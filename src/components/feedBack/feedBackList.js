@@ -121,9 +121,9 @@ const FeedBackList = () => {
         onClose={handleCloseMiddle}
         aria-labelledby="middle-dialog-title"
       >
-        <DialogTitle id="middle-dialog-title">
+        <Typography component = "div" sx={{ fontSize: "30px" }}>
         Update Feedback for {selectedFirstName}
-        </DialogTitle>
+        </Typography>
         <DialogContent>
           {selectedFeedback && (
             <Middle

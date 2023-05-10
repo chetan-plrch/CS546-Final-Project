@@ -41,19 +41,21 @@ const JournalInput = ({ onClose }) => {
           my: 2,
         }}
       >
-        <TextareaAutosize
+      <label for = "my-input">
+      <TextareaAutosize id = "my-input"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Write your notes here..."
           minRows={6}
           style={{
             width: "100%",
-            padding: "10px",
+            padding: "20px",
             fontSize: "16px",
             borderRadius: "4px",
           }}
+          
         />
-        <Button
+          <Button
           variant="contained"
           color="primary"
           onClick={handleCreateJournal}
@@ -74,6 +76,9 @@ const JournalInput = ({ onClose }) => {
         >
           Cancel
         </Button>
+      </label>
+   
+      
       </Box>
       <Button
         variant="outlined"
