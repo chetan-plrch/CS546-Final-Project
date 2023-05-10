@@ -135,6 +135,7 @@ const Connections = () => {
           contentKey='lastMessage'
           selectedId={selectedConnectionId}
           onSelectionChange={(connectionId) => changeChatWindow(connectionId)}
+          viewArchive={true}
         />
         {
           selectedConnectionId ? (

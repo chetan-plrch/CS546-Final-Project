@@ -26,7 +26,8 @@ function CustomList(props) {
       selectionKey,
       alternateList,
       onButtonClick,
-      onSelectionChange
+      onSelectionChange,
+      viewArchive
     } = props
 
     const defaultImage = '';
@@ -51,16 +52,19 @@ function CustomList(props) {
     return (
       <Box className='list-container'>
         <span className='list-title'>{listTitle}</span>
-
-              <Link onClick={() => toggleArchiveChat(alternateList[0]?.[selectionKey])} sx={{padding: '5px', cursor: 'pointer'}}>
-                {
-                  showArchivedChats ? (
-                    <span>Hide Archived Chats</span>
-                  ) : (
-                    <span>Show Archived Chats</span>
-                   )
-                }
-              </Link>
+        {
+          viewArchive ? (
+            <Link onClick={() => toggleArchiveChat(alternateList[0]?.[selectionKey])} sx={{padding: '5px', cursor: 'pointer'}}>
+            {
+              showArchivedChats ? (
+                <span>Hide Archived Chats</span>
+              ) : (
+                <span>Show Archived Chats</span>
+               )
+            }
+          </Link>
+          ) : null
+        }
         <List
           sx={{ '--ListItemDecorator-size': '56px' }}
         >
@@ -115,7 +119,8 @@ CustomList.defaultProps = {
     selectionKey: 'id', // Key to be used for selection
     contentKey: 'content', // Key to be used for content
     onButtonClick: () => {}, // Callback function to be called on button click
-    onSelectionChange: () => {} // Callback function to be called on list item change
+    onSelectionChange: () => {}, // Callback function to be called on list item change
+    viewArchive: false
 };
 
 CustomList.propTypes = {
@@ -130,7 +135,8 @@ CustomList.propTypes = {
     selectionKey: PropTypes.string,
     list: PropTypes.array.isRequired,
     onSelectionChange: PropTypes.func,
-    titleKey: PropTypes.string.isRequired
+    titleKey: PropTypes.string.isRequired,
+    viewArchive: PropTypes.bool
 };
 
 export default CustomList;
