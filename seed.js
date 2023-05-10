@@ -18,6 +18,7 @@ feeds.forEach(async (feed) => {
       feed.type,
       feed.images
     );
+    
   } catch (error) {
     console.error(`Cannot create feed: ${error.message}`);
   }
