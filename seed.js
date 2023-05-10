@@ -10,19 +10,16 @@ import { feedBackData } from "./server/data/index.js";
 import feeds from "./feedsFake.js";
 
 
-feeds.forEach(async (feed) => {
-  try {
-    const insertedId = await feedData.createFeed(
-      feed.title,
-      feed.description,
-      feed.type,
-      feed.images
-    );
-    
-  } catch (error) {
-    console.error(`Cannot create feed: ${error.message}`);
-  }
-});
+const createFeeds = async () => {
+  let feedIds = []
+  feedIds = await Promise.all(feeds.map(async (feed) => feedData.createFeed(
+        feed.title,
+        feed.description,
+        feed.type,
+        feed.images
+  )))
+  return feedIds
+}
 
 const imageUrlToBase64 = async (url) => {
   return new Promise((resolve, reject) => {
@@ -71,6 +68,29 @@ const createFeedback = async (chatArray, feedbacks) => {
     console.log(e);
   }
 };
+
+const createFeedLikeSaveComment = async (users, feedIds) => {
+  const likePromises = users.map((user) => feedData.updateLike(user._id, feedIds[0], true))
+  const likePromises2 = users.map((user) => feedData.updateLike(user._id, feedIds[1], true))
+  
+  await Promise.all(likePromises)
+  await Promise.all(likePromises2)
+
+  console.log('Create likes for users')
+  const savePromises = users.map((user) => feedData.savePost(user._id, feedIds[0], true))
+  const savePromises2 = users.map((user) => feedData.savePost(user._id, feedIds[1], true))
+  
+  await Promise.all(savePromises)
+  await Promise.all(savePromises2)
+
+  console.log('Create saves for users')
+  const commentPromises = users.map((user) => feedData.updateComment({ userId: user._id, feedId: feedIds[0], message: 'my comment', userName: `${user.firstName} ${user.lastName}` }))
+  const commentPromises2 = users.map((user) => feedData.updateComment({ userId: user._id, feedId: feedIds[1], message: 'my comment', userName: `${user.firstName} ${user.lastName}` }))
+  
+  await Promise.all(commentPromises)
+  await Promise.all(commentPromises2)
+  console.log('Create comments for users')
+}
 
 const createConversations = async (seekerIds, listenerIds) => {
   try {
@@ -158,6 +178,9 @@ const createUsersAndJournals = async (users, messages) => {
     });
 
     await createConversations(seekerIds, listenerIds);
+    
+    const feedIds = await createFeeds()
+    await createFeedLikeSaveComment(idArray, feedIds)
 
     console.log('\n**** Successfully ran seed file! ****\n')
     process.exit()
