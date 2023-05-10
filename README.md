@@ -1,161 +1,67 @@
-# WELCOME TO NEW LEAF 
-## Group 33 Final Project
-
-
-// If possible please use ingonito mode some of the extensions of browsers disrupts the behaviour
-
-
-// Mention trigger message to enter  feedback
-
-
-
- ### Introduction to Project :- 
- 
- - In today’s world, mental health issues faced are more than ever Our website aims towards addressing these issues and giving its users the best help possible with their issues like depression, anxiety, etc.,
-
- - The website allows users to be completely anonymous and chat with professionals about their feelings and the issues they are facing. Users are also shown a feed that consists of posts , pictures and quotes which are motivational and happy in nature to help them lighten the mood. It is completely up to the users if they want to keep their connections or not.
-
-
-GITHUB REPOSITORY LINK -  https://github.com/chetan-plrch/CS546-Final-Project
-
-### Contributors
+# Group 33 Final Project
+## New Leaf - A mental health domain app
+### Team Members
 1. Pooja Mule
 2. Chetan Jain
 3. Sachin Devangan
 4. Chandra Vamsi Reddy
 
-Start Script to run on different machines -
-```
-1. WINDOWS  - scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",}
+### Github repository
+https://github.com/chetan-plrch/CS546-Final-Project
 
-2. MAC-OS  - scripts": {
-"start-mac": "export PORT=3000 && react-scripts start"}
-```
-```
- To install the necessary dependencies for this project, please run the command "npm install."
-
- To start the express server, please use the command "npm run server."
-
- To start the react app, use the command "npm start."
-```
-
-```
-To populate the database run the seed file using command 
-
-"npm run seed"
-```
-
-
-Dependencies used in our project - 
-```
-{
-  "name": "cs546-final-project",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "CS546 Final Project",
-  "dependencies": {
-    "@emotion/react": "^11.11.0",
-    "@emotion/style": "^0.8.0",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/joy": "^5.0.0-alpha.76",
-    "@mui/material": "^5.12.3",
-    "axios": "^1.3.6",
-    "bad-words": "^3.0.4",
-    "bcrypt": "^5.1.0",
-    "cookie-parser": "^1.4.6",
-    "express": "^4.18.2",
-    "express-xss-sanitizer": "^1.1.6",
-    "js-cookie": "^3.0.4",
-    "jsonwebtoken": "^9.0.0",
-    "mongodb": "^5.1.0",
-    "nodemon": "^2.0.22",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-infinite-scroll-component": "^6.1.0",
-    "react-material-ui-carousel": "^3.4.2",
-    "react-router-dom": "^6.10.0",
-    "react-scripts": "4.0.3",
-    "react-toastify": "^9.1.2",
-    "socket.io": "^4.6.1",
-    "socket.io-client": "^4.6.1",
-    "xss": "^1.0.14"
-  },
-  "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "seed": "node seed.js",
-    "start-mac": "export PORT=3000 && react-scripts start",
-    "server": "nodemon server/app.js",
-    "build": "react-scripts build",
-    "test": "export PORT=3000 && react-scripts start &",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chetan-plrch/CS546-Final-Project.git"
-  },
-  "author": "Section C- Group 33",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/chetan-plrch/CS546-Final-Project/issues"
-  },
-  "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
-    "eslint": "^7.11.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "node-fetch": "^3.3.1"
-  }
-}
-```
-
- - If you encounter any issues with the login or signup process, we recommend clearing your cookies. To do so, please follow these steps: open the "Inspect" menu select "Application," and then remove the cookies.
-
- For testing our APIs, it's important to have a Cookie named "TOKEN" with a JWT Token value. Please refer to the attached screenshot as an example.
+ ### Introduction to Project
  
- token - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDU3ZWIwYzg1NmMzZjgzNTYzY2IwZTEiLCJ1c2VybmFtZSI6ImJ5YWt1Z2FudXNlciIsImZpcnN0TmFtZSI6IkhpbmF0YSIsImlhdCI6MTY4MzY2NzMwNH0.pXs-bzu6qmdA0LOad5qJXslvV2YZJud8l2PNVeOlN5U
+ - In today’s world, mental health issues faced are more than ever. Our website aims towards addressing these issues and giving its users the best help possible with their issues like depression, anxiety, etc.,
+ - The website allows users to be completely anonymous if they wish and chat with professionals about their feelings and the issues that they are facing in order to get the help that they need.
+ - Users are also shown a feed that consists of posts, pictures and quotes which are motivational and happy in nature to help them uplift their mental state. It is completely up to the users if they want to continue talking to the experts.
+
+## Prerequisite
+Prefer using private browsing modes such as `incognito` for `chrome` since the browser plugins cause some unusual intermittent behaviour due to their features
+## Steps to execute the application
+1. Download the repo from the git repo link https://github.com/chetan-plrch/CS546-Final-Project/tree/master
+2. Please use branch `master` to clone the repo
+3. To download all the dependencies, go to project path and run
+`npm install`
+4. To add data for testing purposes to the database, run `npm run seed`
+5. To run the application <br>
+&nbsp;&nbsp;1. On client side, at current path, run `npm start`<br>
+&nbsp;&nbsp;2. To start the server, run `npm run server` at</br> 
+&emsp;the same location in a new terminal<br>
+&ensp; NOTE - If you are facing errors in running client side script on macOS with `npm start` then use `npm start-mac` instead
+
+## Important points to note
+1. Adding records to DB through seed file and dropping of database sometimes causes unexpected cookie issues. It is recommented that you clear cookies in such cases. Follow these steps to clear cookies in browser<br>
+&emsp;1. Right click in the browser and open inspect menu<br>
+&emsp;2. Go to tab `Application`<br>
+&emsp;3. Clear cookies from the option provided in this tab
+2. `Postman Testing Note` This application uses a key called `token` which stores a JWT token value. To make any authorized requests first, make sure you make the login request first so this cookie gets set. It is not required to send this token in any of the apis
+3. User is directed to `login` page when the application is opened in the browser. This page provides a link to `register` if you are a new user 
+
+## Core Features
+1. Homepage<br>
+&emsp;1. Once user logs in, they are directed to the home page on `Feeds` tab<br>
+&emsp;2. This tab consists of a feed which comprises of motivational posts, quotes, pictures<br>
+&emsp;3. There is also a tab to navigate to reviews given to different professionals by different users<br>
+&emsp;4. Only the reviews which are public are displayed in the `Reviews` tab
+2. Roles and categories<br>
+&emsp;1.Users can sign up as either listeners (professional helpers) or advice seekers. The sign up flows will be designed accordingly.
+3. Search, list, and filter users
+&emsp;1.
+4. Show user's connections and chats
+5. Real time chat feature
+6. User Feedback
+7. Block/Unblock users
+8. User Profile
+9. Deactivate account
+
+## Extra Features
+1. Journal
+2. Like, comment, and save
+3. Archive and unarchive chat
 
 
 
-- ### Core Features :-
-    1. Homepage - 
-    2. Roles and categories
-    3. Search, list, and filter users
-    4. Show user's connections and chats
-    5. Real time chat feature
-    6. User Feedback
-    7. Block/Unblock users
-    8. User Profile
-    9. Deactivate account
-
-    
-
-- ### Extra Features :-
- 1. Journaling - + sign button at the bottom of every page is the feature
- 2. Like, comment, save posts
- 3. Archive/Unarchive chats
+<!-- // Mention trigger message to enter  feedback
 
 
 The workflow of the project involves several steps that users will follow when using the platform.
@@ -178,5 +84,5 @@ The workflow of the project involves several steps that users will follow when u
 
    - Feedback: Users can access the Feedbacks page to view their submitted feedback for Listeners. They can edit their feedback, including ratings and descriptions. Users can also choose to make their feedback public by selecting the "isPublic" checkbox. Public feedback appears on the homepage's Reviews section, visible to all users.
 
-Overall, this workflow is designed to make it easy for users to find the right Listener for their needs and to facilitate productive conversations between Seekers and Listeners.
+Overall, this workflow is designed to make it easy for users to find the right Listener for their needs and to facilitate productive conversations between Seekers and Listeners. -->
 
