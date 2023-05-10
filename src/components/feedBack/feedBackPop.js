@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Typography
 } from "@mui/material";
 import { getFeedbackByChatId } from "../../api/feedback";
 import { getUserId } from "../../helper/index";
@@ -90,7 +91,7 @@ const FeedBackPop = (props) => {
         onClose={() => setShowFeedbackForm(false)}
         aria-labelledby="feedback-form-dialog-title"
       >
-        <DialogTitle id="feedback-form-dialog-title">Feedback Form for {username.toUpperCase()}</DialogTitle>
+        <Typography component = "div" sx={{ fontSize: "30px" }}>Feedback Form for {username.toUpperCase()}</Typography>
         <DialogContent>
           <FeedBackForm userId={userId} chatId={chatId} username={username} onSubmit={() => setShowFeedbackForm(false)}/>
         </DialogContent>
@@ -105,7 +106,7 @@ const FeedBackPop = (props) => {
         onClose={() => setShowMiddle(false)}
         aria-labelledby="middle-dialog-title"
       >
-        <DialogTitle id="middle-dialog-title">Update Feedback for {username.toUpperCase()}</DialogTitle>
+        <Typography component = "div" sx={{ fontSize: "30px" }}>Update Feedback for {username.toUpperCase()}</Typography>
         <DialogContent>
           <Middle userId={userId} chatId={chatId} username={username} onSuccess={() => setShowMiddle(false)}/>
         </DialogContent>

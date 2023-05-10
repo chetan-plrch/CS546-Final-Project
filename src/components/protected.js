@@ -7,6 +7,7 @@ import { initialPage, delay } from "../helper";
 import Journal from "./journal/journal";
 import { Fab, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { Typography } from "@mui/material";
 
 const Protected = (props) => {
   const [unprotect, setUnprotect] = useState(props.isLoggedIn);
@@ -70,7 +71,7 @@ const Protected = (props) => {
               onClose={handleJournalClose}
               aria-labelledby="journal-dialog-title"
             >
-              <DialogTitle id="journal-dialog-title">Journal</DialogTitle>
+              <Typography component = "div" sx={{ fontSize: "30px" }}>Journal</Typography>
               <DialogContent>
                 <Journal onClose={handleJournalClose} />
               </DialogContent>
