@@ -16,7 +16,7 @@ function CustomTextField(props) {
             className="signup-input"
             onBlur={onBlur}
             size="small"
-            id={props.name}
+            id={props.name?.split(" ")?.join("-")}
             name={props.name}
             onChange={onChange}
             value={props.value}

@@ -103,7 +103,7 @@ const Connections = () => {
       setConnections(updatedConnections);
       if (updatedConnections?.length) {
         setSelectedConnectionId(updatedConnections[0]?._id);
-        setSelectedConnectionId(updatedConnections[0]?.fullName);
+        setSelectedConnectionName(updatedConnections[0]?.fullName);
       };
     } else {
       const unarchivedConnection = archivedConnections.find((connection) => connection._id === selectedConnectionId);
@@ -111,10 +111,12 @@ const Connections = () => {
       setConnections(updatedConnections);
       const updatedArchivedConnections = archivedConnections.filter((connection) => connection._id !== selectedConnectionId);
       setArchivedConnections(updatedArchivedConnections);
-      if (updatedConnections?.length) {
-        setSelectedConnectionId(updatedConnections[0]?._id);
-        setSelectedConnectionId(updatedConnections[0]?.fullName);
-      };
+      if (updatedArchivedConnections?.length) {
+        setSelectedConnectionId(updatedArchivedConnections[0]?._id);
+        setSelectedConnectionName(updatedArchivedConnections[0]?.fullName);
+      } else {
+        setArchivedConnections([]);
+      }
     };
   };
 
