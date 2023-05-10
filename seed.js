@@ -157,6 +157,9 @@ const createUsersAndJournals = async (users, messages) => {
     });
 
     await createConversations(seekerIds, listenerIds);
+
+    console.log('\n**** Successfully ran seed file! ****\n')
+    process.exit()
   } catch (e) {
     console.log(e);
  }
@@ -177,3 +180,4 @@ const messages = [
 ];
 
 createUsersAndJournals(users, messages);
+
