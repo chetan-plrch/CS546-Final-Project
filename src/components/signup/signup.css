@@ -1,0 +1,136 @@
+.signup-input {
+  margin: 10px 0px !important;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-dialog {
+  background-color: rgb(255, 255, 255);
+  padding: 20px 35px;
+  border-radius: 10px;
+  min-width: 680px;
+  height: fit-content;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.update-container-dialog {
+  min-width: 480px;
+  background-color: rgb(255, 255, 255);
+  padding: 20px 35px;
+  border-radius: 10px;
+  height: fit-content;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.header-dialog {
+  color: #2d842d;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.input-dialog {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.input-dialog-2 {
+  display: flex;
+  flex-direction: column;
+  margin-top: 45px;
+  margin-left: 25px;
+}
+
+.profile-image {
+  width: 80px;
+  height: 80px;
+  margin-top: 48px;
+  margin-right: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-image-error {
+  font-size: 13px;
+  width: 82px;
+  text-align: center;
+  color: red;
+  margin-top: 10px;
+}
+
+.signup-button {
+  margin-left: 96px !important;
+  margin-top: 10px !important;
+  width: 280px !important;
+}
+
+.blocked-button {
+  margin-left: 96px !important;
+  margin-top: 10px !important;
+  width: 120px !important;
+}
+
+.anonymous-input {
+  margin-left: -10px !important;
+}
+
+.signup-message-spacing {
+  margin-left: 96px !important;
+  min-height: 20px;
+}
+
+.MuiFormGroup-root {
+  flex-direction: row !important;
+}
+
+.MuiFormGroup-root span {
+  font-size: 12px !important;
+}
+
+.my-helper-text {
+  color: #d32f2f !important;
+}
+
+.login-link {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.blocked-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px
+}
+
+.blocked-item {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+}
+
+.blocked-title {
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: .3rem;
+  background-color: lightgrey;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  margin-top: 55px;
+}
+
+.empty-blocked-list {
+  padding: 30px
+}
+
+.action-div {
+  display: flex;
+  flex-direction: column;
+}

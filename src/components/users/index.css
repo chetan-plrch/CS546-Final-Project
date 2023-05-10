@@ -1,0 +1,27 @@
+.user-container {
+    display: flex;
+    background-color: white;
+    height: 600px;
+    width: 800px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-container {
+    display: flex;
+    width: 40%;
+    height: 10%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.user-list-container {
+    overflow: scroll;
+}

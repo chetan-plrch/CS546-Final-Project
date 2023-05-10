@@ -1,0 +1,36 @@
+/* Highlight list with elevation and border */
+.selected-item {
+    background-color: lightblue;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+.clickable-list-item {
+    cursor: pointer;
+    /* border: 1px solid grey;
+    border-radius: 5px; */
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+    align-items: center;
+}
+
+.list-title {
+    font-weight: 500;
+    font-size: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.unread-label {
+    background-color: green;
+    color: white;
+    border-radius: 8px;
+    padding: 2px;
+    font-size: 11px;
+    margin-left: 10px;
+}

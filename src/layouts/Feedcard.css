@@ -1,0 +1,51 @@
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 80%;
+    width: 80%;
+    background-color: aliceblue;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.post-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.post-date {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.description {
+    color: brown;
+    font-weight: bold;
+    font-size: large;
+}
+
+.description-container {
+    word-wrap: break-word;
+    width: 60%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.interactions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+}
