@@ -103,7 +103,7 @@ const Connections = () => {
       setConnections(updatedConnections);
       if (updatedConnections?.length) {
         setSelectedConnectionId(updatedConnections[0]?._id);
-        setSelectedConnectionId(updatedConnections[0]?.fullName);
+        setSelectedConnectionName(updatedConnections[0]?.fullName);
       };
     } else {
       const unarchivedConnection = archivedConnections.find((connection) => connection._id === selectedConnectionId);
@@ -113,7 +113,7 @@ const Connections = () => {
       setArchivedConnections(updatedArchivedConnections);
       if (updatedConnections?.length) {
         setSelectedConnectionId(updatedConnections[0]?._id);
-        setSelectedConnectionId(updatedConnections[0]?.fullName);
+        setSelectedConnectionName(updatedConnections[0]?.fullName);
       };
     };
   };

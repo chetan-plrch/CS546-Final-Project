@@ -75,7 +75,7 @@ function CustomList(props) {
                   onClick={() => onListItemClick(item[selectionKey])}>
                     {
                       viewImage ? (
-                        <ListItemDecorator>
+                        <ListItemDecorator component="div">
                           <Avatar alt='Profile Picture' src={item[imageKey] || defaultImage} />
                         </ListItemDecorator>
                       ) : null

@@ -37,7 +37,7 @@ function CustomFilter(props) {
     <IconButton
       size='large'
       aria-label='filter experts list'
-      aria-controls='filter-experts-list'
+      // aria-controls='filter-experts-list'
       aria-haspopup='true'
       onClick={() => setShowOptions(!showOptions)}
       color={selectedOptions?.length ? 'primary': ''}>
